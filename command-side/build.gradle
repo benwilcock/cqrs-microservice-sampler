@@ -16,11 +16,17 @@ jar {
 
 dependencies {
     compile project(':common-things')
-    //compile("org.springframework.boot:spring-boot-starter-web")
-    //compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.axonframework:axon-core:2.4.1")
     compile("org.axonframework:axon-test:2.4.1")
-    //testCompile("org.springframework.boot:spring-boot-starter-test")
+    compile("org.axonframework:axon-amqp:2.4.1")
+    compile("org.axonframework:axon-mongo:2.4.1")
+    compile("org.springframework:spring-context:+")
+    compile("org.springframework.amqp:spring-rabbit:+")
+    compile("org.springframework.data:spring-data-mongodb:+")
+
+    // compile("org.springframework.boot:spring-boot-starter-web")
+    // compile("org.springframework.boot:spring-boot-starter-actuator")
+    // testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
 task wrapper(type: Wrapper) {
