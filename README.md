@@ -1,6 +1,6 @@
 # microservice-sampler
 
-This is a demonstration of the mocroservices pattern in `Java``. It's built to illustrate the use of the following ideas in
+This is a demonstration of the mocroservices pattern in `Java`. It's built to illustrate the use of the following ideas in
 one simple 'Todo' application...
 
 1. Microservices 
