@@ -20,21 +20,7 @@
                                     aggregate-type="com.soagrowers.todo.aggregates.Todo"
                                     event-bus="eventBus"/>
 
-    <bean id="eventStore" class="org.axonframework.eventstore.mongo.MongoEventStore">
-        <!--<constructor-arg ref="serializer"/>-->
-        <constructor-arg ref="mongoTemplate"/>
-    </bean>
-    <mongo:mongo host="127.0.0.1" port="27017"/>
-    <mongo:db-factory dbname="todo" />
-    <bean id="mongoTemplate" class="org.axonframework.eventstore.mongo.DefaultMongoTemplate">
-        <constructor-arg index="0" ref="mongo"/>
-        <constructor-arg index="1" value="todo"/>
-        <constructor-arg index="2" value="events"/>
-        <constructor-arg index="3" value="snapshots"/>
-        <constructor-arg index="4"><null/></constructor-arg>
-        <constructor-arg index="5"><null/></constructor-arg>
-    </bean>
-
+    <axon:filesystem-event-store base-dir="events"/>
 
     <bean id="commandGatewayFactory" class="org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean" >
         <property name="commandBus" ref="commandBus"/>
@@ -47,5 +33,28 @@
     <axon:annotation-config />
     <!-- instantiates the given handlers -->
     <bean class="com.soagrowers.todo.eventhandlers.EventLoggingHandler"/>
+
+
+    <!--
+    <bean id="eventStore" class="org.axonframework.eventstore.mongo.MongoEventStore">
+        <constructor-arg ref="serializer"/>
+        <constructor-arg ref="mongoTemplate"/>
+    </bean>
+
+    <mongo:mongo host="127.0.0.1" port="27017"/>
+
+    <mongo:db-factory dbname="todo" />
+    <bean id="mongoTemplate" class="org.axonframework.eventstore.mongo.DefaultMongoTemplate">
+        <constructor-arg index="0" ref="mongo"/>
+        <constructor-arg index="1" value="todo"/>
+        <constructor-arg index="2" value="events"/>
+        <constructor-arg index="3" value="snapshots"/>
+        <constructor-arg index="4"><null/></constructor-arg>
+        <constructor-arg index="5"><null/></constructor-arg>
+    </bean>-->
+
+
+
+
 
 </beans>
