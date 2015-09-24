@@ -35,13 +35,12 @@ jar {
 
 dependencies {
     compile project(':common-things')
-    compile("org.axonframework:axon-core:2.4.1")
-    compile("org.axonframework:axon-test:2.4.1")
+
     compile("org.axonframework:axon-amqp:2.4.1")
     compile("org.axonframework:axon-mongo:2.4.1")
-    compile("org.springframework:spring-context:+")
-    compile("org.springframework.amqp:spring-rabbit:+")
-    compile("org.springframework.data:spring-data-mongodb:+")
+    compile("org.springframework:spring-context:4.0.3.RELEASE")
+    compile("org.springframework.amqp:spring-rabbit:1.4.5.RELEASE")
+    compile("org.springframework.data:spring-data-mongodb:1.7.2.RELEASE")
 
     // compile("org.springframework.boot:spring-boot-starter-web")
     // compile("org.springframework.boot:spring-boot-starter-actuator")

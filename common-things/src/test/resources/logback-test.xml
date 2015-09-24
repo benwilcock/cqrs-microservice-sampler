@@ -2,13 +2,13 @@
 <configuration debug="false">
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="ch.qos.logback.classic.PatternLayout">
+        <encoder>
             <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
         </encoder>
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>build/IntegrationTest.log</file>
+        <file>build/Common-UnitTest.log</file>
 
         <encoder>
             <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
@@ -19,16 +19,13 @@
         <level value="TRACE"/>
     </logger>
 
-    <!--<logger name="org.springframework">
-        <level value="OFF"/>
-    </logger>
-
     <logger name="org.axonframework">
         <level value="OFF"/>
-    </logger>-->
+    </logger>
 
     <root>
         <level value="error"/>
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>

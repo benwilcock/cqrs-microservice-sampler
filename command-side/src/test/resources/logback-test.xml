@@ -8,8 +8,7 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>build/Test.log</file>
-
+        <file>build/Command-UnitTest.log</file>
         <encoder>
             <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
         </encoder>
@@ -19,12 +18,8 @@
         <level value="TRACE"/>
     </logger>
 
-    <!--<logger name="org.springframework">
-        <level value="OFF"/>
-    </logger>
--->
     <logger name="org.axonframework">
-        <level value="INFO"/>
+        <level value="OFF"/>
     </logger>
 
     <root>

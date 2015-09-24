@@ -14,21 +14,22 @@ import org.slf4j.LoggerFactory;
  */
 public class EventLoggingHandler {
 
-    private  static final Logger LOG = LoggerFactory.getLogger(EventLoggingHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EventLoggingHandler.class);
+    private final String INSTANCE_ID = String.valueOf(Double.valueOf(Math.random() * 100).intValue());
 
     @EventHandler
     public void handle(TodoCreated event) {
-        LOG.debug("{}: Event({}) [{}] '{}'", this.getClass().getSimpleName(), event.getClass().getSimpleName(), event.getId(), event.getTitle());
+        LOG.debug("INSTANCE-{}: Event({}) [{}] '{}'", INSTANCE_ID, event.getClass().getSimpleName(), event.getId(), event.getTitle());
     }
 
     @EventHandler
     public void handle(TodoDone event) {
-        LOG.debug("{}: Event({}) [{}]", this.getClass().getSimpleName(), event.getClass().getSimpleName(), event.getId());
+        LOG.debug("INSTANCE-{}: Event({}) [{}]", INSTANCE_ID, event.getClass().getSimpleName(), event.getId());
     }
 
     @EventHandler
     public void handle(TodoUndone event) {
-        LOG.debug("{}:Event({}) [{}]", this.getClass().getSimpleName(), event.getClass().getSimpleName(), event.getId());
+        LOG.debug("INSTANCE-{}:Event({}) [{}]", INSTANCE_ID, event.getClass().getSimpleName(), event.getId());
     }
 }
 

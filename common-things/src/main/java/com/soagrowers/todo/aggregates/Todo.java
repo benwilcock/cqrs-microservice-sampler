@@ -1,7 +1,9 @@
 package com.soagrowers.todo.aggregates;
 
-import com.soagrowers.todo.commands.*;
 import com.soagrowers.todo.events.*;
+import com.soagrowers.todo.commands.CreateCommand;
+import com.soagrowers.todo.commands.MarkDoneCommand;
+import com.soagrowers.todo.commands.MarkUndoneCommand;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
@@ -19,12 +21,12 @@ import org.slf4j.LoggerFactory;
  * to the aggregate thereby re-creating the logical state of the Aggregate.
  * <p>
  * The Todo Aggregate can handle and react to 'Commands', and when it reacts
- * to these commands it creates and 'applies' Events that represent the logical changes
+ * to these com.soagrowers.todo.commands it creates and 'applies' Events that represent the logical changes
  * to be made. These Events are also handled by the Todo.
  * <p>
  * Axon takes care of much of this via the CommandBus, EventBus and Repository.
  * <p>
- * Axon delivers commands placed on the bus to the Aggregate. Axon supports the 'applying' of
+ * Axon delivers com.soagrowers.todo.commands placed on the bus to the Aggregate. Axon supports the 'applying' of
  * Events to the Aggregate, and the handling of those events by the aggregate or any other
  * configured EventHandlers.
  */

@@ -11,17 +11,53 @@
                            http://www.axonframework.org/schema/amqp http://www.axonframework.org/schema/axon-amqp.xsd
                            ">
 
-    <!-- Defaults to SimpleCommandBus. transaction-manager="rabbitTransactionManager" -->
-    <axon:command-bus id="commandBus" />
-    <axon:event-bus id="eventBus"/>
+    <axon:command-bus id="commandBus" transaction-manager="rabbitTransactionManager"/>
+    <axon:event-bus id="terminalEventBus" terminal="rabbit.terminal"/>
 
-    <!-- event-bus="eventBus" event-store="eventStore" -->
+    <rabbit:admin id="test" connection-factory="rabbit" auto-startup="true"/>
+    <rabbit:connection-factory id="rabbit" username="test" password="password"/>
+    <rabbit:template id="rabbitTemplate" connection-factory="rabbit"/>
+    <bean id="rabbitTransactionManager" class="org.springframework.amqp.rabbit.transaction.RabbitTransactionManager">
+        <property name="connectionFactory" ref="rabbit" />
+    </bean>
+    <rabbit:queue id="defaultQueue" name="todo.axon.terminal.defaultQueue" auto-delete="false" durable="false"/>
+    <rabbit:fanout-exchange id="todoExchange" name="todo.axon.terminal" auto-delete="false" durable="true">
+        <rabbit:bindings>
+            <rabbit:binding queue="defaultQueue" />
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+
+
+    <axon-amqp:terminal id="rabbit.terminal"
+                        exchange-name="todo.axon.terminal"
+                        connection-factory="rabbit"
+                        transactional="true"
+                        serializer="MQSerializer">
+        <axon-amqp:default-configuration transaction-manager="rabbitTransactionManager"/>
+    </axon-amqp:terminal>
+
+    <bean id="MQSerializer" class="org.axonframework.serializer.xml.XStreamSerializer" />
+    <bean id="DBSerializer" class="org.axonframework.serializer.xml.XStreamSerializer" />
+
+    <axon:cluster id="command.cluster" default="true" >
+        <axon:meta-data>
+            <entry key="AMQP.Config">
+                <axon-amqp:configuration transaction-manager="rabbitTransactionManager"
+                                         transaction-size="1"
+                                         queue-name="todo.axon.terminal.defaultQueue"
+                                         exclusive="false" />
+            </entry>
+        </axon:meta-data>
+    </axon:cluster>
+
+
     <axon:event-sourcing-repository id="todoRepository"
                                     aggregate-type="com.soagrowers.todo.aggregates.Todo"
-                                    event-bus="eventBus"/>
+                                    event-bus="terminalEventBus"
+                                    event-store="mongoEventStore"/>
 
-    <bean id="eventStore" class="org.axonframework.eventstore.mongo.MongoEventStore">
-        <!--<constructor-arg ref="serializer"/>-->
+    <bean id="mongoEventStore" class="org.axonframework.eventstore.mongo.MongoEventStore">
+        <constructor-arg ref="DBSerializer"/>
         <constructor-arg ref="mongoTemplate"/>
     </bean>
     <mongo:mongo host="127.0.0.1" port="27017"/>
@@ -43,9 +79,9 @@
     <axon:aggregate-command-handler aggregate-type="com.soagrowers.todo.aggregates.Todo"
                                     repository="todoRepository"
                                     command-bus="commandBus"/>
-    <!-- Scans for @CommandHandlers and @EventHandlers -->
+    <!-- Scans for @CommandHandlers and @EventHandlers-->
     <axon:annotation-config />
-    <!-- instantiates the given handlers -->
+    <!-- instantiates the given handlers-->
     <bean class="com.soagrowers.todo.eventhandlers.EventLoggingHandler"/>
 
 </beans>

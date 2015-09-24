@@ -4,6 +4,7 @@ import com.soagrowers.todo.aggregates.Todo;
 import com.soagrowers.todo.commands.CreateCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.EventSourcingRepository;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -16,6 +17,13 @@ import static org.junit.Assert.*;
  */
 public class TodoCommandAppTest {
 
+
+    @AfterClass
+    public static void closeDown() throws InterruptedException{
+        // Give the message listeners time to consume from the message queues..
+        // Otherwise the messages 'back-up'
+        TimeUnit.SECONDS.sleep(3l);
+    }
 
     @Test
     public void testGatewayIsntNull(){
@@ -30,11 +38,10 @@ public class TodoCommandAppTest {
     }
 
     @Test
-    public void testCommandDeliveryAndEventSourcingWorks() throws InterruptedException {
+    public void testCommandDeliveryAndEventSourcingWorks()  {
         String id = UUID.randomUUID().toString();
         String title = "Test command delivery";
-        TodoCommandApp.getGateway().send(new CreateCommand(id,title));
-        TimeUnit.SECONDS.sleep(1l);
+        TodoCommandApp.getGateway().send(new CreateCommand(id, title));
         Todo todo = TodoCommandApp.loadAggregate(id);
         assertEquals(id, todo.getId());
         assertEquals(title, todo.getTitle());
