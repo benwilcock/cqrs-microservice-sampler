@@ -15,25 +15,25 @@ import static org.junit.Assert.*;
 /**
  * Created by ben on 22/09/15.
  */
-public class TodoCommandAppTest {
+public class TodoCommandApiTest {
 
 
     @AfterClass
     public static void closeDown() throws InterruptedException{
         // Give the message listeners time to consume from the message queues..
         // Otherwise the messages 'back-up'
-        TimeUnit.SECONDS.sleep(3l);
+        TimeUnit.SECONDS.sleep(5l);
     }
 
     @Test
     public void testGatewayIsntNull(){
-        CommandGateway gateway = TodoCommandApp.getGateway();
+        CommandGateway gateway = TodoCommandApi.getGateway();
         assertNotNull(gateway);
     }
 
     @Test
     public void testRepositoryIsntNull(){
-        EventSourcingRepository<Todo> repo = TodoCommandApp.getRepository();
+        EventSourcingRepository<Todo> repo = TodoCommandApi.getRepository();
         assertNotNull(repo);
     }
 
@@ -41,8 +41,8 @@ public class TodoCommandAppTest {
     public void testCommandDeliveryAndEventSourcingWorks()  {
         String id = UUID.randomUUID().toString();
         String title = "Test command delivery";
-        TodoCommandApp.getGateway().send(new CreateCommand(id, title));
-        Todo todo = TodoCommandApp.loadAggregate(id);
+        TodoCommandApi.getGateway().sendAndWait(new CreateCommand(id, title));
+        Todo todo = TodoCommandApi.loadAggregate(id);
         assertEquals(id, todo.getId());
         assertEquals(title, todo.getTitle());
         assertFalse(todo.isDone());

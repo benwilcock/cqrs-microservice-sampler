@@ -11,9 +11,20 @@
                            http://www.axonframework.org/schema/amqp http://www.axonframework.org/schema/axon-amqp.xsd
                            ">
 
+    <!--
+
+    BUSSES...
+
+    -->
+
     <axon:command-bus id="commandBus" transaction-manager="rabbitTransactionManager"/>
     <axon:event-bus id="terminalEventBus" terminal="rabbit.terminal"/>
 
+    <!--
+
+    MESSAGING...
+
+    -->
     <rabbit:admin id="test" connection-factory="rabbit" auto-startup="true"/>
     <rabbit:connection-factory id="rabbit" username="test" password="password"/>
     <rabbit:template id="rabbitTemplate" connection-factory="rabbit"/>
@@ -27,6 +38,11 @@
         </rabbit:bindings>
     </rabbit:fanout-exchange>
 
+    <!--
+
+    TERMINAL...
+
+    -->
 
     <axon-amqp:terminal id="rabbit.terminal"
                         exchange-name="todo.axon.terminal"
@@ -38,6 +54,12 @@
 
     <bean id="MQSerializer" class="org.axonframework.serializer.xml.XStreamSerializer" />
     <bean id="DBSerializer" class="org.axonframework.serializer.xml.XStreamSerializer" />
+
+    <!--
+
+    CLUSTER...
+
+    -->
 
     <axon:cluster id="command.cluster" default="true" >
         <axon:meta-data>
@@ -51,10 +73,22 @@
     </axon:cluster>
 
 
+    <!--
+
+    REPOSITORY...
+
+    -->
+
     <axon:event-sourcing-repository id="todoRepository"
                                     aggregate-type="com.soagrowers.todo.aggregates.Todo"
                                     event-bus="terminalEventBus"
                                     event-store="mongoEventStore"/>
+
+    <!--
+
+    EVENT-STORE...
+
+    -->
 
     <bean id="mongoEventStore" class="org.axonframework.eventstore.mongo.MongoEventStore">
         <constructor-arg ref="DBSerializer"/>
@@ -71,6 +105,11 @@
         <constructor-arg index="5"><null/></constructor-arg>
     </bean>
 
+    <!--
+
+    COMMAND HANDLING...
+
+    -->
 
     <bean id="commandGatewayFactory" class="org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean" >
         <property name="commandBus" ref="commandBus"/>
@@ -79,6 +118,8 @@
     <axon:aggregate-command-handler aggregate-type="com.soagrowers.todo.aggregates.Todo"
                                     repository="todoRepository"
                                     command-bus="commandBus"/>
+
+
     <!-- Scans for @CommandHandlers and @EventHandlers-->
     <axon:annotation-config />
     <!-- instantiates the given handlers-->

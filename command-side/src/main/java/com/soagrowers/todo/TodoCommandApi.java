@@ -16,23 +16,23 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * Created by ben on 21/09/15.
  */
-public class TodoCommandApp {
+public class TodoCommandApi {
 
 
-    private final static Logger LOG = LoggerFactory.getLogger(TodoCommandApp.class);
+    private final static Logger LOG = LoggerFactory.getLogger(TodoCommandApi.class);
     private final static CommandGateway commandGateway;
     private final static ApplicationContext applicationContext;
     private final static EventSourcingRepository<Todo> repository;
     private final static String CONTEXT_FILE_NAME = "commandContext.xml";
 
     static {
-        LOG.info("Starting the TodoCommandApp with context file: {}", CONTEXT_FILE_NAME);
+        LOG.info("Starting the TodoCommandApi with context file: {}", CONTEXT_FILE_NAME);
         applicationContext = new ClassPathXmlApplicationContext(CONTEXT_FILE_NAME);
         commandGateway = applicationContext.getBean(CommandGateway.class);
         repository = (EventSourcingRepository<Todo>) applicationContext.getBean("todoRepository");
     }
 
-    private TodoCommandApp() {
+    private TodoCommandApi() {
     }
 
     public static CommandGateway getGateway() {
