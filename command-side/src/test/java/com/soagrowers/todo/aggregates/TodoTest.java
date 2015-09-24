@@ -24,22 +24,14 @@ public class TodoTest {
     public void testCreateToDoItem() throws Exception {
         fixture.given()
                 .when(new CreateCommand("todo1", "need to implement the aggregate"))
-                .expectEvents(new TodoItemCreatedEvent("todo1", "need to implement the aggregate"));
+                .expectEvents(new TodoCreated("todo1", "need to implement the aggregate"));
     }
 
     @Test
     public void testMarkToDoItemAsCompleted() throws Exception {
-        fixture.given(new TodoItemCreatedEvent("todo1", "need to implement the aggregate"))
+        fixture.given(new TodoCreated("todo1", "need to implement the aggregate"))
                 .when(new MarkDoneCommand("todo1"))
                 .expectVoidReturnType()
-                .expectEvents(new TodoItemDoneEvent("todo1"));
-    }
-
-    @Test
-    public void testMarkToDoItemAsCompletedTwiceFails() throws Exception {
-        fixture.given(new TodoItemCreatedEvent("todo1", "need to implement the aggregate"),
-                new TodoItemDoneEvent("todo1"))
-                .when(new MarkDoneCommand("todo1"))
-                .expectException(IllegalStateException.class);
+                .expectEvents(new TodoDone("todo1"));
     }
 }

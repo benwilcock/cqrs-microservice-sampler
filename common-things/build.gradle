@@ -9,6 +9,10 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'idea'
 
+dependencies{
+
+}
+
 jar {
     baseName = 'todo-common-things'
 }

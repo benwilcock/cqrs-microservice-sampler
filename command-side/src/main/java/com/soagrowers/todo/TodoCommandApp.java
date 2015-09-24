@@ -22,12 +22,14 @@ public class TodoCommandApp {
     private final static Logger LOG = LoggerFactory.getLogger(TodoCommandApp.class);
     private final static CommandGateway commandGateway;
     private final static ApplicationContext applicationContext;
-    //private final static EventSourcingRepository<Todo> repository;
+    private final static EventSourcingRepository<Todo> repository;
+    private final static String CONTEXT_FILE_NAME = "commandContext.xml";
 
     static {
-        applicationContext = new ClassPathXmlApplicationContext("commandContext.xml");
+        LOG.info("Starting the TodoCommandApp with context file: {}", CONTEXT_FILE_NAME);
+        applicationContext = new ClassPathXmlApplicationContext(CONTEXT_FILE_NAME);
         commandGateway = applicationContext.getBean(CommandGateway.class);
-        //repository = (EventSourcingRepository<Todo>) applicationContext.getBean("todoRepository");
+        repository = (EventSourcingRepository<Todo>) applicationContext.getBean("todoRepository");
     }
 
     private TodoCommandApp() {
@@ -37,10 +39,11 @@ public class TodoCommandApp {
         return commandGateway;
     }
 
-/*
+
     public static EventSourcingRepository<Todo> getRepository() {
         return repository;
     }
+
 
     public static final Todo loadAggregate(String toDoItemId) {
         LOG.debug("Loading: 'Todo' {}", toDoItemId);
@@ -50,5 +53,4 @@ public class TodoCommandApp {
         LOG.debug("Loaded: 'Todo' {}, '{}', complete={}", item.getId(), item.getTitle(), item.isDone());
         return item;
     }
-*/
 }

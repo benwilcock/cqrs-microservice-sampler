@@ -2,13 +2,32 @@ buildscript {
     repositories {
         mavenCentral()
     }
+
+
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.6.RELEASE")
     }
 }
 
+
 apply plugin: 'idea'
 //apply plugin: 'spring-boot'
+
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
 
 jar {
     baseName = 'todo-command-side'
@@ -32,6 +51,20 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+}
+
+tasks.withType(Test) {
+    reports.html.destination = file("${reporting.baseDir}/${name}")
+}
+
+// http://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
 
 /*
 *

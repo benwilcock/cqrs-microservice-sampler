@@ -56,7 +56,7 @@ public class Todo extends AbstractAnnotatedAggregateRoot {
     /**
      * This constructor is marked as a 'CommandHandler' for the
      * CreateCommand. This command can be used to construct
-     * new instances of the Aggregate. If successful a new TodoItemCreatedEvent
+     * new instances of the Aggregate. If successful a new TodoCreated
      * is 'applied' to the aggregate using the Axon 'apply' method. The apply
      * method appears to also propagate the Event to any other registered
      * 'Event Listeners', who may take further action.
@@ -66,29 +66,14 @@ public class Todo extends AbstractAnnotatedAggregateRoot {
     @CommandHandler
     public Todo(CreateCommand command) {
         LOG.debug("Command: 'CreateToDoItem' received.");
-        apply(new TodoItemCreatedEvent(command.getTodoId(), command.getDescription()));
-    }
-
-    /**
-     * This method is marked as an EventHandler and is therefore used by the Axon framework to
-     * handle events of the specified type (TodoItemCreatedEvent). The TodoItemCreatedEvent can be
-     * raised either by the constructor during Todo(CreateCommand) or by the
-     * Repository when 're-loading' the aggregate.
-     *
-     * @param event
-     */
-    @EventSourcingHandler
-    public void on(TodoItemCreatedEvent event) {
-        this.id = event.getId();
-        this.title = event.getDescription();
-        LOG.debug("Applied: 'TodoItemCreatedEvent' [{}] '{}'", event.getId(), event.getDescription());
+        apply(new TodoCreated(command.getTodoId(), command.getDescription()));
     }
 
     @CommandHandler
     public void markDone(MarkDoneCommand command) {
         LOG.debug("Command: 'MarkDone' received.");
         if (!this.isDone()) {
-            apply(new TodoItemDoneEvent(id));
+            apply(new TodoDone(id));
         } else {
             throw new IllegalStateException("This Todo (" + this.getId() + ") is already Done.");
         }
@@ -98,22 +83,37 @@ public class Todo extends AbstractAnnotatedAggregateRoot {
     public void markUndone(MarkUndoneCommand command) {
         LOG.debug("Command: 'MarkUndone' received.");
         if (this.isDone()) {
-            apply(new TodoItemUndoneEvent(id));
+            apply(new TodoUndone(id));
         } else {
             throw new IllegalStateException("This Todo (" + this.getId() + ") is no longer Done.");
         }
     }
 
+    /**
+     * This method is marked as an EventSourcingHandler and is therefore used by the Axon framework to
+     * handle events of the specified type (TodoCreated). The TodoCreated can be
+     * raised either by the constructor during Todo(CreateCommand) or by the
+     * Repository when 're-loading' the aggregate.
+     *
+     * @param event
+     */
     @EventSourcingHandler
-    public void on(TodoItemDoneEvent event) {
+    public void on(TodoCreated event) {
+        this.id = event.getId();
+        this.title = event.getTitle();
+        LOG.debug("Applied: 'TodoCreated' [{}] '{}'", event.getId(), event.getTitle());
+    }
+
+    @EventSourcingHandler
+    public void on(TodoDone event) {
         this.isDone = true;
         LOG.debug("Applied: 'TodoItemCompletedEvent' [{}]", event.getId());
     }
 
     @EventSourcingHandler
-    public void on(TodoItemUndoneEvent event) {
+    public void on(TodoUndone event) {
         this.isDone = false;
-        LOG.debug("Applied: 'TodoItemUndoneEvent' [{}]", event.getId());
+        LOG.debug("Applied: 'TodoUndone' [{}]", event.getId());
     }
 
     public String getId() {
