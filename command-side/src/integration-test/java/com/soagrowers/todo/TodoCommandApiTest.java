@@ -2,6 +2,8 @@ package com.soagrowers.todo;
 
 import com.soagrowers.todo.aggregates.Todo;
 import com.soagrowers.todo.commands.CreateCommand;
+import com.soagrowers.todo.commands.MarkDoneCommand;
+import com.soagrowers.todo.commands.MarkUndoneCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.EventSourcingRepository;
 import org.junit.AfterClass;
@@ -37,14 +39,44 @@ public class TodoCommandApiTest {
         assertNotNull(repo);
     }
 
-    @Test
+    /*@Test
     public void testCommandDeliveryAndEventSourcingWorks()  {
         String id = UUID.randomUUID().toString();
-        String title = "Test command delivery";
+        String title = "TODO [" + id + "]";
         TodoCommandApi.getGateway().sendAndWait(new CreateCommand(id, title));
         Todo todo = TodoCommandApi.loadAggregate(id);
         assertEquals(id, todo.getId());
         assertEquals(title, todo.getTitle());
         assertFalse(todo.isDone());
+    }*/
+
+    @Test
+    public void createLotsOfTodos(){
+        for (int i = 0; i < 100; i++) {
+            String id = UUID.randomUUID().toString();
+            String title = "TODO [" + id + "]";
+            TodoCommandApi.getGateway().sendAndWait(new CreateCommand(id, title));
+        }
+    }
+
+    @Test
+    public void createLotsOfDoneTodos(){
+        for (int i = 0; i < 100; i++) {
+            String id = UUID.randomUUID().toString();
+            String title = "TODO [" + id + "]";
+            TodoCommandApi.getGateway().sendAndWait(new CreateCommand(id, title));
+            TodoCommandApi.getGateway().sendAndWait(new MarkDoneCommand(id));
+        }
+    }
+
+    @Test
+    public void createLotsOfUndoneTodos(){
+        for (int i = 0; i < 100; i++) {
+            String id = UUID.randomUUID().toString();
+            String title = "TODO [" + id + "]";
+            TodoCommandApi.getGateway().sendAndWait(new CreateCommand(id, title));
+            TodoCommandApi.getGateway().sendAndWait(new MarkDoneCommand(id));
+            TodoCommandApi.getGateway().sendAndWait(new MarkUndoneCommand(id));
+        }
     }
 }

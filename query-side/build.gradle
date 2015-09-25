@@ -8,7 +8,7 @@ buildscript {
 }
 
 apply plugin: 'idea'
-//apply plugin: 'spring-boot'
+apply plugin: 'spring-boot'
 
 jar {
     baseName = 'todo-query-side'
@@ -20,7 +20,10 @@ repositories {
 }
 
 dependencies {
+    compile project(':common-things')
+    compile("org.axonframework:axon-amqp:2.4.1")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-amqp")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

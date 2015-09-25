@@ -31,7 +31,7 @@
     <bean id="rabbitTransactionManager" class="org.springframework.amqp.rabbit.transaction.RabbitTransactionManager">
         <property name="connectionFactory" ref="rabbit" />
     </bean>
-    <rabbit:queue id="defaultQueue" name="todo.axon.terminal.defaultQueue" auto-delete="false" durable="false"/>
+    <rabbit:queue id="defaultQueue" name="todo.axon.terminal.defaultQueue" auto-delete="false" durable="true"/>
     <rabbit:fanout-exchange id="todoExchange" name="todo.axon.terminal" auto-delete="false" durable="true">
         <rabbit:bindings>
             <rabbit:binding queue="defaultQueue" />
