@@ -17,7 +17,3 @@ dependencies{
 jar {
     baseName = 'todo-common-things'
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
-}
