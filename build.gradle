@@ -17,3 +17,7 @@ subprojects {
 
     version = '0.1'
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
