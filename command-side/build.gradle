@@ -35,16 +35,13 @@ jar {
 
 dependencies {
     compile project(':common-things')
-
     compile("org.axonframework:axon-amqp:2.4.1")
     compile("org.axonframework:axon-mongo:2.4.1")
-    compile("org.springframework:spring-context:4.0.3.RELEASE")
-    compile("org.springframework.amqp:spring-rabbit:1.4.5.RELEASE")
-    compile("org.springframework.data:spring-data-mongodb:1.7.2.RELEASE")
-
-    // compile("org.springframework.boot:spring-boot-starter-web")
-    // compile("org.springframework.boot:spring-boot-starter-actuator")
-    // testCompile("org.springframework.boot:spring-boot-starter-test")
+    compile("org.springframework.boot:spring-boot-starter-actuator:1.2.6.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-web:1.2.6.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-amqp:1.2.6.RELEASE")
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb:1.2.6.RELEASE')
+    testCompile("org.springframework.boot:spring-boot-starter-test:1.2.6.RELEASE")
 }
 
 task integrationTest(type: Test) {
