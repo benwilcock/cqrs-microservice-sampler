@@ -35,7 +35,11 @@ Assuming you already have...
 
 ### Bring up the DB and MQ servers...
 
-First lets get the rabbit and mongo servers up. We'll use Docker because its really simple. If you already have MongoDB and RabbitMQ servers available on localhost (and of the default ports), then you can safely skip this step.
+First lets get the rabbit and mongo servers up. We'll use Docker because its really simple. If you already have MongoDB and RabbitMQ servers available on localhost (and of the default ports).
+
+> The demo expects a RabbitMQ user with the username `test` and the password `password` to be present and for this user to have admin rights so that it can create exchanges and queues. If you don't want to add such a user, stop your local RabbitMQ server and start the docker one instead.
+
+> The demo also expects the MongoDB server to have a default `guest` user and for this have admin rights. If you don't want to allow this, stop your local MongoDB server and start the docker one instead using the commands below.
 
 ```bash
 $ docker run -d --name my-mongo -p 27017:27017 mongo
