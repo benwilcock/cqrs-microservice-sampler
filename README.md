@@ -1,14 +1,14 @@
 # microservice-sampler
 
-This is a demonstration of the mocroservices pattern in `Java`. It's built to illustrate the use of the following ideas in one simple 'Todo' application...
+This is a demonstration of the mocroservices pattern in `Java`. It's built to illustrate the use of a number of techniques and patterns in one simple 'Todo' application...
 
 1. Microservices 
 2. Command and Query Responsibility Separation (CQRS)
 3. Event Sourcing
 
-It uses the following technologies to do this...
+It leverages the following technologies to do this...
 
-- Spring-Boot
+- (Spring Boot)[http://projects.spring.io/spring-boot/]
 - Axon Framework
 - RabbitMQ (Axon supports any Spring AMQP platform)
 - MongoDB (Axon also supports JDBC, JPA, etc...)
@@ -69,7 +69,7 @@ $ ./gradlew query-side:bootRun
 ```
 After lots of output from Spring Boot, you should have a fully booted query-side microservice listening on http port 9002 (which can be changed later if you like).
 
-In **terminal 2**:-
+In **terminal 2**:
 
 We can check the service is started and that the *material-view* is empty by sending a RESTful query to the service like so:-
 
