@@ -8,38 +8,38 @@ This is a demonstration of the mocroservices pattern in `Java`. It's built to il
 
 It leverages the following technologies to do this...
 
-- (Spring Boot)[http://projects.spring.io/spring-boot/]
-- Axon Framework
-- RabbitMQ (Axon supports any Spring AMQP platform)
-- MongoDB (Axon also supports JDBC, JPA, etc...)
+- [Spring Boot](http://projects.spring.io/spring-boot/) (v1.2.6)
+- [Axon Framework](http://www.axonframework.org/) (v2.4)
+- [RabbitMQ](https://www.rabbitmq.com/) (v3.5.4) Axon supports any Spring AMQP supported platform.
+- [MongoDB](https://www.mongodb.com/) (v.latest) Axon also supports JDBC & JPA based event-stores.
 
 ## How it works
 
 The domain is literally split into a Command-side microservice and a Query-side microservice (this is CQRS in its most literal form, although it doesn't have to be this way if you don't want it to be).
 
-The **command-side** can process commands such as creating and completing or un-completing a Todo item. The execution of these commands results in `Events` which are stored to disk by Axon (using MongoDB) and propagated out to other VM's (as many as you like) via RabbitMQ.
+The **command-side** can process commands such as creating and completing or un-completing a Todo item. The execution of these commands results in `Events` which are persisted by Axon (using MongoDB) and propagated out to other VM's (as many as you like) via RabbitMQ.
 
 The **query-side** listens for `Events` coming from RabbitMQ and process them in whatever way makes the most sense. In this simple Todo demo, the query-side builds and maintains a *materialised view* which tracks the state of the individual Todo items (in terms of whether they are complete or incomplete). The query-side can be replicated many times for scalability and the messages held by RabbitMQ are durable, so they can be stored on behalf of the query side if there is a problem.
 
 The command-side and the query-side both have REST API's which can be used to access their capabilities.
 
-## Running the Demo...
+> These REST API's are 'work in progress'.
+
+Read the [Axon documentation](http://www.axonframework.org/download/) for the finer details of how Axon generally operates to bring you CQRS and Event Sourcing to your apps, as well as lots of detail on how it all get's configured (spoiler: it's mostly spring-context XML for the setup and some Java extensions and annotations within the code).
+
+## Running the Demo yourself...
 
 Assuming you already have...
 
-- Java JDK 8
-- Git
-- Docker
+- [Java JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) (I'm using v1.8.0_60)
+- [Git](https://git-scm.com/) (I'm using v1.9.1)
+- [Docker](https://www.docker.com/) (I'm using v1.8.2)
 
 ...then do the following...
 
-### Bring up the DB and MQ servers...
+### Step 1: Spool up the Database and Messaging servers...
 
-First lets get the rabbit and mongo servers up. We'll use Docker because its really simple. If you already have MongoDB and RabbitMQ servers available on localhost (and of the default ports).
-
-> The demo expects a RabbitMQ user with the username `test` and the password `password` to be present and for this user to have admin rights so that it can create exchanges and queues. If you don't want to add such a user, stop your local RabbitMQ server and start the docker one instead.
-
-> The demo also expects the MongoDB server to have a default `guest` user and for this have admin rights. If you don't want to allow this, stop your local MongoDB server and start the docker one instead using the commands below.
+First lets get the rabbit and mongo servers up. We'll use Docker because its really simple.
 
 ```bash
 $ docker run -d --name my-mongo -p 27017:27017 mongo
@@ -49,7 +49,13 @@ $ docker ps
 
 Executing these commands should pull down the required docker containers and install and run them locally. They're given the names `my-rabbit` and `my-mongo` and they'll run in the background until you ask docker to stop them (using `docker stop my-mongo` for example).
 
-### Clone and build the project...
+If you already have MongoDB and RabbitMQ servers available on localhost (and of the default ports) you can use those instead of docker if you have the required users and settings (see the blockquotes below for details).
+
+> The demo expects a RabbitMQ user with the username `test` and the password `password` to be present and for this user to have admin rights so that it can create exchanges and queues. If you don't want to add such a user, stop your local RabbitMQ server and start the docker one instead.
+
+> The demo also expects the MongoDB server to have a default `guest` user with no password and for this guest user to have admin rights. If you don't want to add such a user, stop your local MongoDB server and start the docker container instead using the commands above.
+
+### Step 2: Clone and build the project...
 
 Next we can download, build it and unit test the microservices project. Here I'm using the Gradle wrapper, so there is no need to actually install Gradle if you don't want to.
 
@@ -59,7 +65,7 @@ $ cd microservice-sampler
 $ ./gradlew clean test
 ```
 
-### Integration Test using multiple VM's...
+### Step 3: Integration Test (using multiple VM's)...
 
 So far so good. Now we want to test the delivery of event messages to other processes. To do this we need two (**2**) terminal windows. In one window we'll boot the `query-side` (which contains an event-listener and a materialised view), and in the other terminal we'll fire the `command-side` integration tests (which generate commands that generate events).
 
