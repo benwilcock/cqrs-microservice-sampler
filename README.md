@@ -15,11 +15,11 @@ It leverages the following technologies to do this...
 
 ## How it works
 
-The domain is literally split into a Command-side microservice and a Query-side microservice (this is CQRS in its most literal form, although it doesn't have to be this way if you don't want it to be).
+The `Todo` domain is literally split into a *command-side* microservice application and a *query-side* microservice application (this is CQRS in its most literal form, although it doesn't have to be this way if you don't want it to be). Both services use spring-boot. Communication between the two services is `event-driven` and the demo uses messaging as a means of passing the events between processes (VM's).
 
-The **command-side** can process commands such as creating and completing or un-completing a Todo item. The execution of these commands results in `Events` which are persisted by Axon (using MongoDB) and propagated out to other VM's (as many as you like) via RabbitMQ.
+The **command-side** processes commands. Commands are actions which change state in some way. In this demo commands are used to create, complete or un-complete a Todo item. The execution of these commands on a Todo item (a.k.a an `Aggregate`) results in `Events` being generated which are persisted by Axon (using MongoDB) and propagated out to other VM's (as many VM's as you like) via RabbitMQ messaging. In event-sourcing, events are the sole records in the system. They are used by the system to describe and re-build aggregates on demand, one event at a time.
 
-The **query-side** listens for `Events` coming from RabbitMQ and process them in whatever way makes the most sense. In this simple Todo demo, the query-side builds and maintains a *materialised view* which tracks the state of the individual Todo items (in terms of whether they are complete or incomplete). The query-side can be replicated many times for scalability and the messages held by RabbitMQ are durable, so they can be stored on behalf of the query side if there is a problem.
+The **query-side** is an event-listener and processor. It listens for the `Events` and processes them in whatever way makes the most sense. In this simple Todo demo, the query-side just builds and maintains a *materialised view* which tracks the state of the individual Todo items (in terms of whether they are complete or incomplete). The query-side can be replicated many times for scalability and the messages held by the RabbitMQ queues are durable, so they can be temporarily stored on behalf of the event-listener if there is a problem.
 
 The command-side and the query-side both have REST API's which can be used to access their capabilities.
 
@@ -97,5 +97,5 @@ In **terminal 2** ask the query-side microservice for a count to show how many c
 ```bash
 $ curl http://localhost:9002/todo/count
 ```
-You should get an answer that is something like `COUNT: todo=200 done=100` confirming that lots of events were recieved and that the material view was altered accordingly.
+You should get an answer that is something like `COUNT: todo=200 done=100` confirming that lots of events were received and that the material-view was altered accordingly.
 
