@@ -39,17 +39,6 @@ public class TodoCommandApiTest {
         assertNotNull(repo);
     }
 
-    /*@Test
-    public void testCommandDeliveryAndEventSourcingWorks()  {
-        String id = UUID.randomUUID().toString();
-        String title = "TODO [" + id + "]";
-        TodoCommandApi.getGateway().sendAndWait(new CreateCommand(id, title));
-        Todo todo = TodoCommandApi.loadAggregate(id);
-        assertEquals(id, todo.getId());
-        assertEquals(title, todo.getTitle());
-        assertFalse(todo.isDone());
-    }*/
-
     @Test
     public void createLotsOfTodos(){
         for (int i = 0; i < 100; i++) {

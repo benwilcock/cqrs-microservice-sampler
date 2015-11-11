@@ -1,0 +1,78 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:axon="http://www.axonframework.org/schema/core"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xmlns:axon-amqp="http://www.axonframework.org/schema/amqp"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core-2.0.xsd
+                           http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+                           http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd
+                           http://www.axonframework.org/schema/amqp http://www.axonframework.org/schema/axon-amqp.xsd
+                           ">
+
+    <axon:event-bus id="terminalEventBus" terminal="rabbit.terminal"/>
+
+    <!--
+
+    TERMINAL...
+
+    -->
+
+    <axon-amqp:terminal id="rabbit.terminal"
+                        exchange-name="todo.axon.terminal"
+                        connection-factory="rabbit"
+                        transactional="true"
+                        serializer="MQSerializer">
+        <axon-amqp:default-configuration transaction-manager="rabbitTransactionManager"/>
+    </axon-amqp:terminal>
+
+    <bean id="MQSerializer" class="org.axonframework.serializer.xml.XStreamSerializer"/>
+
+    <!--
+
+    MESSAGING...
+
+    Queue names must be unique for each "event-listening-instance" if you want each to get all the published events,
+    otherwise you'll effectively create a 'worker-queue' where each instance only gets a random subset of the
+    event messages that are published...
+
+    -->
+    <rabbit:admin id="test" connection-factory="rabbit" auto-startup="true"/>
+    <rabbit:connection-factory id="rabbit" username="test" password="password"/>
+    <rabbit:template id="rabbitTemplate" connection-factory="rabbit"/>
+    <bean id="rabbitTransactionManager" class="org.springframework.amqp.rabbit.transaction.RabbitTransactionManager">
+        <property name="connectionFactory" ref="rabbit"/>
+    </bean>
+    <rabbit:queue id="queryQueue" name="todo.axon.terminal.eventStream1" auto-delete="false" durable="true"/>
+    <rabbit:fanout-exchange id="todoExchange" name="todo.axon.terminal" auto-delete="false" durable="true">
+        <rabbit:bindings>
+            <rabbit:binding queue="queryQueue"/>
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+
+
+    <!--
+
+    CLUSTER...
+
+    -->
+
+    <axon:cluster id="query.cluster" default="true">
+        <axon:meta-data>
+            <entry key="AMQP.Config">
+                <axon-amqp:configuration transaction-manager="rabbitTransactionManager"
+                                         transaction-size="10"
+                                         queue-name="todo.axon.terminal.eventStream1"/>
+            </entry>
+        </axon:meta-data>
+    </axon:cluster>
+
+
+    <!-- Scans for @CommandHandlers and @EventHandlers -->
+    <axon:annotation-config/>
+    <!-- instantiates the given handlers -->
+    <bean class="com.soagrowers.todo.eventhandlers.EventLoggingHandler"/>
+    <bean class="com.soagrowers.todo.eventhandlers.ToDoMaterialViewManager"/>
+
+</beans>
