@@ -1,6 +1,6 @@
-# Spring Boot with Data and REST
+# Material views with Spring Data REST
 
-This sample shows how spring data can be used with spring rest and spring boot to create a simple CRUD application.
+This module listens for events coming from the 'command-side' and uses this event stream to populate a database table (a.k.a. a 'material view') that lists each todo item alongside its current 'completed' status. The technology used to achieve this is [spring-boot-data-rest](https://spring.io/guides/gs/accessing-data-rest/) which relies upon an in memory H2 database to hold the persistent data.
 
 To spin up the Spring Boot service, use the gradle 'bootRun' plugin.
 
@@ -8,24 +8,23 @@ To spin up the Spring Boot service, use the gradle 'bootRun' plugin.
 $ gradlew bootRun
 ```
 
-Once the server is up you can ask the service to detail it's resources...
+Once the server is up you can ask the service to detail it's RESTful resources (in a second terminal window) as follows...
 
 ```bash
-$ curl http://localhost:8080
+$ curl http://localhost:9004
 ```
 
-This will return the following json outlining the services available, including as you can see the
-**todo** service.
+This will return the following json outlining the services available, including as you can see the **todo** service.
 
 ```json
 {
   "_links" : {
     "todo" : {
-      "href" : "http://localhost:8080/todo{?page,size,sort}",
+      "href" : "http://localhost:9004/todo{?page,size,sort}",
       "templated" : true
     },
     "profile" : {
-      "href" : "http://localhost:8080/alps"
+      "href" : "http://localhost:9004/alps"
     }
   }
 }
@@ -34,20 +33,20 @@ This will return the following json outlining the services available, including 
 You can then quiz the todo service for it's capabilities with...
 
 ```bash
-$ curl http://localhost:8080/todo
+$ curl http://localhost:9004/todo
 ```
 
-The following json is returned which shows the capabilities offered by the service as _links.
+The following json is returned which shows the capabilities offered by the service as _links. If there are any resources, the first page-full would be returned along with information on how many elements are in the dataset and some pagination hints. If you want more data run the command-side:integrationTest from gradle as detailed in the README.md at the root of this project.
 
 ```json
 {
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/todo{?page,size,sort}",
+      "href" : "http://localhost:9004/todo{?page,size,sort}",
       "templated" : true
     },
     "search" : {
-      "href" : "http://localhost:8080/todo/search"
+      "href" : "http://localhost:9004/todo/search"
     }
   },
   "page" : {
@@ -59,57 +58,11 @@ The following json is returned which shows the capabilities offered by the servi
 }
 ```
 
-Now lets create a new 'todo' item via REST (using POST). In this case I've specified an ID myself which is a bit different from the usual script. The ability to create and delete data can be swiched off using an annotation - see the ```ReadOnlyPagingAndSortingRepository``` for details.
-
-```bash
-$ curl -i -X POST -H "Content-Type:application/json" -d '{  "id": "test-0001", "title" : "Buy Milk!",  "status" : "false" }' http://localhost:8080/todo
-```
-
-The service will create the record in the H2 database (an in-memory database by default), and return the following response...
-```
-HTTP/1.1 201 Created
-Server: Apache-Coyote/1.1
-Location: http://localhost:8080/todo/test-0001
-Content-Length: 0
-Date: Mon, 09 Nov 2015 14:56:11 GMT
-```
-
-Now lets read the record from the database using its resource ID and view it's contents.
-
-```bash
-$ curl http://localhost:8080/todo/test-0001
-```
-
-```json
-{
-  "title" : "Buy Milk!",
-  "status" : false,
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/todo/test-0001"
-    }
-  }
-}
-```
-
-For comparison, we'll also create another todo with a different ID that has a status of 'true'.
-
-```bash
-$ curl -i -X POST -H "Content-Type:application/json" -d '{  "id": "test-0002", "title" : "Buy Bread!",  "status" : "true" }' http://localhost:8080/todo
-```
-
-```
-HTTP/1.1 201 Created
-Server: Apache-Coyote/1.1
-Location: http://localhost:8080/todo/test-0002
-Content-Length: 0
-Date: Mon, 09 Nov 2015 15:01:08 GMT
-```
 
 Now lets see what searches are available by asking the search feature to detail them.
 
 ```bash
-$ curl http://localhost:8080/todo/search
+$ curl http://localhost:9004/todo/search
 ```
 
 The search feature confirms that we have a custom search called 'findByStatus' which can take a status parameter...
@@ -118,7 +71,7 @@ The search feature confirms that we have a custom search called 'findByStatus' w
 {
   "_links" : {
     "findByStatus" : {
-      "href" : "http://localhost:8080/todo/search/findByStatus{?status}",
+      "href" : "http://localhost:9004/todo/search/findByStatus{?status}",
       "templated" : true
     }
   }
@@ -128,65 +81,12 @@ The search feature confirms that we have a custom search called 'findByStatus' w
 So lets try that 'findByStatus' search by looking for all todo's with a status=false...
 
 ```bash
-$ curl http://localhost:8080/todo/search/findByStatus?status=false
+$ curl http://localhost:9004/todo/search/findByStatus?status=false
 ```
 
-The service returns the following hits to our search criteria...
-
-```json
-{
-  "_embedded" : {
-    "todo" : [ {
-      "title" : "Buy Milk!",
-      "status" : false,
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/todo/test-0001"
-        }
-      }
-    } ]
-  }
-}
-```
-
-Buy Milk! is listed because it's status was **false**, but 'Buy Bread!' was not listed in the results because it's status is currently true.
-
-Now, lets update the 'Buy Bread!' resource so that it's status becomes 'false', then re-run the search.
-
-```bash
-$ curl -X PUT -H "Content-Type:application/json" -d '{  "id": "test-0002", "title" : "Buy Bread!",  "status" : "false" }' http://localhost:8080/todo/test-0002
-$ curl http://localhost:8080/todo/search/findByStatus?status=false
-```
-
-Now both 'Buy Milk!' and 'Buy Bread!' show in the 'findByStatus' search results when "status = false" is given as the search criteria.
-
-```json
-{
-  "_embedded" : {
-    "todo" : [ {
-      "title" : "Buy Milk!",
-      "status" : false,
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/todo/test-0001"
-        }
-      }
-    }, {
-      "title" : "Buy Bread!",
-      "status" : false,
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/todo/test-0002"
-        }
-      }
-    } ]
-  }
-}
-```
-
-Because the DELETE method has been marked as 'not exported' in the ```ReadOnlyPagingAndSortingRepository``` using the ```@RestResource(exported = false)``` annotation, it should not be possible to remove any of the todo's from the database. Isssuing a delete command silently fails.
+Because the **delete** and **save** methods have been marked as 'not exported' in the ```ReadOnlyPagingAndSortingRepository``` (using the ```@RestResource(exported = false)``` annotation), it should not be possible to remove any of the todo's from the database. Therefore issuing a delete command will silently fail.
 
  ```bash
- curl -X DELETE http://localhost:8080/todo/test-0001
+ curl -X DELETE http://localhost:9004/todo/test-0001
  ```
 
