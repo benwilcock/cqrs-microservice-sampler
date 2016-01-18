@@ -1,9 +1,9 @@
 package com.soagrowers.todo.aggregates;
 
+import com.soagrowers.todo.commands.CreateTodoCommand;
 import com.soagrowers.todo.events.*;
-import com.soagrowers.todo.commands.CreateCommand;
-import com.soagrowers.todo.commands.MarkDoneCommand;
-import com.soagrowers.todo.commands.MarkUndoneCommand;
+import com.soagrowers.todo.commands.MarkTodoAsDoneCommand;
+import com.soagrowers.todo.commands.MarkTodoAsUndoneCommand;
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
@@ -57,7 +57,7 @@ public class Todo extends AbstractAnnotatedAggregateRoot {
 
     /**
      * This constructor is marked as a 'CommandHandler' for the
-     * CreateCommand. This command can be used to construct
+     * CreateTodoCommand. This command can be used to construct
      * new instances of the Aggregate. If successful a new TodoCreated
      * is 'applied' to the aggregate using the Axon 'apply' method. The apply
      * method appears to also propagate the Event to any other registered
@@ -66,26 +66,26 @@ public class Todo extends AbstractAnnotatedAggregateRoot {
      * @param command
      */
     @CommandHandler
-    public Todo(CreateCommand command) {
+    public Todo(CreateTodoCommand command) {
         LOG.debug("Command: 'CreateToDoItem' received.");
         apply(new TodoCreated(command.getTodoId(), command.getDescription()));
     }
 
     @CommandHandler
-    public void markDone(MarkDoneCommand command) {
+    public void markDone(MarkTodoAsDoneCommand command) {
         LOG.debug("Command: 'MarkDone' received.");
         if (!this.isDone()) {
-            apply(new TodoDone(id));
+            apply(new TodoMarkedAsDone(id));
         } else {
             throw new IllegalStateException("This Todo (" + this.getId() + ") is already Done.");
         }
     }
 
     @CommandHandler
-    public void markUndone(MarkUndoneCommand command) {
+    public void markUndone(MarkTodoAsUndoneCommand command) {
         LOG.debug("Command: 'MarkUndone' received.");
         if (this.isDone()) {
-            apply(new TodoUndone(id));
+            apply(new TodoMarkedAsUndone(id));
         } else {
             throw new IllegalStateException("This Todo (" + this.getId() + ") is no longer Done.");
         }
@@ -94,7 +94,7 @@ public class Todo extends AbstractAnnotatedAggregateRoot {
     /**
      * This method is marked as an EventSourcingHandler and is therefore used by the Axon framework to
      * handle events of the specified type (TodoCreated). The TodoCreated can be
-     * raised either by the constructor during Todo(CreateCommand) or by the
+     * raised either by the constructor during Todo(CreateTodoCommand) or by the
      * Repository when 're-loading' the aggregate.
      *
      * @param event
@@ -107,15 +107,15 @@ public class Todo extends AbstractAnnotatedAggregateRoot {
     }
 
     @EventSourcingHandler
-    public void on(TodoDone event) {
+    public void on(TodoMarkedAsDone event) {
         this.isDone = true;
         LOG.debug("Applied: 'TodoItemCompletedEvent' [{}]", event.getId());
     }
 
     @EventSourcingHandler
-    public void on(TodoUndone event) {
+    public void on(TodoMarkedAsUndone event) {
         this.isDone = false;
-        LOG.debug("Applied: 'TodoUndone' [{}]", event.getId());
+        LOG.debug("Applied: 'TodoMarkedAsUndone' [{}]", event.getId());
     }
 
     public String getId() {

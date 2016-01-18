@@ -47,17 +47,17 @@ $ docker run -d --name my-rabbit -p 5672:5672 -p 15672:15672 -e RABBITMQ_DEFAULT
 $ docker ps
 ```
 
-Executing these commands should pull down the required docker containers and install and run them locally. They're given the names `my-rabbit` and `my-mongo` and they'll run in the background until you ask docker to stop them (using `docker stop my-mongo` for example).
+Assuming you've installed Docker already, executing these commands should install the docker containers for MongoDB and RabbitMQ and run them locally. They're given the names `my-rabbit` and `my-mongo` and they'll run in the background until you ask docker to stop them (using `docker stop my-mongo` for example).
 
-If you already have MongoDB and RabbitMQ servers available on localhost (and of the default ports) you can use those instead of docker if you have the required users and settings (see the blockquotes below for details).
+If you already have MongoDB and RabbitMQ on your computer (using their default ports) you can use those instead of docker once you have the required users and settings configured (see the blockquotes below for details).
 
-> The demo expects a RabbitMQ user with the username `test` and the password `password` to be present and for this user to have admin rights so that it can create exchanges and queues. If you don't want to add such a user, stop your local RabbitMQ server and start the docker one instead.
+> The demo expects RabbitMQ to have a user with the username `test` and the password `password` and for this user to have admin rights so that it can create exchanges and queues. If you don't want to add such a user, stop your local RabbitMQ server and start the docker one instead using the commands outlined above.
 
 > The demo also expects the MongoDB server to have a default `guest` user with no password and for this guest user to have admin rights. If you don't want to add such a user, stop your local MongoDB server and start the docker container instead using the commands above.
 
 ### Step 2: Clone and build the project...
 
-Next we can download, build it and unit test the microservices project. Here I'm using the Gradle wrapper, so there is no need to actually install Gradle if you don't want to.
+Next we can download, build and unit test the microservices-sampler project. Here I'm using the Gradle wrapper, so there is no need to actually install Gradle if you don't want to.
 
 ```bash
 $ git clone https://github.com/benwilcock/microservice-sampler.git

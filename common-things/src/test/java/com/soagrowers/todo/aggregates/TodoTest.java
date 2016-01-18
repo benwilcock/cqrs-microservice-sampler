@@ -23,15 +23,15 @@ public class TodoTest {
     @Test
     public void testCreateToDoItem() throws Exception {
         fixture.given()
-                .when(new CreateCommand("todo1", "need to implement the aggregate"))
+                .when(new CreateTodoCommand("todo1", "need to implement the aggregate"))
                 .expectEvents(new TodoCreated("todo1", "need to implement the aggregate"));
     }
 
     @Test
     public void testMarkToDoItemAsCompleted() throws Exception {
         fixture.given(new TodoCreated("todo1", "need to implement the aggregate"))
-                .when(new MarkDoneCommand("todo1"))
+                .when(new MarkTodoAsDoneCommand("todo1"))
                 .expectVoidReturnType()
-                .expectEvents(new TodoDone("todo1"));
+                .expectEvents(new TodoMarkedAsDone("todo1"));
     }
 }

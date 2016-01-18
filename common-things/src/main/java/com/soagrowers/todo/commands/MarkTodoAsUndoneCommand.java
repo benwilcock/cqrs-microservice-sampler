@@ -7,7 +7,7 @@ import org.axonframework.commandhandling.annotation.TargetAggregateIdentifier;
  *
  * @author robertgolder
  */
-public class MarkUndoneCommand {
+public class MarkTodoAsUndoneCommand {
 
     @TargetAggregateIdentifier
     private final String todoId;
@@ -18,7 +18,7 @@ public class MarkUndoneCommand {
      *
      * @param todoId
      */
-    public MarkUndoneCommand(String todoId) {
+    public MarkTodoAsUndoneCommand(String todoId) {
         this.todoId = todoId;
     }
 

@@ -5,7 +5,7 @@ import org.axonframework.commandhandling.annotation.TargetAggregateIdentifier;
 /**
  * Created by Ben on 07/08/2015.
  */
-public class MarkDoneCommand {
+public class MarkTodoAsDoneCommand {
 
     /**
      * How does Axon know which Aggregate to Mark as completed? It uses
@@ -21,7 +21,7 @@ public class MarkDoneCommand {
      *
      * @param todoId
      */
-    public MarkDoneCommand(String todoId) {
+    public MarkTodoAsDoneCommand(String todoId) {
         this.todoId = todoId;
     }
 

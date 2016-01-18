@@ -4,8 +4,8 @@ import com.soagrowers.todo.TodoMaterialViewApplication;
 import com.soagrowers.todo.data.Todo;
 import com.soagrowers.todo.data.TodoRepository;
 import com.soagrowers.todo.events.TodoCreated;
-import com.soagrowers.todo.events.TodoDone;
-import com.soagrowers.todo.events.TodoUndone;
+import com.soagrowers.todo.events.TodoMarkedAsDone;
+import com.soagrowers.todo.events.TodoMarkedAsUndone;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventhandling.replay.ReplayAware;
 import org.slf4j.Logger;
@@ -26,8 +26,8 @@ public class ToDoMaterialViewManager implements ReplayAware {
     }
 
     @EventHandler
-    public void handle(TodoDone event) {
-        LOG.info("TodoDone: [{}]", event.getId());
+    public void handle(TodoMarkedAsDone event) {
+        LOG.info("TodoMarkedAsDone: [{}]", event.getId());
         TodoRepository repo = TodoMaterialViewApplication.getBootApplicationContext().getBean(TodoRepository.class);
 
         if(repo.exists(event.getId())){
@@ -40,8 +40,8 @@ public class ToDoMaterialViewManager implements ReplayAware {
     }
 
     @EventHandler
-    public void handle(TodoUndone event) {
-        LOG.info("TodoUndone: [{}]", event.getId());
+    public void handle(TodoMarkedAsUndone event) {
+        LOG.info("TodoMarkedAsUndone: [{}]", event.getId());
         TodoRepository repo = TodoMaterialViewApplication.getBootApplicationContext().getBean(TodoRepository.class);
 
         if(repo.exists(event.getId())){

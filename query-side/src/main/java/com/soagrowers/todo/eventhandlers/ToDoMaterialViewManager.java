@@ -1,8 +1,8 @@
 package com.soagrowers.todo.eventhandlers;
 
 import com.soagrowers.todo.events.TodoCreated;
-import com.soagrowers.todo.events.TodoDone;
-import com.soagrowers.todo.events.TodoUndone;
+import com.soagrowers.todo.events.TodoMarkedAsDone;
+import com.soagrowers.todo.events.TodoMarkedAsUndone;
 import com.soagrowers.todo.views.TodoMaterialViewSingleton;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventhandling.replay.ReplayAware;
@@ -23,14 +23,14 @@ public class ToDoMaterialViewManager implements ReplayAware {
     }
 
     @EventHandler
-    public void handle(TodoDone event) {
-        LOG.info("TodoDone: [{}]", event.getId());
+    public void handle(TodoMarkedAsDone event) {
+        LOG.info("TodoMarkedAsDone: [{}]", event.getId());
         TodoMaterialViewSingleton.getInstance().changeToDone(event.getId());
     }
 
     @EventHandler
-    public void handle(TodoUndone event) {
-        LOG.info("TodoUndone: [{}]", event.getId());
+    public void handle(TodoMarkedAsUndone event) {
+        LOG.info("TodoMarkedAsUndone: [{}]", event.getId());
         TodoMaterialViewSingleton.getInstance().reopen(event.getId());
     }
 

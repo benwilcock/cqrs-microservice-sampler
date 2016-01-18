@@ -1,8 +1,8 @@
 package com.soagrowers.todo.eventhandlers;
 
 import com.soagrowers.todo.events.TodoCreated;
-import com.soagrowers.todo.events.TodoDone;
-import com.soagrowers.todo.events.TodoUndone;
+import com.soagrowers.todo.events.TodoMarkedAsDone;
+import com.soagrowers.todo.events.TodoMarkedAsUndone;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +23,12 @@ public class EventLoggingHandler {
     }
 
     @EventHandler
-    public void handle(TodoDone event) {
+    public void handle(TodoMarkedAsDone event) {
         LOG.debug("INSTANCE-{}: Event({}) [{}]", INSTANCE_ID, event.getClass().getSimpleName(), event.getId());
     }
 
     @EventHandler
-    public void handle(TodoUndone event) {
+    public void handle(TodoMarkedAsUndone event) {
         LOG.debug("INSTANCE-{}:Event({}) [{}]", INSTANCE_ID, event.getClass().getSimpleName(), event.getId());
     }
 }

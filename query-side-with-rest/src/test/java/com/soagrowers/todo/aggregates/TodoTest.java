@@ -1,10 +1,10 @@
 package com.soagrowers.todo.aggregates;
 
 
-import com.soagrowers.todo.commands.CreateCommand;
-import com.soagrowers.todo.commands.MarkDoneCommand;
+import com.soagrowers.todo.commands.CreateTodoCommand;
+import com.soagrowers.todo.commands.MarkTodoAsDoneCommand;
 import com.soagrowers.todo.events.TodoCreated;
-import com.soagrowers.todo.events.TodoDone;
+import com.soagrowers.todo.events.TodoMarkedAsDone;
 import org.axonframework.test.FixtureConfiguration;
 import org.axonframework.test.Fixtures;
 import org.junit.Before;
@@ -25,15 +25,15 @@ public class TodoTest {
     @Test
     public void testCreateToDoItem() throws Exception {
         fixture.given()
-                .when(new CreateCommand("todo1", "need to implement the aggregate"))
+                .when(new CreateTodoCommand("todo1", "need to implement the aggregate"))
                 .expectEvents(new TodoCreated("todo1", "need to implement the aggregate"));
     }
 
     @Test
     public void testMarkToDoItemAsCompleted() throws Exception {
         fixture.given(new TodoCreated("todo1", "need to implement the aggregate"))
-                .when(new MarkDoneCommand("todo1"))
+                .when(new MarkTodoAsDoneCommand("todo1"))
                 .expectVoidReturnType()
-                .expectEvents(new TodoDone("todo1"));
+                .expectEvents(new TodoMarkedAsDone("todo1"));
     }
 }
