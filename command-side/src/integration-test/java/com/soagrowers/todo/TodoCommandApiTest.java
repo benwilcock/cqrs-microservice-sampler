@@ -37,7 +37,7 @@ public class TodoCommandApiTest {
     public void testRepositoryIsntNull(){
         EventSourcingRepository<Todo> repo = TodoCommandApi.getRepository();
         assertNotNull(repo);
-    }
+    } 
 
     @Test
     public void createLotsOfTodos(){
