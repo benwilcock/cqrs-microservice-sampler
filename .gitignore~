@@ -1,5 +1,6 @@
 # Folders
 build
+events
 .gradle
 .idea
 
