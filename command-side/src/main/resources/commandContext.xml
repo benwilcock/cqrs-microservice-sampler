@@ -31,9 +31,7 @@
     <bean id="rabbitTransactionManager" class="org.springframework.amqp.rabbit.transaction.RabbitTransactionManager">
         <property name="connectionFactory" ref="rabbit" />
     </bean>
-    <!--<rabbit:queue id="event.stream" name="product.events.default.stream" auto-delete="false" durable="true"/>-->
     <rabbit:fanout-exchange id="productExchange" name="product.events.fanout.exchange" auto-delete="false" durable="true">
-        <!--<rabbit:bindings><rabbit:binding queue="event.stream" /></rabbit:bindings>-->
     </rabbit:fanout-exchange>
 
     <!--
@@ -52,21 +50,6 @@
 
     <bean id="MQSerializer" class="org.axonframework.serializer.xml.XStreamSerializer" />
     <bean id="DBSerializer" class="org.axonframework.serializer.xml.XStreamSerializer" />
-
-    <!--
-
-    CLUSTER...
-
-    <axon:cluster id="command.cluster" default="true" >
-        <axon:meta-data>
-            <entry key="AMQP.Config">
-                <axon-amqp:configuration transaction-manager="rabbitTransactionManager"
-                                         transaction-size="1"
-                                         queue-name="product.events.default.stream" />
-            </entry>
-        </axon:meta-data>
-    </axon:cluster>
-    -->
 
     <!--
 
@@ -91,7 +74,7 @@
     </bean>
     <mongo:mongo host="127.0.0.1" port="27017"/>
     <mongo:db-factory dbname="product" />
-    <bean id="mongoTemplate" class="org.axonframework.eventstore.mongo.DefaultMongoTemplate">
+    <bean id="mongoTemplate" class="org.axonframework.eventstore.mongo.DefaultMongoTemplate" >
         <constructor-arg index="0" ref="mongo"/>
         <constructor-arg index="1" value="product"/>
         <constructor-arg index="2" value="events"/>
@@ -117,7 +100,5 @@
 
     <!-- Scans for @CommandHandlers and @EventHandlers-->
     <axon:annotation-config />
-    <!-- instantiates the given handlers
-    <bean class="com.soagrowers.product.eventhandlers.EventLoggingHandler"/>-->
 
 </beans>

@@ -5,6 +5,7 @@ package com.soagrowers.product;
 import com.soagrowers.product.aggregates.ProductAggregate;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.EventSourcingRepository;
+import org.axonframework.eventstore.mongo.MongoEventStore;
 import org.axonframework.unitofwork.DefaultUnitOfWorkFactory;
 import org.axonframework.unitofwork.UnitOfWork;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ public class ProductCommandApi {
 
 
     private final static Logger LOG = LoggerFactory.getLogger(ProductCommandApi.class);
+    private final static MongoEventStore eventStore;
     private final static CommandGateway commandGateway;
     private final static ApplicationContext applicationContext;
     private final static EventSourcingRepository<ProductAggregate> repository;
@@ -30,9 +32,14 @@ public class ProductCommandApi {
         applicationContext = new ClassPathXmlApplicationContext(CONTEXT_FILE_NAME);
         commandGateway = applicationContext.getBean(CommandGateway.class);
         repository = (EventSourcingRepository<ProductAggregate>) applicationContext.getBean("productRepository");
+        eventStore = (MongoEventStore)applicationContext.getBean("mongoEventStore");
     }
 
     private ProductCommandApi() {
+    }
+
+    public static MongoEventStore getEventStore() {
+        return eventStore;
     }
 
     public static CommandGateway getGateway() {
