@@ -31,11 +31,9 @@
     <bean id="rabbitTransactionManager" class="org.springframework.amqp.rabbit.transaction.RabbitTransactionManager">
         <property name="connectionFactory" ref="rabbit" />
     </bean>
-    <rabbit:queue id="defaultQueue" name="product.axon.terminal.defaultStream" auto-delete="false" durable="true"/>
-    <rabbit:fanout-exchange id="productExchange" name="product.axon.terminal" auto-delete="false" durable="true">
-        <rabbit:bindings>
-            <rabbit:binding queue="defaultQueue" />
-        </rabbit:bindings>
+    <!--<rabbit:queue id="event.stream" name="product.events.default.stream" auto-delete="false" durable="true"/>-->
+    <rabbit:fanout-exchange id="productExchange" name="product.events.fanout.exchange" auto-delete="false" durable="true">
+        <!--<rabbit:bindings><rabbit:binding queue="event.stream" /></rabbit:bindings>-->
     </rabbit:fanout-exchange>
 
     <!--
@@ -45,7 +43,7 @@
     -->
 
     <axon-amqp:terminal id="rabbit.terminal"
-                        exchange-name="product.axon.terminal"
+                        exchange-name="product.events.fanout.exchange"
                         connection-factory="rabbit"
                         transactional="true"
                         serializer="MQSerializer">
@@ -59,18 +57,16 @@
 
     CLUSTER...
 
-    -->
-
     <axon:cluster id="command.cluster" default="true" >
         <axon:meta-data>
             <entry key="AMQP.Config">
                 <axon-amqp:configuration transaction-manager="rabbitTransactionManager"
                                          transaction-size="1"
-                                         queue-name="product.axon.terminal.defaultStream" />
+                                         queue-name="product.events.default.stream" />
             </entry>
         </axon:meta-data>
     </axon:cluster>
-
+    -->
 
     <!--
 
@@ -121,7 +117,7 @@
 
     <!-- Scans for @CommandHandlers and @EventHandlers-->
     <axon:annotation-config />
-    <!-- instantiates the given handlers-->
-    <bean class="com.soagrowers.product.eventhandlers.EventLoggingHandler"/>
+    <!-- instantiates the given handlers
+    <bean class="com.soagrowers.product.eventhandlers.EventLoggingHandler"/>-->
 
 </beans>
