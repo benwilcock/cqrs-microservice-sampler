@@ -4,14 +4,16 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.6.RELEASE")
+        classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
 
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'docker'
 
 jar {
-    baseName = 'todo-query-side-with-rest'
+    baseName = 'product-query-side'
 }
 
 repositories {
@@ -33,5 +35,23 @@ dependencies {
 
     testCompile("org.axonframework:axon-test:2.4.1")
     testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+task buildDocker(type: Docker, dependsOn: assemble){
+    push = false
+    applicationName = jar.baseName
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst{
+        copy {
+            from jar
+            into stageDir
+        }
+    }
+}
+
+task createDistribution(type: Zip, dependsOn: buildDocker){
+    from buildDocker.stageDir
+    from('src/main/docker/Dockerfile')
+    from('src/main/docker/Dockerrun.aws.json')
 }
 

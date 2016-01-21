@@ -45,6 +45,10 @@ public class ProductAggregate extends AbstractAnnotatedAggregateRoot {
     private String name;
     private boolean isSaleable = false;
 
+//    private enum Saleability {
+//        UNKNOWN, ONSALE, OFFSALE
+//    }
+
     /**
      * This default constructor is used by the Repository to construct
      * a prototype ProductAggregate. Events are then used to set properties
