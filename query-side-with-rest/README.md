@@ -1,6 +1,6 @@
 # Material views with Spring Data REST
 
-This module listens for events coming from the 'command-side' and uses this event stream to populate a database table (a.k.a. a 'material view') that lists each todo item alongside its current 'completed' status. The technology used to achieve this is [spring-boot-data-rest](https://spring.io/guides/gs/accessing-data-rest/) which relies upon an in memory H2 database to hold the persistent data.
+This module listens for events coming from the 'command-side' and uses this event stream to populate a database table (a.k.a. a 'material view') that lists each todo item alongside its current 'completed' saleable. The technology used to achieve this is [spring-boot-data-rest](https://spring.io/guides/gs/accessing-data-rest/) which relies upon an in memory H2 database to hold the persistent data.
 
 To spin up the Spring Boot service, use the gradle 'bootRun' plugin.
 
@@ -65,23 +65,23 @@ Now lets see what searches are available by asking the search feature to detail 
 $ curl http://localhost:9004/todo/search
 ```
 
-The search feature confirms that we have a custom search called 'findByStatus' which can take a status parameter...
+The search feature confirms that we have a custom search called 'findByStatus' which can take a saleable parameter...
 
 ```json
 {
   "_links" : {
     "findByStatus" : {
-      "href" : "http://localhost:9004/todo/search/findByStatus{?status}",
+      "href" : "http://localhost:9004/todo/search/findByStatus{?saleable}",
       "templated" : true
     }
   }
 }
 ```
 
-So lets try that 'findByStatus' search by looking for all todo's with a status=false...
+So lets try that 'findByStatus' search by looking for all todo's with a saleable=false...
 
 ```bash
-$ curl http://localhost:9004/todo/search/findByStatus?status=false
+$ curl http://localhost:9004/todo/search/findByStatus?saleable=false
 ```
 
 Because the **delete** and **save** methods have been marked as 'not exported' in the ```ReadOnlyPagingAndSortingRepository``` (using the ```@RestResource(exported = false)``` annotation), it should not be possible to remove any of the todo's from the database. Therefore issuing a delete command will silently fail.

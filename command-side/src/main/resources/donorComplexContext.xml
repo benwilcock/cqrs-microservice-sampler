@@ -46,7 +46,7 @@
     <axon:event-bus id="eventBus" terminal="terminal"/>
 
     <axon:event-sourcing-repository id="vrnRepository"
-                                    aggregate-type="uk.gov.dvla.osl.vehiclemark.command.com.soagrowers.todo.aggregates.VrnAggregateRoot"
+                                    aggregate-type="uk.gov.dvla.osl.vehiclemark.command.com.soagrowers.product.aggregates.VrnAggregateRoot"
                                     event-bus="eventBus"
                                     event-store="eventStore">
         <axon:snapshotter-trigger event-count-threshold="2" snapshotter-ref="snapshotter"/>
@@ -55,7 +55,7 @@
     <axon:snapshotter id="snapshotter" event-store="eventStore" />
 
     <axon:aggregate-command-handler id="vrnHandler"
-                                    aggregate-type="uk.gov.dvla.osl.vehiclemark.command.com.soagrowers.todo.aggregates.VrnAggregateRoot"
+                                    aggregate-type="uk.gov.dvla.osl.vehiclemark.command.com.soagrowers.product.aggregates.VrnAggregateRoot"
                                     repository="vrnRepository"
                                     command-bus="commandBus"/>
 

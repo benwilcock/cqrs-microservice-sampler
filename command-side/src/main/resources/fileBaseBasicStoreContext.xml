@@ -17,7 +17,7 @@
 
     <!-- event-bus="eventBus" event-store="eventStore" -->
     <axon:event-sourcing-repository id="todoRepository"
-                                    aggregate-type="com.soagrowers.todo.aggregates.Todo"
+                                    aggregate-type="com.soagrowers.product.aggregates.ProductAggregate"
                                     event-bus="eventBus"/>
 
     <axon:filesystem-event-store base-dir="events"/>
@@ -26,13 +26,13 @@
         <property name="commandBus" ref="commandBus"/>
     </bean>
 
-    <axon:aggregate-command-handler aggregate-type="com.soagrowers.todo.aggregates.Todo"
+    <axon:aggregate-command-handler aggregate-type="com.soagrowers.product.aggregates.ProductAggregate"
                                     repository="todoRepository"
                                     command-bus="commandBus"/>
     <!-- Scans for @CommandHandlers and @EventHandlers -->
     <axon:annotation-config />
     <!-- instantiates the given handlers -->
-    <bean class="com.soagrowers.todo.eventhandlers.EventLoggingHandler"/>
+    <bean class="com.soagrowers.product.eventhandlers.EventLoggingHandler"/>
 
 
     <!--

@@ -10,8 +10,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 dependencies{
-    compile("org.axonframework:axon-core:2.4.1")
-    testCompile("org.axonframework:axon-test:2.4.1")
+    //compile("org.axonframework:axon-core:2.4.1")
 }
 
 jar {

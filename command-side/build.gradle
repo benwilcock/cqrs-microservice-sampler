@@ -40,6 +40,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-amqp")
     compile('org.springframework.boot:spring-boot-starter-data-mongodb')
     testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.axonframework:axon-test:2.4.1")
 }
 
 task integrationTest(type: Test) {

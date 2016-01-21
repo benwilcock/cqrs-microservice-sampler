@@ -31,8 +31,8 @@
     <bean id="rabbitTransactionManager" class="org.springframework.amqp.rabbit.transaction.RabbitTransactionManager">
         <property name="connectionFactory" ref="rabbit" />
     </bean>
-    <rabbit:queue id="defaultQueue" name="todo.axon.terminal.defaultStream" auto-delete="false" durable="true"/>
-    <rabbit:fanout-exchange id="todoExchange" name="todo.axon.terminal" auto-delete="false" durable="true">
+    <rabbit:queue id="defaultQueue" name="product.axon.terminal.defaultStream" auto-delete="false" durable="true"/>
+    <rabbit:fanout-exchange id="productExchange" name="product.axon.terminal" auto-delete="false" durable="true">
         <rabbit:bindings>
             <rabbit:binding queue="defaultQueue" />
         </rabbit:bindings>
@@ -45,7 +45,7 @@
     -->
 
     <axon-amqp:terminal id="rabbit.terminal"
-                        exchange-name="todo.axon.terminal"
+                        exchange-name="product.axon.terminal"
                         connection-factory="rabbit"
                         transactional="true"
                         serializer="MQSerializer">
@@ -66,7 +66,7 @@
             <entry key="AMQP.Config">
                 <axon-amqp:configuration transaction-manager="rabbitTransactionManager"
                                          transaction-size="1"
-                                         queue-name="todo.axon.terminal.defaultStream" />
+                                         queue-name="product.axon.terminal.defaultStream" />
             </entry>
         </axon:meta-data>
     </axon:cluster>
@@ -78,8 +78,8 @@
 
     -->
 
-    <axon:event-sourcing-repository id="todoRepository"
-                                    aggregate-type="com.soagrowers.todo.aggregates.Todo"
+    <axon:event-sourcing-repository id="productRepository"
+                                    aggregate-type="com.soagrowers.product.aggregates.ProductAggregate"
                                     event-bus="terminalEventBus"
                                     event-store="mongoEventStore"/>
 
@@ -94,10 +94,10 @@
         <constructor-arg ref="mongoTemplate"/>
     </bean>
     <mongo:mongo host="127.0.0.1" port="27017"/>
-    <mongo:db-factory dbname="todo" />
+    <mongo:db-factory dbname="product" />
     <bean id="mongoTemplate" class="org.axonframework.eventstore.mongo.DefaultMongoTemplate">
         <constructor-arg index="0" ref="mongo"/>
-        <constructor-arg index="1" value="todo"/>
+        <constructor-arg index="1" value="product"/>
         <constructor-arg index="2" value="events"/>
         <constructor-arg index="3" value="snapshots"/>
         <constructor-arg index="4"><null/></constructor-arg>
@@ -114,14 +114,14 @@
         <property name="commandBus" ref="commandBus"/>
     </bean>
 
-    <axon:aggregate-command-handler aggregate-type="com.soagrowers.todo.aggregates.Todo"
-                                    repository="todoRepository"
+    <axon:aggregate-command-handler aggregate-type="com.soagrowers.product.aggregates.ProductAggregate"
+                                    repository="productRepository"
                                     command-bus="commandBus"/>
 
 
     <!-- Scans for @CommandHandlers and @EventHandlers-->
     <axon:annotation-config />
     <!-- instantiates the given handlers-->
-    <bean class="com.soagrowers.todo.eventhandlers.EventLoggingHandler"/>
+    <bean class="com.soagrowers.product.eventhandlers.EventLoggingHandler"/>
 
 </beans>

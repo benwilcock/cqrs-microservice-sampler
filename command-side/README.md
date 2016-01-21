@@ -11,5 +11,5 @@ $ ./start-servers.sh
 You can create a new Todo item at any time using the REST API.
 
 ```
-curl -v --data "desc=blah" http://localhost:9000/create/{Insert your GUID here}
+curl -v --data "desc=blah" http://localhost:9000/product/add/{Insert your GUID here}
 ```

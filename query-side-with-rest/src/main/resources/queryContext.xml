@@ -20,7 +20,7 @@
     -->
 
     <axon-amqp:terminal id="rabbit.terminal"
-                        exchange-name="todo.axon.terminal"
+                        exchange-name="product.axon.terminal"
                         connection-factory="rabbit"
                         transactional="true"
                         serializer="MQSerializer">
@@ -44,8 +44,8 @@
     <bean id="rabbitTransactionManager" class="org.springframework.amqp.rabbit.transaction.RabbitTransactionManager">
         <property name="connectionFactory" ref="rabbit"/>
     </bean>
-    <rabbit:queue id="queryQueue" name="todo.axon.terminal.eventStream1" auto-delete="false" durable="true"/>
-    <rabbit:fanout-exchange id="todoExchange" name="todo.axon.terminal" auto-delete="false" durable="true">
+    <rabbit:queue id="queryQueue" name="product.axon.terminal.eventStream" auto-delete="false" durable="true"/>
+    <rabbit:fanout-exchange id="productExchange" name="product.axon.terminal" auto-delete="false" durable="true">
         <rabbit:bindings>
             <rabbit:binding queue="queryQueue"/>
         </rabbit:bindings>
@@ -63,7 +63,7 @@
             <entry key="AMQP.Config">
                 <axon-amqp:configuration transaction-manager="rabbitTransactionManager"
                                          transaction-size="10"
-                                         queue-name="todo.axon.terminal.eventStream1"/>
+                                         queue-name="product.axon.terminal.eventStream"/>
             </entry>
         </axon:meta-data>
     </axon:cluster>
@@ -72,7 +72,7 @@
     <!-- Scans for @CommandHandlers and @EventHandlers -->
     <axon:annotation-config/>
     <!-- instantiates the given handlers -->
-    <bean class="com.soagrowers.todo.eventhandlers.EventLoggingHandler"/>
-    <bean class="com.soagrowers.todo.eventhandlers.ToDoMaterialViewManager"/>
+    <bean class="com.soagrowers.product.eventhandlers.EventLoggingHandler"/>
+    <bean class="com.soagrowers.product.eventhandlers.ProductViewManager"/>
 
 </beans>
