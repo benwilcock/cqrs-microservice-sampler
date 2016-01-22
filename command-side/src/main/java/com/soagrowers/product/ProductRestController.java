@@ -17,13 +17,15 @@ public class ProductRestController {
 
     @RequestMapping(value = "/product/add/{id}", method = RequestMethod.POST)
     public void addProduct(@PathVariable(value = "id") String id,
-                       @RequestParam(value = "name", required = true, defaultValue = "Un-named Product!") String name,
-                       HttpServletResponse response) {
+                           @RequestParam(value = "name", required = true, defaultValue = "Un-named Product!") String name,
+                           HttpServletResponse response) {
+
         LOG.info("ADD PRODUCT request received: [{}] '{}'", id, name);
         AddProductCommand command = new AddProductCommand(id, name);
         ProductCommandApi.getGateway().send(command);
         LOG.info("AddProductCommand sent to command gateway for processing: [{}] '{}'", id, name);
-        response.setStatus(HttpServletResponse.SC_OK);
 
+        // Set up the 200 OK response
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 }
