@@ -71,6 +71,7 @@ public class ProductAggregate extends AbstractAnnotatedAggregateRoot {
     @CommandHandler
     public ProductAggregate(AddProductCommand command) {
         LOG.debug("Command: 'AddProductCommand' received.");
+        LOG.debug("Queuing up a new ProductAddedEvent for product '{}'", command.getId());
         apply(new ProductAddedEvent(command.getId(), command.getName()));
     }
 

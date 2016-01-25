@@ -28,11 +28,13 @@ public class ProductCommandApi {
     private final static String CONTEXT_FILE_NAME = "commandContext.xml";
 
     static {
-        LOG.info("Starting the ProductCommandApi with context file: {}", CONTEXT_FILE_NAME);
+        LOG.info("Starting the ProductCommandApi. Context file = '{}'", CONTEXT_FILE_NAME);
         applicationContext = new ClassPathXmlApplicationContext(CONTEXT_FILE_NAME);
         commandGateway = applicationContext.getBean(CommandGateway.class);
         repository = (EventSourcingRepository<ProductAggregate>) applicationContext.getBean("productRepository");
         eventStore = (MongoEventStore)applicationContext.getBean("mongoEventStore");
+        eventStore.ensureIndexes();
+        LOG.info("Ensure Indexes run on EventStore instance: " + eventStore.toString());
     }
 
     private ProductCommandApi() {

@@ -22,7 +22,7 @@ public class ProductRestController {
 
         LOG.info("ADD PRODUCT request received: [{}] '{}'", id, name);
         AddProductCommand command = new AddProductCommand(id, name);
-        ProductCommandApi.getGateway().send(command);
+        ProductCommandApi.getGateway().sendAndWait(command);
         LOG.info("AddProductCommand sent to command gateway for processing: [{}] '{}'", id, name);
 
         // Set up the 200 OK response
