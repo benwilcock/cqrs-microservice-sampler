@@ -34,7 +34,7 @@ public class ProductCommandApi {
         repository = (EventSourcingRepository<ProductAggregate>) applicationContext.getBean("productRepository");
         eventStore = (MongoEventStore)applicationContext.getBean("mongoEventStore");
         eventStore.ensureIndexes();
-        LOG.info("Ensure Indexes run on EventStore instance: " + eventStore.toString());
+        LOG.info("Ensure Indexes has been run on Mongo Event Store instance: " + eventStore.toString());
     }
 
     private ProductCommandApi() {
