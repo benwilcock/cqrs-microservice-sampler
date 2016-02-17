@@ -91,7 +91,7 @@ public class ProductCommandApiTest {
     @Test
     public void createLotsOfProducts() {
         String title, id;
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 100; i++) {
             id = UUID.randomUUID().toString();
             title = "Product [" + id + "]";
             ProductCommandApi.getGateway().sendAndWait(new AddProductCommand(id, title));
