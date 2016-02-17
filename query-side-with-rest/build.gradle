@@ -13,7 +13,7 @@ configurations{
 }
 
 jar {
-    baseName = 'product-query-side'
+    archiveName = 'product-query-side.jar'
 }
 
 apply plugin: 'idea'
@@ -28,7 +28,6 @@ repositories {
 dependencies {
     compile project(':common-things')
     compile("org.axonframework:axon-amqp:2.4.1")
-
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-jetty")

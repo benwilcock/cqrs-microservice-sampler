@@ -9,10 +9,6 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'idea'
 
-dependencies{
-    //compile("org.axonframework:axon-core:2.4.1")
-}
-
 jar {
-    baseName = 'todo-common-things'
+    baseName = 'product-domain-events'
 }

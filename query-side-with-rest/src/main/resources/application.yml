@@ -1,0 +1,7 @@
+spring:
+    application:
+        name: product-query-side
+server:
+    port: 9090
+management:
+    port: 9091
