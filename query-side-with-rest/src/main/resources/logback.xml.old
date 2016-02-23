@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="true">
+<!--<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -8,14 +8,14 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>./build/integration-test.log</file>
+        <file>build/query-side.log</file>
         <encoder>
             <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
         </encoder>
     </appender>
 
     <logger name="com.soagrowers">
-        <level value="TRACE"/>
+        <level value="DEBUG"/>
     </logger>
 
     <logger name="org.axonframework">
@@ -23,7 +23,7 @@
     </logger>
 
     <logger name="org.springframework">
-        <level value="INFO"/>
+        <level value="DEBUG"/>
     </logger>
 
     <root>
@@ -31,4 +31,4 @@
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
-</configuration>
+</configuration>-->

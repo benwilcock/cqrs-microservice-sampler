@@ -1,6 +1,30 @@
+#debug: true
+logging:
+    level:
+        root: INFO
+        org.springframework: INFO
+            #aop: DEBUG
+            #dao: DEBUG
+            #orm: DEBUG
+            #amqp: DEBUG
+            #data: DEBUG
+            #transaction: DEBUG
+        org.axonframework: INFO
+        com.soagrowers: TRACE
+    file: ./build/log/query-side.log
 spring:
     application:
         name: product-query-side
+        exchange: product.events.fanout.exchange
+        queue: product.view.event.stream
+        terminal: product.axon.terminal
+    rabbitmq:
+        hostname: localhost
+        username: test
+        password: password
+    #data:
+        #mongodb:
+            #uri: mongodb://localhost:27017/products
 server:
     port: 9090
 management:
