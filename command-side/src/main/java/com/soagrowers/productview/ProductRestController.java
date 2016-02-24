@@ -1,8 +1,10 @@
 package com.soagrowers.productview;
 
 import com.soagrowers.productview.commands.AddProductCommand;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,15 +17,19 @@ public class ProductRestController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductRestController.class);
 
-    @RequestMapping(value = "/product/add/{id}", method = RequestMethod.POST)
+    @Autowired
+    CommandGateway commandGateway;
+
+    @RequestMapping(value = "/products/add/{id}", method = RequestMethod.POST)
     public void addProduct(@PathVariable(value = "id") String id,
                            @RequestParam(value = "name", required = true, defaultValue = "Un-named Product!") String name,
                            HttpServletResponse response) {
 
-        LOG.info("ADD PRODUCT request received: [{}] '{}'", id, name);
+        LOG.info("ADD PRODUCT API request received: [{}] '{}'", id, name);
+
         AddProductCommand command = new AddProductCommand(id, name);
-        ProductCommandApi.getGateway().sendAndWait(command);
-        LOG.info("AddProductCommand sent to command gateway for processing: [{}] '{}'", id, name);
+        commandGateway.sendAndWait(command);
+        LOG.info("ADD PRODUCT COMMAND sent to GATEWAY: Product [{}] '{}'", id, name);
 
         // Set up the 200 OK response
         response.setStatus(HttpServletResponse.SC_OK);

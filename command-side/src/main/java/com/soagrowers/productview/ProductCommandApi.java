@@ -25,7 +25,7 @@ public class ProductCommandApi {
     private final static CommandGateway commandGateway;
     private final static ApplicationContext applicationContext;
     private final static EventSourcingRepository<ProductAggregate> repository;
-    private final static String CONTEXT_FILE_NAME = "commandContext.xml";
+    private final static String CONTEXT_FILE_NAME = "old/commandContext.xml";
 
     static {
         LOG.info("Starting the ProductCommandApi. Context file = '{}'", CONTEXT_FILE_NAME);

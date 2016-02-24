@@ -21,17 +21,17 @@ public class EventLoggingHandler {
 
     @EventHandler
     public void handle(ProductAddedEvent event) {
-        LOG.debug("INSTANCE-{}: Event({}) [{}] '{}'", INSTANCE_ID, event.getClass().getSimpleName(), event.getId(), event.getName());
+        LOG.debug("IID:{} ET:{} EID:[{}] '{}'", INSTANCE_ID, event.getClass().getSimpleName(), event.getId(), event.getName());
     }
 
     @EventHandler
     public void handle(ProductSaleableEvent event) {
-        LOG.debug("INSTANCE-{}: Event({}) [{}]", INSTANCE_ID, event.getClass().getSimpleName(), event.getId());
+        LOG.debug("IID:{} ET:{} EID:[{}]", INSTANCE_ID, event.getClass().getSimpleName(), event.getId());
     }
 
     @EventHandler
     public void handle(ProductUnsaleableEvent event) {
-        LOG.debug("INSTANCE-{}:Event({}) [{}]", INSTANCE_ID, event.getClass().getSimpleName(), event.getId());
+        LOG.debug("IID:{} ET:{} EID:[{}]", INSTANCE_ID, event.getClass().getSimpleName(), event.getId());
     }
 }
 

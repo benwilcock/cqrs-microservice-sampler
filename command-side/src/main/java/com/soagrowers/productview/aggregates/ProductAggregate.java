@@ -10,6 +10,7 @@ import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.axonframework.eventsourcing.annotation.EventSourcingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * ProductAggregate is essentially a DDD AggregateRoot (from the DDD concept). In event-sourced
@@ -30,7 +31,6 @@ import org.slf4j.LoggerFactory;
  * Events to the Aggregate, and the handling of those events by the aggregate or any other
  * configured EventHandlers.
  */
-
 public class ProductAggregate extends AbstractAnnotatedAggregateRoot {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductAggregate.class);
