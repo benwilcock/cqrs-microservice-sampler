@@ -19,6 +19,7 @@ import org.axonframework.eventstore.EventStore;
 import org.axonframework.eventstore.mongo.DefaultMongoTemplate;
 import org.axonframework.eventstore.mongo.MongoEventStore;
 import org.axonframework.eventstore.mongo.MongoTemplate;
+import org.axonframework.serializer.json.JacksonSerializer;
 import org.axonframework.serializer.xml.XStreamSerializer;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.transaction.RabbitTransactionManager;
@@ -60,9 +61,14 @@ public class AxonConfiguration {
     @Value("${spring.application.snapshotCollectionName}")
     private String snapshotCollectionName;
 
-    @Bean
-    XStreamSerializer serializer() {
+/*    @Bean
+    XStreamSerializer xmlSerializer() {
         return new XStreamSerializer();
+    }*/
+
+    @Bean
+    JacksonSerializer jsonSerializer() {
+        return new JacksonSerializer();
     }
 
     @Bean
@@ -96,7 +102,8 @@ public class AxonConfiguration {
         terminal.setExchangeName(exchangeName);
         terminal.setDurable(true);
         terminal.setTransactional(true);
-        terminal.setSerializer(serializer());
+        terminal.setSerializer(jsonSerializer());
+        //terminal.setSerializer(xmlSerializer());
         terminal.setListenerContainerLifecycleManager(listenerContainerLifecycleManager());
         return terminal;
     }
@@ -115,7 +122,8 @@ public class AxonConfiguration {
 
     @Bean
     EventStore eventStore() {
-        MongoEventStore eventStore = new MongoEventStore(serializer(), axonMongoTemplate());
+        //MongoEventStore eventStore = new MongoEventStore(xmlSerializer(), axonMongoTemplate());
+        MongoEventStore eventStore = new MongoEventStore(jsonSerializer(), axonMongoTemplate());
         return eventStore;
     }
 

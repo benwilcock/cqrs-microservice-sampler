@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 public abstract class AbstractEvent implements Serializable {
 
-    private final String id;
+    private String id;
+
+    public AbstractEvent() {}
 
     public AbstractEvent(String id) {
         this.id = id;

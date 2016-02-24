@@ -5,6 +5,7 @@ import org.axonframework.eventhandling.*;
 import org.axonframework.eventhandling.amqp.spring.ListenerContainerLifecycleManager;
 import org.axonframework.eventhandling.amqp.spring.SpringAMQPConsumerConfiguration;
 import org.axonframework.eventhandling.amqp.spring.SpringAMQPTerminal;
+import org.axonframework.serializer.json.JacksonSerializer;
 import org.axonframework.serializer.xml.XStreamSerializer;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,14 @@ class AxonConfiguration {
     private String terminalName;
 
 
-    @Bean
-    XStreamSerializer xStreamSerializer() {
+/*    @Bean
+    XStreamSerializer xmlSerializer() {
         return new XStreamSerializer();
+    }*/
+
+    @Bean
+    JacksonSerializer jsonSerializer(){
+        return new JacksonSerializer();
     }
 
     @Bean
@@ -68,7 +74,8 @@ class AxonConfiguration {
     EventBusTerminal terminal() {
         SpringAMQPTerminal terminal = new SpringAMQPTerminal();
         terminal.setConnectionFactory(connectionFactory);
-        terminal.setSerializer(xStreamSerializer());
+        //terminal.setSerializer(xmlSerializer());
+        terminal.setSerializer(jsonSerializer());
         terminal.setExchangeName(terminalName);
         terminal.setListenerContainerLifecycleManager(listenerContainerLifecycleManager());
         terminal.setDurable(true);

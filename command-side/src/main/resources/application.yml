@@ -17,7 +17,6 @@ spring:
         name: product-command-side
         exchange: product.events.fanout.exchange
         queue: product.default.queue
-        #terminal: product.axon.terminal
         databaseName: products
         eventsCollectionName: events
         snapshotCollectionName: snapshots

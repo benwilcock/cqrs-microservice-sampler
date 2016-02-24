@@ -4,7 +4,10 @@ package com.soagrowers.productview.events;
 public class ProductAddedEvent extends AbstractEvent {
 
 
-    private final String name;
+    private String name;
+
+    public ProductAddedEvent() {
+    }
 
     public ProductAddedEvent(String id, String name) {
         super(id);
