@@ -45,6 +45,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-mongodb:1.3.2.RELEASE')
     testCompile("org.springframework.boot:spring-boot-starter-test:1.3.2.RELEASE")
     testCompile("org.axonframework:axon-test:2.4.3")
+    testCompile("com.jayway.restassured:rest-assured:2.8.0")
 }
 
 task buildDocker(type: Docker, dependsOn: assemble){

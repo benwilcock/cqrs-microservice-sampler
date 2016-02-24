@@ -6,10 +6,18 @@ import com.soagrowers.productview.commands.MarkProductAsSaleableCommand;
 import com.soagrowers.productview.commands.MarkProductAsUnsaleableCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.EventSourcingRepository;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.IntegrationTest;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +29,17 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Created by ben on 22/09/15.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = Application.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@IntegrationTest({"server.port:0"})
 public class ProductCommandTest {
+
+    @Autowired
+    public CommandGateway gateway;
+
+    @Autowired
+    public EventSourcingRepository<ProductAggregate> repo;
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductCommandTest.class);
     private static List<String> ids = new ArrayList<String>();
@@ -30,8 +47,7 @@ public class ProductCommandTest {
 
     @BeforeClass
     public static void setup() {
-        for (int i = 0; i < testVolume; i++)
-        {
+        for (int i = 0; i < testVolume; i++) {
             String id = UUID.randomUUID().toString();
             ids.add(id);
             LOG.info("Created Product Id [{}]", id);
@@ -39,40 +55,37 @@ public class ProductCommandTest {
     }
 
     @Test
-    public void testGatewayIsntNull() {
-        CommandGateway gateway = ProductCommandApi.getGateway();
+    public void testA_GatewayIsntNull() {
         assertNotNull(gateway);
     }
 
     @Test
-    public void testRepositoryIsntNull() {
-        EventSourcingRepository<ProductAggregate> repo = ProductCommandApi.getRepository();
+    public void testB_RepositoryIsntNull() {
         assertNotNull(repo);
     }
 
 
-
     @Test
-    public void testA_createLotsOfProducts() {
-        for (String id : ids){
-            ProductCommandApi.getGateway().sendAndWait(new AddProductCommand(id, "Product [" + id + "]"));
+    public void testC_createLotsOfProducts() {
+        for (String id : ids) {
+            gateway.sendAndWait(new AddProductCommand(id, "Product [" + id + "]"));
             LOG.info("Product {} sent command 'Add'.", id);
         }
     }
 
     @Test
-    public void testB_markAllProductsAsSaleable() {
+    public void testD_markAllProductsAsSaleable() {
         for (String id : ids) {
-            ProductCommandApi.getGateway().sendAndWait(new MarkProductAsSaleableCommand(id));
+            gateway.sendAndWait(new MarkProductAsSaleableCommand(id));
             LOG.info("Product {} sent command 'Saleable'.", id);
         }
 
     }
 
     @Test
-    public void testC_markProductsAsUnsaleable() {
+    public void testE_markProductsAsUnsaleable() {
         for (String id : ids) {
-            ProductCommandApi.getGateway().sendAndWait(new MarkProductAsUnsaleableCommand(id));
+            gateway.sendAndWait(new MarkProductAsUnsaleableCommand(id));
             LOG.info("Product {} sent command 'Unsaleable'.", id);
         }
     }
