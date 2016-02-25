@@ -11,7 +11,7 @@ logging:
             #transaction: DEBUG
         org.axonframework: INFO
         com.soagrowers: TRACE
-    file: ./build/log/query-side.log
+    file: ./build/logs/query-side-server.log
 spring:
     application:
         name: product-query-side

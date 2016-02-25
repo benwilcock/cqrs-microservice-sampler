@@ -11,7 +11,7 @@ subprojects {
     }
 
     dependencies {
-        compile 'ch.qos.logback:logback-classic:1.1.3'
+        compile 'ch.qos.logback:logback-classic:1.1.5'
         testCompile 'junit:junit:4.12'
     }
 

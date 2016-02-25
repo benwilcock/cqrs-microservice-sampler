@@ -16,7 +16,6 @@ jar {
     archiveName = 'product-query-side.jar'
 }
 
-apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'docker'
 

@@ -6,9 +6,6 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-
 jar {
     baseName = 'product-domain-events'
 }

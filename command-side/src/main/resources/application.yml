@@ -11,7 +11,7 @@ logging:
             #transaction: DEBUG
         org.axonframework: INFO
         com.soagrowers: DEBUG
-    file: ./build/log/command-side.log
+    file: ./build/logs/command-side-server.log
 spring:
     application:
         name: product-command-side
