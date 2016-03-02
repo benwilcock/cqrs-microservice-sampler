@@ -31,14 +31,13 @@ public class ITEndToEndProduct {
     @BeforeClass
     public static void setupClass(){
         id = UUID.randomUUID().toString();
-        name = "I'm Product ["+id+"]";
+        name = "I am Product ["+id+"]";
     }
 
     @After
     public void afterEach() throws InterruptedException {
         TimeUnit.SECONDS.sleep(2l);
     }
-    //http://localhost:9000/products/add/0000001?name=Awesome%20Drill
 
     /**
      * Send a command to the command-side to create a new Product.
@@ -49,9 +48,9 @@ public class ITEndToEndProduct {
         given().
                 port(PORT_FOR_COMMANDS).
         when().
-                post(PRODUCTS + CMD_PRODUCT_ADD + "/{id}?name={name}", id, name).
+                post(PRODUCTS_CMD_BASE_PATH + CMD_PRODUCT_ADD + "/{id}?name={name}", id, name).
         then().
-                statusCode(HttpStatus.SC_OK);
+                statusCode(HttpStatus.SC_CREATED);
 
     }
     /**
@@ -65,7 +64,7 @@ public class ITEndToEndProduct {
         given().
                 port(Statics.PORT_FOR_QUERIES).
         when().
-                get(PRODUCTS+"/{id}", id).
+                get(PRODUCTS_QRY_BASE_PATH + "/{id}", id).
         then().
                 statusCode(HttpStatus.SC_OK).
                 body("name", Matchers.is(name));

@@ -5,13 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Arrays;
 
 /**
  * Created by ben on 19/01/16.
  */
-
+@EnableSwagger2
 @SpringBootApplication
 public class Application {
 
@@ -21,7 +22,7 @@ public class Application {
         ApplicationContext context = SpringApplication.run(Application.class, args);
         LOG.debug("Starting App with ContextId:['{}']", context.getApplicationName(), context.getId());
 
-        if(LOG.isTraceEnabled()) {
+        if (LOG.isTraceEnabled()) {
             String[] beans = context.getBeanDefinitionNames();
             Arrays.sort(beans);
             for (String bean : beans) {

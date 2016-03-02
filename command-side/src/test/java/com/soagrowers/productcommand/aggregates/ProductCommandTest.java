@@ -1,7 +1,9 @@
 package com.soagrowers.productcommand.aggregates;
 
 import com.soagrowers.productcommand.Application;
-import com.soagrowers.productcommand.commands.*;
+import com.soagrowers.productcommand.commands.AddProductCommand;
+import com.soagrowers.productcommand.commands.MarkProductAsSaleableCommand;
+import com.soagrowers.productcommand.commands.MarkProductAsUnsaleableCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.EventSourcingRepository;
 import org.junit.AfterClass;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +32,9 @@ import static org.junit.Assert.assertNotNull;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
+@IntegrationTest({"server.port=0"})
+@WebAppConfiguration
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@IntegrationTest({"server.port:0"})
 public class ProductCommandTest {
 
     @Autowired

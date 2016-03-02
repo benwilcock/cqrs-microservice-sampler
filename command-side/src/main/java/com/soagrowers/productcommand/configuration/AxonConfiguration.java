@@ -66,7 +66,7 @@ public class AxonConfiguration {
     }*/
 
     @Bean
-    JacksonSerializer jsonSerializer() {
+    JacksonSerializer axonJsonSerializer() {
         return new JacksonSerializer();
     }
 
@@ -101,7 +101,7 @@ public class AxonConfiguration {
         terminal.setExchangeName(exchangeName);
         terminal.setDurable(true);
         terminal.setTransactional(true);
-        terminal.setSerializer(jsonSerializer());
+        terminal.setSerializer(axonJsonSerializer());
         //terminal.setSerializer(xmlSerializer());
         terminal.setListenerContainerLifecycleManager(listenerContainerLifecycleManager());
         return terminal;
@@ -122,7 +122,7 @@ public class AxonConfiguration {
     @Bean
     EventStore eventStore() {
         //MongoEventStore eventStore = new MongoEventStore(xmlSerializer(), axonMongoTemplate());
-        MongoEventStore eventStore = new MongoEventStore(jsonSerializer(), axonMongoTemplate());
+        MongoEventStore eventStore = new MongoEventStore(axonJsonSerializer(), axonMongoTemplate());
         return eventStore;
     }
 

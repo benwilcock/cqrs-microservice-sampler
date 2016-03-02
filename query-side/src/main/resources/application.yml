@@ -22,9 +22,9 @@ spring:
         hostname: localhost
         username: test
         password: password
-    #data:
-        #mongodb:
-            #uri: mongodb://localhost:27017/products
+    data:
+        rest:
+            #base-path: api/v1
 server:
     port: 9090
 management:

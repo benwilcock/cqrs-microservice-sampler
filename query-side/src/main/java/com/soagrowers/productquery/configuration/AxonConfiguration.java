@@ -41,7 +41,7 @@ class AxonConfiguration {
     }*/
 
     @Bean
-    JacksonSerializer jsonSerializer() {
+    JacksonSerializer axonJsonSerializer() {
         return new JacksonSerializer();
     }
 
@@ -74,7 +74,7 @@ class AxonConfiguration {
         SpringAMQPTerminal terminal = new SpringAMQPTerminal();
         terminal.setConnectionFactory(connectionFactory);
         //terminal.setSerializer(xmlSerializer());
-        terminal.setSerializer(jsonSerializer());
+        terminal.setSerializer(axonJsonSerializer());
         terminal.setExchangeName(terminalName);
         terminal.setListenerContainerLifecycleManager(listenerContainerLifecycleManager());
         terminal.setDurable(true);
