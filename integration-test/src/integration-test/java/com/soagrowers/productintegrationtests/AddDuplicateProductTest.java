@@ -1,9 +1,6 @@
 package com.soagrowers.productintegrationtests;
 
-
-
 import org.apache.http.HttpStatus;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -16,22 +13,22 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.jayway.restassured.RestAssured.given;
-import static com.soagrowers.productintegrationtests.Statics.*;
+import static com.soagrowers.utils.Statics.*;
 
 /**
- * Created by ben on 24/02/16.
+ * Created by ben on 09/03/16.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ITEndToEndProduct {
+public class AddDuplicateProductTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ITEndToEndProduct.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AddDuplicateProductTest.class);
     private static String id;
     private static String name;
 
     @BeforeClass
-    public static void setupClass(){
+    public static void setupClass() {
         id = UUID.randomUUID().toString();
-        name = "I am Product ["+id+"]";
+        name = "AddDuplicateTest [" + id + "]";
     }
 
     @After
@@ -39,34 +36,23 @@ public class ITEndToEndProduct {
         TimeUnit.SECONDS.sleep(2l);
     }
 
-    /**
-     * Send a command to the command-side to create a new Product.
-     */
     @Test
-    public void testA_PostAProduct() {
-
+    public void testAddOfDuplicatesFailsPartA() {
         given().
                 port(PORT_FOR_COMMANDS).
-        when().
+                when().
                 post(PRODUCTS_CMD_BASE_PATH + CMD_PRODUCT_ADD + "/{id}?name={name}", id, name).
-        then().
+                then().
                 statusCode(HttpStatus.SC_CREATED);
-
     }
-    /**
-     *  Check that the new Product created event has arrived on the query-side and been
-     *  made available for clients to view.
-     */
 
     @Test
-    public void testB_GetAProduct(){
-
-        given().
-                port(Statics.PORT_FOR_QUERIES).
-        when().
-                get(PRODUCTS_QRY_BASE_PATH + "/{id}", id).
-        then().
-                statusCode(HttpStatus.SC_OK).
-                body("name", Matchers.is(name));
+    public void testAddOfDuplicatesFailsPartB() {
+        given()
+                .port(PORT_FOR_COMMANDS)
+                .when()
+                .post(PRODUCTS_CMD_BASE_PATH + CMD_PRODUCT_ADD + "/{id}?name={name}", id, name)
+                .then()
+                .statusCode(HttpStatus.SC_CONFLICT);
     }
 }

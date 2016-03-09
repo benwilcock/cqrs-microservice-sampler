@@ -1,6 +1,7 @@
 package com.soagrowers.productintegrationtests;
 
 
+import com.soagrowers.utils.Statics;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -14,9 +15,9 @@ import static com.jayway.restassured.RestAssured.given;
 /**
  * Created by ben on 24/02/16.
  */
-public class AssertSystemHealth {
+public class AssertSystemHealthTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AssertSystemHealth.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AssertSystemHealthTest.class);
 
     private String productId = UUID.randomUUID().toString();
 

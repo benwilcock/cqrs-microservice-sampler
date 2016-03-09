@@ -1,20 +1,21 @@
-package com.soagrowers.productcommand.utils;
+package com.soagrowers.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
 /**
  * Created by ben on 02/03/16.
  */
-public final class Asserts {
+public enum Asserts {
+
+    INSTANCE;
 
     private static final Logger LOG = LoggerFactory.getLogger(Asserts.class);
 
-    @Value("${debug}")
-    private static boolean debug = false;
+    private static boolean active = false;
+
     public static final String EMPTY_STRING = "";
     public static final String UNEXPECTED_NULL = "Unexpected Null Parameter";
     public static final String UNEXPECTED_EMPTY_STRING = "Unexpected Null Parameter";
@@ -22,30 +23,36 @@ public final class Asserts {
     public static final String NOT_FALSE = "Should have been FALSE but wasn't";
     public static final String USED_WRONG_METHOD = "I think you used the wrong Asserts method!";
 
-    public static void isTrue(boolean trueism){
-        if(debug && trueism == false){
+    private static Asserts instance;
+
+    private Asserts() {
+    }
+
+
+    public void isTrue(boolean trueism) {
+        if (active && trueism == false) {
             LOG.warn(NOT_TRUE);
             throw new AssertionError(NOT_TRUE);
         }
     }
 
-    public static void isFalse(boolean falsehood){
-        if(debug && falsehood == true){
+    public void isFalse(boolean falsehood) {
+        if (active && falsehood == true) {
             LOG.warn(NOT_FALSE);
             throw new AssertionError(NOT_FALSE);
         }
     }
 
-    public static void isNotEmpty(Object object){
+    public void isNotEmpty(Object object) {
 
-        if(debug) {
+        if (active) {
 
             if (null == object) {
                 LOG.warn(UNEXPECTED_NULL);
                 throw new AssertionError(UNEXPECTED_NULL);
             }
 
-            if(List.class.isAssignableFrom(object.getClass())){
+            if (List.class.isAssignableFrom(object.getClass())) {
                 LOG.warn(USED_WRONG_METHOD);
                 throw new IllegalArgumentException(USED_WRONG_METHOD);
             }
@@ -59,19 +66,19 @@ public final class Asserts {
         }
     }
 
-    public static void areNotEmpty(List<Object> objects){
-        if(debug) {
+    public void areNotEmpty(List<Object> objects) {
+        if (active) {
             for (Object object : objects) {
                 isNotEmpty(object);
             }
         }
     }
 
-    public static boolean isAssertsOn() {
-        return debug;
+    public boolean isAssertsOn() {
+        return active;
     }
 
-    public static void setAssertsTo(boolean asserts) {
-        Asserts.debug = asserts;
+    public void setAssertsTo(boolean asserts) {
+        Asserts.active = asserts;
     }
 }

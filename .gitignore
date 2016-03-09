@@ -1,7 +1,8 @@
 # Folders
-build
+/build
 .gradle
 .idea
+/unused
 
 # File Patterns
 *.class

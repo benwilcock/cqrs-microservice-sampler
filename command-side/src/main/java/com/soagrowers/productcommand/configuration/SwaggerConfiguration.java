@@ -22,7 +22,7 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("products-cmd-api")
                 .select()
-                .paths(regex("/api.*"))
+                .paths(regex("/products.*"))
                 .build()
                 .pathMapping("/")
                 .apiInfo(metadata());

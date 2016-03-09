@@ -1,4 +1,4 @@
-package com.soagrowers.productcommand.utils;
+package com.soagrowers.utils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,48 +15,48 @@ public class AssertsTest {
 
     @Before
     public void setup(){
-        Asserts.setAssertsTo(true);
+        Asserts.INSTANCE.setAssertsTo(true);
     }
 
     @Test
     public void testSetAsserts(){
 
-        Asserts.setAssertsTo(true);
-        assertTrue(Asserts.isAssertsOn());
+        Asserts.INSTANCE.setAssertsTo(true);
+        assertTrue(Asserts.INSTANCE.isAssertsOn());
 
-        Asserts.setAssertsTo(false);
-        assertFalse(Asserts.isAssertsOn());
+        Asserts.INSTANCE.setAssertsTo(false);
+        assertFalse(Asserts.INSTANCE.isAssertsOn());
     }
 
     @Test
     public void testIsNotEmpty(){
 
-        Asserts.isNotEmpty(new String("test"));
+        Asserts.INSTANCE.isNotEmpty(new String("test"));
 
         try {
-            Asserts.isNotEmpty(null);
+            Asserts.INSTANCE.isNotEmpty(null);
             assertTrue(false);
         } catch (AssertionError ae){
-            assertEquals(Asserts.UNEXPECTED_NULL, ae.getMessage());
+            assertEquals(Asserts.INSTANCE.UNEXPECTED_NULL, ae.getMessage());
         }
 
         try {
-            Asserts.isNotEmpty(Asserts.EMPTY_STRING);
+            Asserts.INSTANCE.isNotEmpty(Asserts.EMPTY_STRING);
             assertTrue(false);
         } catch (AssertionError ae){
-            assertEquals(Asserts.UNEXPECTED_EMPTY_STRING, ae.getMessage());
+            assertEquals(Asserts.INSTANCE.UNEXPECTED_EMPTY_STRING, ae.getMessage());
         }
     }
 
     @Test
     public void testAreNotEmpty(){
 
-        Asserts.areNotEmpty(Arrays.asList("test", "test"));
+        Asserts.INSTANCE.areNotEmpty(Arrays.asList("test", "test"));
 
         try {
             String id = UUID.randomUUID().toString();
             String name = Asserts.EMPTY_STRING;
-            Asserts.areNotEmpty(Arrays.asList(id, name));
+            Asserts.INSTANCE.areNotEmpty(Arrays.asList(id, name));
             assertTrue(false);
         } catch (AssertionError ae){
             assertEquals(ae.getMessage(), Asserts.UNEXPECTED_EMPTY_STRING);
@@ -65,7 +65,7 @@ public class AssertsTest {
         try {
             String id = null;
             String name = Asserts.EMPTY_STRING;
-            Asserts.areNotEmpty(Arrays.asList(id, name));
+            Asserts.INSTANCE.areNotEmpty(Arrays.asList(id, name));
             assertTrue(false);
         } catch (AssertionError ae){
             assertEquals(ae.getMessage(), Asserts.UNEXPECTED_NULL);
@@ -78,7 +78,7 @@ public class AssertsTest {
         String name = Asserts.EMPTY_STRING;
 
         try {
-            Asserts.isNotEmpty(Arrays.asList(id, name));
+            Asserts.INSTANCE.isNotEmpty(Arrays.asList(id, name));
             assertTrue(false);
         } catch (IllegalArgumentException ia){
             assertTrue(true);
