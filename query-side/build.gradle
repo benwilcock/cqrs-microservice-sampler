@@ -13,26 +13,24 @@ configurations{
 }
 
 jar {
+    baseName = 'product-query-side'
     archiveName = 'product-query-side.jar'
 }
 
+group = 'benwilcock'
 apply plugin: 'spring-boot'
 apply plugin: 'docker'
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    dependencies {
-        compile project(':common-things')
-        compile("org.axonframework:axon-amqp:2.4.3")
-        compile("org.springframework.boot:spring-boot-starter-actuator:1.3.2.RELEASE")
-        compile("org.springframework.boot:spring-boot-starter-web:1.3.2.RELEASE")
-        compile("org.springframework.boot:spring-boot-starter-jetty:1.3.2.RELEASE")
-        compile("org.springframework.boot:spring-boot-starter-amqp:1.3.2.RELEASE")
-        compile("org.springframework.boot:spring-boot-starter-data-jpa:1.3.2.RELEASE")
-        compile("org.springframework.boot:spring-boot-starter-data-rest:1.3.2.RELEASE")
-        compile("com.h2database:h2")
-    }
+dependencies {
+    compile project(':common-things')
+    compile("org.axonframework:axon-amqp:2.4.3")
+    compile("org.springframework.boot:spring-boot-starter-actuator:1.3.2.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-web:1.3.2.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-jetty:1.3.2.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-amqp:1.3.2.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:1.3.2.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-data-rest:1.3.2.RELEASE")
+    compile("com.h2database:h2")
 }
 
 
@@ -46,11 +44,5 @@ task buildDocker(type: Docker, dependsOn: assemble){
             into stageDir
         }
     }
-}
-
-task createDistribution(type: Zip, dependsOn: buildDocker){
-    from buildDocker.stageDir
-    from('src/main/docker/Dockerfile')
-    from('src/main/docker/Dockerrun.aws.json')
 }
 

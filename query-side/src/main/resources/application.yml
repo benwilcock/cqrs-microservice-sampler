@@ -19,7 +19,7 @@ spring:
         queue: product.view.event.stream
         terminal: product.axon.terminal
     rabbitmq:
-        hostname: localhost
+        hostname: rabbitmq
         username: test
         password: password
     data:
