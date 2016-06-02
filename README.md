@@ -21,9 +21,9 @@ Commands are _actions which change state_ in some way. The command-side microser
 
 > In DDD the 'Product' entity is often referred to as an `Aggregate` or `AggregateRoot`.
 
-## More about the 'Command-side'
+## More about the 'Query-side'
 
-The **query-side** microservice acts as an event-listener and processor. It listens for the `Events` and processes them in whatever way makes the most sense. In this particular demonstration, the query-side just builds and maintains a *materialised view* which tracks the state of the individual Products (in terms of whether they are saleable or un-saleable). The query-side can be replicated many times for scalability and the messages held by the RabbitMQ queues are durable, so they can be temporarily stored on behalf of the event-listener if it goes down.
+The query-side microservice acts as an event-listener and processor. It listens for the `Events` and processes them in whatever way makes the most sense. In this particular demonstration, the query-side just builds and maintains a *materialised view* which tracks the state of the individual Products (in terms of whether they are saleable or un-saleable). The query-side can be replicated many times for scalability and the messages held by the RabbitMQ queues are durable, so they can be temporarily stored on behalf of the event-listener if it goes down.
 
 The command-side and the query-side both have REST API's which can be used to access their capabilities.
 
@@ -54,7 +54,7 @@ $ ./gradlew clean test image
 If you now check your docker images you should see the following images in your list of images.
 
 ```bash
-$ **docker images**
+$ docker images
 REPOSITORY                        TAG                 IMAGE ID            CREATED             SIZE
 benwilcock/product-query-side     latest              85324407071a        0 minutes ago      270.3 MB
 benwilcock/discovery-service      latest              ae715b59fd40        0 minutes ago      241.7 MB
@@ -72,13 +72,13 @@ $ docker-compose up
 You'll see lots of logging output as the servers spin up. There are 5 servers in total, they are 'mongodb', 'rabbitmq', 'discovery', 'product-cmd-side', and 'product-qry-side'. If you want to see what docker instances are running at any time, open a separate terminal and execute the following command:-
  
 ```bash
-$ **docker ps**
-CONTAINER ID IMAGE                                    COMMAND                  STATUS              PORTS
-fffc443838ca   benwilcock/product-command-side:latest   "java -Djava.security"   Up 3 seconds        0.0.0.0:9000-9001->9000-9001/tcp
-6e156d5fab6d   benwilcock/product-query-side:latest     "java -Djava.security"   Up 3 seconds        0.0.0.0:9090-9091->9090-9091/tcp
-dac5e70f6750   benwilcock/discovery-service             "java -Djava.security"   Up 4 seconds        0.0.0.0:8761->8761/tcp
-74b6a0ceb94b   mongo:2.4                                "/entrypoint.sh mongo"   Up 4 seconds        0.0.0.0:32771->27017/tcp 
-6114c16b53f6   rabbitmq:3-management                    "/docker-entrypoint.s"   Up 4 seconds        4369/tcp, 5671/tcp, 15671/tcp, 25672/tcp, 0.0.0.0:15672->15672/tcp, 
+$ docker ps
+CONTAINER ID        IMAGE                                    COMMAND                  CREATED             STATUS              PORTS                                                                                         NAMES
+fffc443838ca        benwilcock/product-command-side:latest   "java -Djava.security"   38 minutes ago      Up 38 minutes       0.0.0.0:9000-9001->9000-9001/tcp                                                              product-cmd-side
+6e156d5fab6d        benwilcock/product-query-side:latest     "java -Djava.security"   38 minutes ago      Up 38 minutes       0.0.0.0:9090-9091->9090-9091/tcp                                                              product-qry-side
+dac5e70f6750        benwilcock/discovery-service             "java -Djava.security"   38 minutes ago      Up 38 minutes       0.0.0.0:8761->8761/tcp                                                                        discovery
+74b6a0ceb94b        mongo:2.4                                "/entrypoint.sh mongo"   38 minutes ago      Up 38 minutes       0.0.0.0:32771->27017/tcp                                                                      mongodb
+6114c16b53f6        rabbitmq:3-management                    "/docker-entrypoint.s"   38 minutes ago      Up 38 minutes       4369/tcp, 5671/tcp, 15671/tcp, 25672/tcp, 0.0.0.0:15672->15672/tcp, 0.0.0.0:32770->5672/tcp   rabbitmq
 ```
 
 Once the servers are up you can have a poke around using a browser if you like. Exposed are:-
@@ -105,7 +105,7 @@ To run this test this we need to open a second terminal window from which we can
 Let's add an MP3 product to our product catalogue with the name 'Everything is Awesome'.
 
 ```bash
-$ **curl -X POST --header "Content-Type: application/json" --header "Accept: */*" "http://localhost:9000/products/add/1?name=Everything%20Is%20Awesome"**
+$ curl -X POST --header "Content-Type: application/json" --header "Accept: */*" "http://localhost:9000/products/add/1?name=Everything%20Is%20Awesome"
 *   Trying 127.0.0.1...
 * Connected to localhost (127.0.0.1) port 9000 (#0)
 > POST /products/add/1?name=Everything%20Is%20Awesome HTTP/1.1
@@ -126,8 +126,11 @@ If the response code is `HTTP/1.1 201 Created` then the product "Everything is A
 
 Now lets check that users can see the product that we just added. To do this we use the query-side API and issue a simple 'GET' request.
 
+```bash
+$ curl http://localhost:9090/products/1
+```
+
 ```json
-$ **curl http://localhost:9090/products/1**
 {
     name: "Everything Is Awesome",
     saleable: false,
