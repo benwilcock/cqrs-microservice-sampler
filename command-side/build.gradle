@@ -1,12 +1,13 @@
 buildscript {
+    ext {
+        springBootVersion = '1.3.5.RELEASE'
+    }
     repositories {
         mavenCentral()
         jcenter()
     }
-
-
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.2.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
@@ -31,16 +32,27 @@ dependencies {
     compile("io.springfox:springfox-swagger-ui:2.3.0")
     compile("org.axonframework:axon-amqp:2.4.3")
     compile("org.axonframework:axon-mongo:2.4.3")
-    compile("org.springframework.boot:spring-boot-starter-actuator:1.3.2.RELEASE")
-    compile("org.springframework.boot:spring-boot-starter-web:1.3.2.RELEASE")
-    compile("org.springframework.boot:spring-boot-starter-jetty:1.3.2.RELEASE")
-    compile("org.springframework.boot:spring-boot-starter-amqp:1.3.2.RELEASE")
-    compile('org.springframework.boot:spring-boot-starter-data-mongodb:1.3.2.RELEASE')
-    testCompile("org.springframework.boot:spring-boot-starter-test:1.3.2.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-amqp:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
+    compile("org.springframework.cloud:spring-cloud-starter-eureka")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.axonframework:axon-test:2.4.3")
 }
 
-task buildDocker(type: Docker, dependsOn: build){
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.RELEASE"
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
+
+task image(type: Docker, dependsOn: build){
     push = false
     applicationName = jar.baseName
     dockerfile = file('src/main/docker/Dockerfile')
@@ -51,3 +63,5 @@ task buildDocker(type: Docker, dependsOn: build){
         }
     }
 }
+
+

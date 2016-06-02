@@ -1,0 +1,44 @@
+buildscript {
+	ext {
+		springBootVersion = '1.3.5.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath('se.transmode.gradle:gradle-docker:1.2')
+	}
+}
+
+group = 'benwilcock'
+apply plugin: 'spring-boot'
+apply plugin: 'docker'
+
+jar {
+	baseName = 'discovery-service'
+	archiveName = 'discovery-service.jar'
+}
+
+dependencies {
+	compile('org.springframework.cloud:spring-cloud-starter-eureka-server')
+	testCompile('org.springframework.boot:spring-boot-starter-test') 
+}
+
+dependencyManagement {
+	imports { 
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.RELEASE" 
+	}
+}
+
+task image(type: Docker, dependsOn: build){
+	push = false
+	applicationName = jar.baseName
+	dockerfile = file('src/main/docker/Dockerfile')
+	doFirst{
+		copy {
+			from jar
+			into stageDir
+		}
+	}
+}

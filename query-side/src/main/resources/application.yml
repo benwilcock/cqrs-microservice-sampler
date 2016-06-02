@@ -1,17 +1,8 @@
 #debug: true
-logging:
-    level:
-        root: INFO
-        org.springframework: INFO
-            #aop: DEBUG
-            #dao: DEBUG
-            #orm: DEBUG
-            #amqp: DEBUG
-            #data: DEBUG
-            #transaction: DEBUG
-        org.axonframework: INFO
-        com.soagrowers: TRACE
-    file: ./build/logs/query-side-server.log
+server:
+    port: 9090
+management:
+    port: 9091
 spring:
     application:
         name: product-query-side
@@ -25,7 +16,20 @@ spring:
     data:
         rest:
             #base-path: api/v1
-server:
-    port: 9090
-management:
-    port: 9091
+logging:
+    level:
+        root: INFO
+        org.springframework: INFO
+            #aop: DEBUG
+            #dao: DEBUG
+            #orm: DEBUG
+            #amqp: DEBUG
+            #data: DEBUG
+            #transaction: DEBUG
+        org.axonframework: INFO
+        com.soagrowers: TRACE
+    file: ./build/logs/query-side-server.log
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/

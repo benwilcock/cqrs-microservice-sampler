@@ -1,4 +1,24 @@
-debug: true
+#debug: true
+server:
+    port: 9000
+management:
+    port: 9001
+spring:
+    application:
+        exchange: product.events.fanout.exchange
+        queue: product.default.queue
+        databaseName: products
+        eventsCollectionName: events
+        snapshotCollectionName: snapshots
+    rabbitmq:
+        #hostname: localhost
+        hostname: rabbitmq
+        username: test
+        password: password
+    data:
+        mongodb:
+            #uri: mongodb://localhost:27017/products
+            uri: mongodb://mongodb:27017/products
 logging:
     level:
         root: INFO
@@ -12,22 +32,7 @@ logging:
         org.axonframework: INFO
         com.soagrowers: DEBUG
     file: ./build/logs/command-side-server.log
-spring:
-    application:
-        name: product-command-side
-        exchange: product.events.fanout.exchange
-        queue: product.default.queue
-        databaseName: products
-        eventsCollectionName: events
-        snapshotCollectionName: snapshots
-    rabbitmq:
-        hostname: rabbitmq
-        username: test
-        password: password
-    data:
-        mongodb:
-            uri: mongodb://mongodb:27017/products
-server:
-    port: 9000
-management:
-    port: 9001
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
