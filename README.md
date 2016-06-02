@@ -145,5 +145,5 @@ This JSON output shows that the query-side microservice (operating on port 9090 
 
 ## Other highlights
 
-No Microservice demonstrator would be complete without a service registry, so I've added a Eureka service using Spring Cloud Netflix whic is available on port 8761. The command-side and query-side microservices both register themselves during startup and can be seen on the Eureka console.
+No Microservice demonstrator would be complete without a service registry, so I've added a Eureka service using Spring Cloud Netflix which is available on port `8761`. The command-side and query-side microservices both register themselves during startup and can be seen on the Eureka console.
 
