@@ -3,7 +3,7 @@
 This application demonstrates how to build Microservices using the CQRS/ES pattern with Java, Spring Boot, Axon and Docker. By following this code sample you'll see how to implement:-
 
 1. Scalable Microservices using Java and [Spring Boot](http://projects.spring.io/spring-boot/)
-2. Command and Query Responsibility Separation (CQRS) using [Axon Framework](http://www.axonframework.org/)
+2. Command and Query Responsibility Separation (CQRS) using [Axon Framework v2](http://www.axonframework.org/)
 3. Event Sourcing (ES) and Event Driven Architecture using Axon, [MongoDB](https://www.mongodb.com/) and [RabbitMQ](https://www.rabbitmq.com/)
 4. Build, Ship and Run with Containers using [Docker](http://docker.com)
 
@@ -29,7 +29,7 @@ The command-side and the query-side both have REST API's which can be used to ac
 
 > These REST API's are a 'work in progress' and are subject to change.
 
-Read the [Axon documentation](http://www.axonframework.org/download/) for the finer details of how Axon generally operates to bring you CQRS and Event Sourcing to your apps, as well as lots of detail on how it all get's configured (spoiler: it's mostly spring-context XML for the setup and some Java extensions and annotations within the code).
+Read the [Axon documentation](http://www.axonframework.org) for the finer details of how Axon brings CQRS and Event Sourcing to your apps, as well as lots of detail on how it's used (Spring for the setup and some Java extensions and annotations for the code).
 
 ## Running the Demo
 
@@ -101,7 +101,12 @@ To run this test this we need to open a second terminal window from which we can
 Let's add an MP3 product to our product catalogue with the name 'Everything is Awesome'.
 
 ```bash
-$ curl -X POST --header "Content-Type: application/json" --header "Accept: */*" "http://localhost:9000/products/add/1?name=Everything%20Is%20Awesome"
+$ curl -X POST -v --header "Content-Type: application/json" --header "Accept: */*" "http://localhost:9000/products/add/1?name=Everything%20Is%20Awesome"
+```
+
+You should see the following output and if the response code is `HTTP/1.1 201 Created` then the product "Everything is Awesome" has been added to the command-side successfully.
+
+```bash
 *   Trying 127.0.0.1...
 * Connected to localhost (127.0.0.1) port 9000 (#0)
 > POST /products/add/1?name=Everything%20Is%20Awesome HTTP/1.1
@@ -115,8 +120,6 @@ $ curl -X POST --header "Content-Type: application/json" --header "Accept: */*" 
 < Content-Length: 0
 < Server: Jetty(9.2.16.v20160414)
 ```
-
-If the response code is `HTTP/1.1 201 Created` then the product "Everything is Awesome" will have been added to the command-side successfully.
  
 #### Step 3.2: Query for the Product
 
@@ -125,6 +128,8 @@ Now lets check that users can see the product that we just added. To do this we 
 ```bash
 $ curl http://localhost:9090/products/1
 ```
+
+You should see the following output. This shows that the query-side microservice (operating on port 9090 you'll notice) has a record for our newly added product. The product is listed as not saleable (saleable = false).
 
 ```json
 {
@@ -140,8 +145,6 @@ $ curl http://localhost:9090/products/1
     }
 }
 ```
-
-This JSON output shows that the query-side microservice (operating on port 9090 you'll notice) has a record for our newly added product. The product is listed as not saleable (saleable = false). As HATEOAS is switched on in Spring Boot REST, you have also been offered some other links which you can also traverse with curl.
 
 ## Other highlights
 
