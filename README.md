@@ -98,7 +98,7 @@ To run this test this we need to open a second terminal window from which we can
 
 #### Step 3.1: Add A New Product
 
-Let's add an MP3 product to our product catalogue with the name 'Everything is Awesome'.
+Let's add an MP3 product to our product catalogue with the name 'Everything is Awesome'. To do this we use the command-side API on port `9000` and issue a POST.
 
 ```bash
 $ curl -X POST -v --header "Content-Type: application/json" --header "Accept: */*" "http://localhost:9000/products/add/1?name=Everything%20Is%20Awesome"
@@ -123,7 +123,7 @@ You should see the following output and if the response code is `HTTP/1.1 201 Cr
  
 #### Step 3.2: Query for the Product
 
-Now lets check that users can see the product that we just added. To do this we use the query-side API and issue a simple 'GET' request.
+Now lets check that users can see the product that we just added. To do this we use the query-side API on port `9090` and issue a simple 'GET' request.
 
 ```bash
 $ curl http://localhost:9090/products/1
