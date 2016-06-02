@@ -11,17 +11,17 @@ This application demonstrates how to build Microservices using the CQRS/ES patte
 
 The demonstration uses a fictitious `Product` master data application similar to that which you would find in most retail or manufacturing organisations. The business domain model demonstrated here is very basic. Products can be added, stored, searched and retrieved using a simple REST API.
 
-In a CQRS application, commands like `add` are physically separated from queries like `view (where id=1)`. In this case the domain's code is quite literally split two pieces - a **command-side** microservice and a **query-side** microservice that can  be deployed and scaled independently of each other.  This is CQRS in its most literal form. CQRS doesn't have to be implemented this way if you don't want it to be, but for the purpose of this demonstration there is a clear and intentional split.
+In a CQRS application, commands like `add` are physically separated from queries like `view (where id=1)`. In this case the domain's codebase is quite literally split two pieces - a **command-side microservice** and a **query-side microservice** that can  be deployed and scaled independently of each other.  This is CQRS in its most literal form. CQRS doesn't have to be implemented this way if you don't want it to be, but for the purpose of this demonstration there is a clear and intentional split.
 
 Both the command-side and the query-side microservices use Spring Boot. Communication between the two microservices is `event-driven`. Events are passed between the two microservice components using RabbitMQ messaging. This provides a scalable means of passing events between processes, microservices, legacy systems and other parties in a loosely coupled fashion.
 
-## More about the 'Command-side'
+## More about the Command-side Microservice
 
 Commands are _actions which change state_ in some way. The command-side microservice processes all commands. In this demonstration commands are used to add new Product, or to make them 'salaeable' or 'un-saleable'. The execution of these commands on a particular Product results in `Events` being generated which are persisted by Axon and propagated out to other VM's (as many VM's as you like) via RabbitMQ messaging. In event-sourcing, events are the sole records in the system. They are used by the system to describe and re-build aggregates on demand, one event at a time. 
 
 > In DDD the 'Product' entity is often referred to as an `Aggregate` or an `AggregateRoot`.
 
-## More about the 'Query-side'
+## More about the Query-side Microservice
 
 The query-side microservice acts as an event-listener and processor. It listens for the `Events` and processes them in whatever way makes the most sense. In this particular demonstration, the query-side just builds and maintains a *materialised view* which tracks the state of the individual Products (in terms of whether they are saleable or un-saleable). The query-side can be replicated many times for scalability and the messages held by the RabbitMQ queues are durable, so they can be temporarily stored on behalf of the event-listener if it goes down.
 
