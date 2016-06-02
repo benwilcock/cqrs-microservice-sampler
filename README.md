@@ -1,29 +1,29 @@
 # microservice-sampler
 
-This is a demonstration of the mocroservices pattern in `Java`. It's built to illustrate the use of a number of techniques and patterns in one simple 'Todo' application...
+This application demonstrates the use of the CQRS pattern using Java (Spring Boot) Microservices. This code illustrates the use of:-
 
-1. Microservices 
-2. Command and Query Responsibility Separation (CQRS)
-3. Event Sourcing
-
-It leverages the following technologies to do this...
-
-- [Spring Boot](http://projects.spring.io/spring-boot/) (v1.2.6)
-- [Axon Framework](http://www.axonframework.org/) (v2.4)
-- [RabbitMQ](https://www.rabbitmq.com/) (v3.5.4) Axon supports any Spring AMQP supported platform.
-- [MongoDB](https://www.mongodb.com/) (v.2.14) Axon also supports JDBC & JPA based event-stores.
+1. Microservices using Java and [Spring Boot](http://projects.spring.io/spring-boot/)
+2. Command and Query Responsibility Separation (CQRS) using [Axon Framework](http://www.axonframework.org/)
+3. Event Sourcing and Event Driven Architecture using Axon, [MongoDB](https://www.mongodb.com/) and [RabbitMQ](https://www.rabbitmq.com/)
+4. Build, Ship and Run with Containers using [Docker](http://docker.com)
 
 ## How it works
 
-The `Product` domain is literally split into a *command-side* microservice application and a *query-side* microservice application (this is CQRS in its most literal form, although it doesn't have to be this way if you don't want it to be).
+The demonstration uses a fictitious `Product` master data application similar to that which you would find in most retail or manufacturing organisations. The model demonstrated here is very basic. Products can be added, stored, searched and retrieved by users using a simple REST API.
 
-Both microservices use spring-boot.
+In a CQRS application, commands like 'add' are physically separated from queries like view where id=1. In this case the Product domain's implementation code is quite literally split into a *command-side* microservice and a *query-side* microservice.  This is CQRS in its most literal form. CQRS doesn't have to be implemented this way if you don't want it to be, but for the purpose of this demonstration there is a clear and intentional split.
 
-Communication between the two microservices is `event-driven` and the demo uses RabbitMQ messaging as a means of passing the events between processes (VM's).
+Both microservices use Spring Boot. Communication between the two microservices is `event-driven`. Events are passed between the microservice components using RabbitMQ messaging. This provides a scalable means of passing events between processes, microservices, legacy systems and other parties in a loosely coupled fashion.
 
-The **command-side** processes commands. Commands are actions which change state in some way. In this demo commands are used to create, make salaeable or un-saleable a Product. The execution of these commands on a Product (a.k.a an `Aggregate`) results in `Events` being generated which are persisted by Axon (using MongoDB) and propagated out to other VM's (as many VM's as you like) via RabbitMQ messaging. In event-sourcing, events are the sole records in the system. They are used by the system to describe and re-build aggregates on demand, one event at a time.
+## More about the 'Command-side'
 
-The **query-side** is an event-listener and processor. It listens for the `Events` and processes them in whatever way makes the most sense. In this simple demo, the query-side just builds and maintains a *materialised view* which tracks the state of the individual Products (in terms of whether they are saleable or un-saleable). The query-side can be replicated many times for scalability and the messages held by the RabbitMQ queues are durable, so they can be temporarily stored on behalf of the event-listener if it goes down.
+Commands are _actions which change state_ in some way. The command-side microservice processes all commands. In this demonstration commands are used to add new Product, or to make them 'salaeable' or 'un-saleable'. The execution of these commands on a particular Product results in `Events` being generated which are persisted by Axon and propagated out to other VM's (as many VM's as you like) via RabbitMQ messaging. In event-sourcing, events are the sole records in the system. They are used by the system to describe and re-build aggregates on demand, one event at a time. 
+
+> In DDD the 'Product' entity is often referred to as an `Aggregate` or `AggregateRoot`.
+
+## More about the 'Command-side'
+
+The **query-side** microservice acts as an event-listener and processor. It listens for the `Events` and processes them in whatever way makes the most sense. In this particular demonstration, the query-side just builds and maintains a *materialised view* which tracks the state of the individual Products (in terms of whether they are saleable or un-saleable). The query-side can be replicated many times for scalability and the messages held by the RabbitMQ queues are durable, so they can be temporarily stored on behalf of the event-listener if it goes down.
 
 The command-side and the query-side both have REST API's which can be used to access their capabilities.
 
@@ -33,84 +33,114 @@ Read the [Axon documentation](http://www.axonframework.org/download/) for the fi
 
 ## Running the Demo yourself...
 
-Assuming you already have...
+To run the demo you'll need to have the following application installed on your machine...
 
+- [Linux](http://ubuntu.com) (I'm using Ubuntu 16.04)
 - [Java JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) (I'm using v1.8.0_60)
 - [Git](https://git-scm.com/) (I'm using v1.9.1)
 - [Docker](https://www.docker.com/) (I'm using v1.8.2)
+- [Docker-compose](https://www.docker.com/) (I'm using v1.7.1)
 
-...then do the following...
+If you have installed all the required software, you can run the demo by following the process outlined below. If your using Windows or Mac, Docker is a bit more fiddly to use unless you use the native '[Docker for Mac](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/)' or '[Docker for Windows](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/)' which is in BETA at the time of writing.
 
-### Step 1: Spin up the Database and Messaging servers...
+### Step 1: Build the Microservice docker images
 
-First lets get the RabbitMQ and MongoDB servers up and running. I've used Docker for this because it's really simple.
-
-```bash
-$ docker run -d --name my-mongo -p 27017:27017 mongo:2.4
-$ docker run -d --name my-rabbit -p 5672:5672 -p 15672:15672 -e RABBITMQ_DEFAULT_USER=test -e RABBITMQ_DEFAULT_PASS=password -e RABBITMQ_NODENAME=my-rabbit rabbitmq:3-management
-$ docker ps
-```
-
-Assuming you've installed Docker already, executing these commands should install the necessary docker containers for MongoDB and RabbitMQ and run them locally. They're given the names `my-rabbit` and `my-mongo` and they'll run in the background until you ask docker to stop them (using `docker stop my-mongo` for example).
-
-If you already have MongoDB and RabbitMQ on your system (using their default ports) you can use those instead once you have the required users and settings configured (see the blockquotes below for details).
-
-> The demo expects RabbitMQ to have a user with the username `test` and the password `password` and for this user to have admin rights so that it can create exchanges and queues. If you don't want to add such a user, stop your local RabbitMQ server and start the docker one instead using the commands outlined above.
-
-> The demo also expects the MongoDB server to have a default `guest` user with no password and for this guest user to have admin rights. If you don't want to add such a user, stop your local MongoDB server and start the docker container instead using the commands above.
-
-### Step 2: Clone and build the project...
-
-Next we can download, build and unit test the microservices-sampler project. Here I'm using the Gradle wrapper, so there is no need to actually install Gradle if you don't want to.
+First you will need to build the code and add the generated docker images to your local docker repository. Navigate to the folder where you cloned this git repository and execute the following command at the command line (syntax assumes linux). Gradlew is provided for your convenience - you shouldn't need gradle installed to follow along.
 
 ```bash
-$ git clone https://github.com/benwilcock/microservice-sampler.git
-$ cd microservice-sampler
-$ ./gradlew clean test
+$ ./gradlew clean test image
 ```
 
-### Step 3: Run the Integration Test...
-
-So far so good. Now we want to test the delivery of event messages to other processes. To do this we need two (**2**) terminal windows. In one window we'll boot the `query-side` (which contains an event-listener and a materialised view), and in the other terminal we'll fire the `command-side` integration tests (which generate commands that generate events).
-
-#### In **Terminal #1**:
-
-Start the docker servers for RabbitMQ and MongoDB (if you haven't already).
+If you now check your docker images you should see the following images in your list of images.
 
 ```bash
-$ docker start my-rabbit
-$ docker start my-mongo
+$ **docker images**
+REPOSITORY                        TAG                 IMAGE ID            CREATED             SIZE
+benwilcock/product-query-side     latest              85324407071a        0 minutes ago      270.3 MB
+benwilcock/discovery-service      latest              ae715b59fd40        0 minutes ago      241.7 MB
+benwilcock/product-command-side   latest              67780f537e8c        0 minutes ago      248.5 MB
 ```
 
-Now run the command-side Spring Boot application via gradle.
+### Step 2: Run the server group
+
+Because we're using docker-compose, this should simply be a case of executing the following command at the command line... 
 
 ```bash
-$ ./gradlew command-side:bootRun
+$ docker-compose up
 ```
-After lots of logging output from Spring Boot, you should have a the command-side microservice ready and listening on port 9000.
 
-#### In **Terminal #2**:
+You'll see lots of logging output as the servers spin up. There are 5 servers in total, they are 'mongodb', 'rabbitmq', 'discovery', 'product-cmd-side', and 'product-qry-side'. If you want to see what docker instances are running at any time, open a separate terminal and execute the following command:-
+ 
+```bash
+$ **docker ps**
+CONTAINER ID IMAGE                                    COMMAND                  STATUS              PORTS
+fffc443838ca   benwilcock/product-command-side:latest   "java -Djava.security"   Up 3 seconds        0.0.0.0:9000-9001->9000-9001/tcp
+6e156d5fab6d   benwilcock/product-query-side:latest     "java -Djava.security"   Up 3 seconds        0.0.0.0:9090-9091->9090-9091/tcp
+dac5e70f6750   benwilcock/discovery-service             "java -Djava.security"   Up 4 seconds        0.0.0.0:8761->8761/tcp
+74b6a0ceb94b   mongo:2.4                                "/entrypoint.sh mongo"   Up 4 seconds        0.0.0.0:32771->27017/tcp 
+6114c16b53f6   rabbitmq:3-management                    "/docker-entrypoint.s"   Up 4 seconds        4369/tcp, 5671/tcp, 15671/tcp, 25672/tcp, 0.0.0.0:15672->15672/tcp, 
+```
+
+Once the servers are up you can have a poke around using a browser if you like. Exposed are:-
+ 
+ 1. [The Rabbit Management Console](http://localhost:15672) on port 15672
+ 2. [The Eureka Discovery Server Console](http://localhost:8761) on port 8761
+ 3. [The Product Command Side Swagger API Docs](http://localhost:9000/swagger-ui.html) on port 9000
+ 4. [An empty Product repository on the query-side](http://localhost:9090/products) (JSON format) on port 9090
+
+### Step 3: Test the application.
+
+So far so good. Now we want to test the addition of products. This will test that 
+
+- products are created and persisted in the command-side microservice; 
+- that events are propagated between processes and sent via rabbitmq to the query-side microservice; 
+- and the querying of data in the query-side's materialised view. 
+
+In this _hands-on manual test_ we'll issue an 'Add' command to the command-side REST API which is listening on port 9000. When the command-side has processed the command a 'ProductAdded' event is generated and sent to the query-side via the RabbitMQ service. The query-side then processes this event and adds a record for the product to it's materialised-view (actually a H2 in memory database for this simple demo). As you do this, you should observe some logging output in the terminal window while the test is in progress.
+
+To run this test this we need to open a second terminal window from which we can issue some CURL commands without having to stop docker. 
+
+#### Step 3.1: Add A New Product
+
+Let's add an MP3 product to our product catalogue with the name 'Everything is Awesome'.
 
 ```bash
-$ ./gradlew query-side:bootRun
+$ **curl -X POST --header "Content-Type: application/json" --header "Accept: */*" "http://localhost:9000/products/add/1?name=Everything%20Is%20Awesome"**
+*   Trying 127.0.0.1...
+* Connected to localhost (127.0.0.1) port 9000 (#0)
+> POST /products/add/1?name=Everything%20Is%20Awesome HTTP/1.1
+> Host: localhost:9000
+> User-Agent: curl/7.47.0
+> Content-Type: application/json```bash
+> Accept: */*$ http://localhost:9090/products/1
+< HTTP/1.1 201 Created
+< Date: Thu, 02 Jun 2016 13:37:07 GMTThis 
+< X-Application-Context: product-command-side:9000
+< Content-Length: 0
+< Server: Jetty(9.2.16.v20160414)
 ```
 
-After lots of output from Spring Boot, you should have a fully booted query-side microservice listening on http port 9090.
+If the response code is `HTTP/1.1 201 Created` then the product "Everything is Awesome" will have been added to the command-side successfully.
+ 
+#### Step 3.2: Query for the Product
 
-#### In **Terminal #3**:
+Now lets check that users can see the product that we just added. To do this we use the query-side API and issue a simple 'GET' request.
 
-```bash
-$ ./gradlew integrationTest
+```json
+$ **curl http://localhost:9090/products/1**
+{
+    name: "Everything Is Awesome",
+    saleable: false,
+    _links: {
+        self: {
+            href: "http://localhost:9090/products/1"
+        },
+        product: {
+            href: "http://localhost:9090/products/1"
+        }
+    }
+}
 ```
 
-The integration test sends an 'AddProduct' command to the command-side REST API listening on port 9000. When the command-side has processed the command a 'ProductAdded' event is generated and sent to the query-side via RabbitMQ. The query-side processes this event and adds a record for the product to it's database. You should visually observe this process as logging output in the terminal 1 and terminal 2 windows while the test is in progress.
-
-#### Issuing Queries with CURL
-If you want to inspect the query-side yourself, just use CURL to query the command-side's REST API like this...
-
-```bash
-$ curl http://localhost:9090/products
-```
-
-As HATEOAS is switched on, you should be offered other links which you can also traverse with curl.
+This JSON output shows that the query-side microservice (operating on port 9090 you'll notice) has a record for our newly added product. The product is listed as not saleable (saleable = false). As HATEOAS is switched on in Spring Boot REST, you have also been offered some other links which you can also traverse with curl.
 
