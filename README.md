@@ -98,7 +98,7 @@ To run this test this we need to open a second terminal window from which we can
 
 #### Step 3.1: Add A New Product
 
-Let's add an MP3 product to our product catalogue with the name 'Everything is Awesome'. To do this we use the command-side API on port `9000` and issue a POST.
+Let's add an MP3 product to our product catalogue with the name 'Everything is Awesome'. To do this we use the command-side API on port `9000` and issue a POST request as follows.
 
 ```bash
 $ curl -X POST -v --header "Content-Type: application/json" --header "Accept: */*" "http://localhost:9000/products/add/1?name=Everything%20Is%20Awesome"
