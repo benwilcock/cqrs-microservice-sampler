@@ -28,11 +28,11 @@ services:
      - discovery
     ports:
       - "9000:9000"
-  product-query-side-1:
+  product-query-side:
     image: benwilcock/product-query-side:latest
-    container_name: product-qry-side-1
+    container_name: product-qry-side
     depends_on:
      - rabbitmq
      - discovery
     ports:
-      - "9090:9090"
+      - "9001:9001"
