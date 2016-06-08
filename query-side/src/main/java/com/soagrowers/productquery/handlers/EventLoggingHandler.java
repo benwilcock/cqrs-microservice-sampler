@@ -3,9 +3,12 @@ package com.soagrowers.productquery.handlers;
 import com.soagrowers.productevents.events.ProductAddedEvent;
 import com.soagrowers.productevents.events.ProductSaleableEvent;
 import com.soagrowers.productevents.events.ProductUnsaleableEvent;
+import com.soagrowers.productquery.Application;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,21 +20,23 @@ import org.springframework.stereotype.Component;
 public class EventLoggingHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventLoggingHandler.class);
-    private final String INSTANCE_ID = String.valueOf(Double.valueOf(Math.random() * 100).intValue());
+
+    @Value("${spring.application.index}")
+    private Integer indexId;
 
     @EventHandler
     public void handle(ProductAddedEvent event) {
-        LOG.debug("IID:{} ET:{} EID:[{}] '{}'", INSTANCE_ID, event.getClass().getSimpleName(), event.getId(), event.getName());
+        LOG.debug("Instance:[{}] Event:{} Id:{} Name:'{}'", indexId, event.getClass().getSimpleName(), event.getId(), event.getName());
     }
 
     @EventHandler
     public void handle(ProductSaleableEvent event) {
-        LOG.debug("IID:{} ET:{} EID:[{}]", INSTANCE_ID, event.getClass().getSimpleName(), event.getId());
+        LOG.debug("Instance:[{}] Event:{} Id:{}", indexId, event.getClass().getSimpleName(), event.getId());
     }
 
     @EventHandler
     public void handle(ProductUnsaleableEvent event) {
-        LOG.debug("IID:{} ET:{} EID:[{}]", INSTANCE_ID, event.getClass().getSimpleName(), event.getId());
+        LOG.debug("Instance:[{}] Event:{} Id:{}", indexId, event.getClass().getSimpleName(), event.getId());
     }
 }
 

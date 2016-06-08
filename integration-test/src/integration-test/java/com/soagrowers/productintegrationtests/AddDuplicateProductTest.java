@@ -28,7 +28,7 @@ public class AddDuplicateProductTest {
     @BeforeClass
     public static void setupClass() {
         id = UUID.randomUUID().toString();
-        name = "AddDuplicateTest [" + id + "]";
+        name = "Duplicate Testing Product [" + id + "]";
     }
 
     @After

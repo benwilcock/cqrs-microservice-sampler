@@ -19,15 +19,6 @@ services:
     environment:
      - RABBITMQ_DEFAULT_USER=test
      - RABBITMQ_DEFAULT_PASS=password
-  product-query-side:
-    image: benwilcock/product-query-side:latest
-    container_name: product-qry-side
-    depends_on:
-     - rabbitmq
-     - discovery
-    ports:
-      - "9090:9090"
-      - "9091:9091"
   product-command-side:
     image: benwilcock/product-command-side:latest
     container_name: product-cmd-side
@@ -37,4 +28,11 @@ services:
      - discovery
     ports:
       - "9000:9000"
-      - "9001:9001"
+  product-query-side-1:
+    image: benwilcock/product-query-side:latest
+    container_name: product-qry-side-1
+    depends_on:
+     - rabbitmq
+     - discovery
+    ports:
+      - "9090:9090"

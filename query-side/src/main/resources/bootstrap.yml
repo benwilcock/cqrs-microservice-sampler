@@ -1,0 +1,10 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: product-query-side
+    index: ${random.int[1024,4096]}
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/

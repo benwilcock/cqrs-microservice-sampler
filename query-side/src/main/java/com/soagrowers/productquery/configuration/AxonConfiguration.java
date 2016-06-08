@@ -28,17 +28,22 @@ class AxonConfiguration {
     @Autowired
     public PlatformTransactionManager transactionManager;
 
-    @Value("${spring.application.queue}")
-    private String queueName;
+    @Autowired
+    public String uniqueQueueName;
 
     @Value("${spring.application.terminal}")
     private String terminalName;
 
 
-/*    @Bean
+    /*
+    @Value("${spring.application.queue}")
+    private String queueName;
+
+    @Bean
     XStreamSerializer xmlSerializer() {
         return new XStreamSerializer();
     }*/
+
 
     @Bean
     JacksonSerializer axonJsonSerializer() {
@@ -57,15 +62,15 @@ class AxonConfiguration {
         SpringAMQPConsumerConfiguration amqpConsumerConfiguration = new SpringAMQPConsumerConfiguration();
         amqpConsumerConfiguration.setTxSize(10);
         amqpConsumerConfiguration.setTransactionManager(transactionManager);
-        amqpConsumerConfiguration.setQueueName(queueName);
+        amqpConsumerConfiguration.setQueueName(uniqueQueueName);
         return amqpConsumerConfiguration;
     }
 
 
     @Bean
-    SimpleCluster simpleCluster() {
-        SimpleCluster simpleCluster = new SimpleCluster(queueName);
-        simpleCluster.getMetaData().setProperty(AMQP_CONFIG_KEY, springAMQPConsumerConfiguration());
+    SimpleCluster simpleCluster(SpringAMQPConsumerConfiguration springAMQPConsumerConfiguration) {
+        SimpleCluster simpleCluster = new SimpleCluster(uniqueQueueName);
+        simpleCluster.getMetaData().setProperty(AMQP_CONFIG_KEY, springAMQPConsumerConfiguration);
         return simpleCluster;
     }
 
@@ -83,8 +88,8 @@ class AxonConfiguration {
     }
 
     @Bean
-    EventBus eventBus() {
-        return new ClusteringEventBus(new DefaultClusterSelector(simpleCluster()), terminal());
+    EventBus eventBus(SimpleCluster simpleCluster) {
+        return new ClusteringEventBus(new DefaultClusterSelector(simpleCluster), terminal());
     }
 
 }

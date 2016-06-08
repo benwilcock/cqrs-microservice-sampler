@@ -48,18 +48,18 @@ public enum Asserts {
         if (active) {
 
             if (null == object) {
-                LOG.warn(UNEXPECTED_NULL);
+                LOG.debug(UNEXPECTED_NULL);
                 throw new AssertionError(UNEXPECTED_NULL);
             }
 
             if (List.class.isAssignableFrom(object.getClass())) {
-                LOG.warn(USED_WRONG_METHOD);
+                LOG.debug(USED_WRONG_METHOD);
                 throw new IllegalArgumentException(USED_WRONG_METHOD);
             }
 
             if (String.class.isAssignableFrom(object.getClass())) {
                 if ((String) object == EMPTY_STRING) {
-                    LOG.warn(UNEXPECTED_EMPTY_STRING);
+                    LOG.debug(UNEXPECTED_EMPTY_STRING);
                     throw new AssertionError(UNEXPECTED_EMPTY_STRING);
                 }
             }

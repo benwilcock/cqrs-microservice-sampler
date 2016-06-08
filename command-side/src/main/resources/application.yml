@@ -1,8 +1,4 @@
 #debug: true
-server:
-    port: 9000
-management:
-    port: 9001
 spring:
     application:
         exchange: product.events.fanout.exchange
@@ -30,9 +26,5 @@ logging:
             #data: DEBUG
             #transaction: DEBUG
         org.axonframework: INFO
-        com.soagrowers: DEBUG
+        com.soagrowers: INFO
     file: ./build/logs/command-side-server.log
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://discovery:8761/eureka/

@@ -1,13 +1,7 @@
-#debug: true
-server:
-    port: 9090
-management:
-    port: 9091
 spring:
     application:
-        name: product-query-side
         exchange: product.events.fanout.exchange
-        queue: product.view.event.stream
+        queue: event.stream
         terminal: product.axon.terminal
     rabbitmq:
         hostname: rabbitmq
@@ -29,7 +23,3 @@ logging:
         org.axonframework: INFO
         com.soagrowers: TRACE
     file: ./build/logs/query-side-server.log
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://discovery:8761/eureka/

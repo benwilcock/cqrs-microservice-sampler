@@ -33,27 +33,27 @@ public class ProductRestController {
                     @RequestParam(value = "name", required = true) String name,
                     HttpServletResponse response) {
 
-        LOG.info("ADD request received: ID: {}, NAME: {}", id, name);
+        LOG.debug("Adding Product [{}] '{}'", id, name);
 
         try {
             Asserts.INSTANCE.areNotEmpty(Arrays.asList(id, name));
             AddProductCommand command = new AddProductCommand(id, name);
             commandGateway.sendAndWait(command);
-            LOG.info("AddProductCommand sent to command gateway: Product [{}] '{}'", id, name);
+            LOG.info("Added Product [{}] '{}'", id, name);
             response.setStatus(HttpServletResponse.SC_CREATED);// Set up the 201 CREATED response
             return;
         } catch (AssertionError ae){
-            LOG.warn("Request failed validation. ID: {}, NAME: {}", id, name);
+            LOG.warn("Add Request failed - empty params?. [{}] '{}'", id, name);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
         catch (CommandExecutionException cex) {
-            LOG.warn("AddProductCommand FAILED. Unable to execute the command. Message: {}", cex.getMessage());
+            LOG.warn("Add Command FAILED with Message: {}", cex.getMessage());
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
             if (null != cex.getCause()) {
-                LOG.warn("CAUSED BY: {} {}", cex.getCause().getClass().getName(), cex.getCause().getMessage());
+                LOG.warn("Caused by: {} {}", cex.getCause().getClass().getName(), cex.getCause().getMessage());
                 if (cex.getCause() instanceof ConcurrencyException) {
-                    LOG.warn("ISSUE: A Product with ID [{}] already exists.", id);
+                    LOG.warn("A duplicate product with the same ID [{}] already exists.", id);
                     response.setStatus(HttpServletResponse.SC_CONFLICT);
                 }
             }

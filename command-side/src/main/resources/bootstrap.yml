@@ -1,0 +1,9 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: product-command-side
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/

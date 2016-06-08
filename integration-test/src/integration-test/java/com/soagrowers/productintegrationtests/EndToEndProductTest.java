@@ -32,7 +32,7 @@ public class EndToEndProductTest {
     @BeforeClass
     public static void setupClass(){
         id = UUID.randomUUID().toString();
-        name = "I am Product ["+id+"]";
+        name = "End2End Test Product ["+id+"]";
     }
 
     @After

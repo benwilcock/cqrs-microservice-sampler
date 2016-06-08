@@ -34,9 +34,17 @@ public class RabbitConfiguration {
     @Value("${spring.application.queue}")
     private String queueName;
 
+    @Value("${spring.application.index}")
+    private Integer index;
+
     @Bean
-    Queue eventStream() {
-        return new Queue(queueName, true);
+    public String uniqueQueueName() {
+        return queueName + "." + index;
+    }
+
+    @Bean
+    Queue eventStream(String uniqueQueueName) {
+        return new Queue(uniqueQueueName, false, false, true);
     }
 
     @Bean
@@ -45,8 +53,8 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    Binding binding() {
-        return new Binding(queueName, Binding.DestinationType.QUEUE, exchangeName, "*.*", null);
+    Binding binding(String uniqueQueueName) {
+        return new Binding(uniqueQueueName, Binding.DestinationType.QUEUE, exchangeName, "*.*", null);
     }
 
     @Bean
@@ -59,12 +67,12 @@ public class RabbitConfiguration {
 
     @Bean
     @Required
-    RabbitAdmin rabbitAdmin() {
+    RabbitAdmin rabbitAdmin(String uniqueQueueName) {
         RabbitAdmin admin = new RabbitAdmin(connectionFactory());
         admin.setAutoStartup(true);
         admin.declareExchange(eventBusExchange());
-        admin.declareQueue(eventStream());
-        admin.declareBinding(binding());
+        admin.declareQueue(eventStream(uniqueQueueName));
+        admin.declareBinding(binding(uniqueQueueName));
         return admin;
     }
 }
