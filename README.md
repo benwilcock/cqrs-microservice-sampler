@@ -21,9 +21,7 @@ The logical architecture looks like this:-
 
 Both the command-side and the query-side microservices have been developed using the Spring Boot framework for Java. All communication between the command and query microservices is purely `event-driven`. The events are passed between the microservice components using RabbitMQ messaging. Messaging provides a scalable means of passing events between processes, microservices, legacy systems and other parties in a loosely coupled fashion. 
 
-> Notice how none of the services shares it's database with another. This is important because of the high degree of autonomy it affords each service, which in turn helps the individual services to scale independently of the others in the system.
-
-> For more on CQRS architecture, check out my [Slideshare on CQRS Microservices](http://www.slideshare.net/BenWilcock1/microservice-architecture-with-cqrs-and-event-sourcing).
+> Notice how none of the services shares it's database with another. This is important because of the high degree of autonomy it affords each service, which in turn helps the individual services to scale independently of the others in the system. For more on CQRS architecture, check out my [Slideshare on CQRS Microservices](http://www.slideshare.net/BenWilcock1/microservice-architecture-with-cqrs-and-event-sourcing) which the slide above is taken from.
 
 ## More about the Command-side Microservice
 
@@ -41,28 +39,28 @@ The command-side and the query-side both have REST API's which can be used to ac
 
 Read the [Axon documentation](http://www.axonframework.org) for the finer details of how Axon brings CQRS and Event Sourcing to your apps, as well as lots of detail on how it's configured and used (using Spring for the setup and some Java extensions and annotations for the code).
 
-## Running the Demo
+# Running the Demo
 
-Running the demo is easy but you'll need to have the following software installed on your machine first...
+Running the demo is easy but you'll need to have the following software installed on your machine. I'm using [Ubuntu 16.04](http://ubuntu.com) as my OS.
 
 - [Docker](https://www.docker.com/) (I'm using v1.8.2)
 - [Docker-compose](https://www.docker.com/) (I'm using v1.7.1)
 
-If you have all the required software, you can run the demo by following the process outlined below. I'm using [Ubuntu 16.04](http://ubuntu.com) as my development OS. 
+If you have all the required software, you can run the demo by following the process outlined below. 
 
-> If you're developing on Windows or Mac then Docker is a bit more fiddly unless you try out the native '[Docker for Mac](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/)' or '[Docker for Windows](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/)'. Both in BETA at the time of writing and neither have been tested for compatibility with this demo.
+> If you're using Windows or Mac then Docker is a bit more fiddly unless you try out the native '[Docker for Mac](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/)' or '[Docker for Windows](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/)'. Both are in BETA at the time of writing.
 
-### Step 1: Get the Docker-compose config file
+## Step 1: Get the Docker-compose config file
 
-In a new empty folder, at the terminal execute the following command to download the latest docker-compose configuration file (YAML). 
+In a new empty folder, at the terminal execute the following command to download the latest docker-compose configuration file for this demo. 
 
 ```bash
 $ wget https://raw.githubusercontent.com/benwilcock/microservice-sampler/master/docker-compose.yml
 ```
 
-> Don't change the file name - Docker defaults to looking for a file named 'docker-compose.yml'
+> Try not to change the file name - Docker defaults to looking for a file called 'docker-compose.yml'.
 
-### Step 2: Start the Microservices
+## Step 2: Start the Microservices
 
 Because we're using docker-compose, starting the microservices is simply a case of executing the following command window from within the folder you created for step 1... 
 
@@ -84,13 +82,13 @@ Once the servers are all up and running (this can take some time at first) you c
  4. [The Product Command Side Swagger API Docs](http://localhost:9000/swagger-ui.html) on port `9000`
  5. [An empty Product repository on the query-side](http://localhost:9001/products) (responses are in JSON format) on port `9001`
 
-### Step 3: Adding and Viewing Products.
+## Step 3: Adding and Viewing Products.
 
 So far so good. Now we want to test the addition of products. 
 
 In this _hands-on manual test_ we'll issue an `add` command to the command-side REST API which is listening on port 9000. When the command-side has processed the command a 'ProductAdded' event is stored onto MongoDB and forwarded to the query-side via the RabbitMQ messaging server. The query-side then processes this event and adds a record for the product to it's materialised-view (actually a H2 in memory database for this simple demo). Finally we'll use the query-side microservice on port `9090` to lookup information regarding the product we added. As you do these tasks, you should observe some logging output in the terminal window. 
 
-#### Step 3.1: Add A New Product
+### Step 3.1: Add A New Product
 
 To perform this manual test this we need to first **open a second terminal window** from where we can issue some CURL commands without having to stop the docker instances we have running in the first window.
 
@@ -117,7 +115,7 @@ You should see the following response. If the response code is `HTTP/1.1 201 Cre
 < Server: Jetty(9.2.16.v20160414)
 ```
  
-#### Step 3.2: Query for the Product
+### Step 3.2: Query for the Product
 
 Now lets check that regular users can also view the product that we just added. To do this we use the query-side API on port `9001` and issue a simple 'GET' request.
 
@@ -144,7 +142,7 @@ You should see the following output. This shows that the query-side microservice
 
 That's it. Go ahead and add some more products if you like but be careful not to try to re-use the same product ID or you'll see an error.
 
-## Other highlights
+# Other highlights
 
 No Microservice demonstrator would be complete without a service registry, so I've added a Eureka service using Spring Cloud Netflix which is available on port `8761`. The command-side and query-side microservices both register themselves during startup and can be seen on the Eureka console. Registering can be useful for resilience and allows for client side load balancing.
 
