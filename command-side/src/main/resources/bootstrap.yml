@@ -3,6 +3,13 @@ server:
 spring:
   application:
     name: product-command-side
+  cloud:
+    config:
+      uri: http://config:8888
+      failFast: true
+      retry:
+        initialInterval: 2000
+        maxAttempts: 20
 eureka:
   client:
     serviceUrl:

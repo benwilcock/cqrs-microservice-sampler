@@ -28,13 +28,12 @@ configurations{
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}")
 	compile('org.springframework.cloud:spring-cloud-config-server')
-    compile("org.springframework.cloud:spring-cloud-starter-eureka")
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
 }
 
 dependencyManagement {
 	imports { 
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.RELEASE" 
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR1"
 	}
 }
 

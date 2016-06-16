@@ -26,6 +26,7 @@ apply plugin: 'docker'
 
 dependencies {
     compile project(':common-things')
+    compile("com.h2database:h2")
     compile("org.axonframework:axon-amqp:2.4.3")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
@@ -33,14 +34,16 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-amqp:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-data-rest:${springBootVersion}")
+    compile("org.springframework.retry:spring-retry")
+    compile("org.springframework.boot:spring-boot-starter-aop:${springBootVersion}")
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
+    compile("org.springframework.cloud:spring-cloud-starter-config")
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    compile("com.h2database:h2")
 }
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.RELEASE"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR1"
     }
 }
 

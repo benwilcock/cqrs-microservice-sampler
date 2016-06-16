@@ -6,9 +6,11 @@ package com.soagrowers.utils;
 public class Statics {
 
     public static final int PORT_FOR_COMMANDS = 9000;
-    public static final int COMMAND_SIDE_MANAGEMENT_PORT_NUM = 9000;
     public static final int PORT_FOR_QUERIES = 9001;
-    public static final int QUERY_SIDE_MANAGEMENT_PORT_NUM = 9001;
+    public static final int PORT_FOR_DISCOVERY = 8761;
+    public static final int PORT_FOR_CONFIG = 8888;
+    public static final String QRY_SERVICE_ID = "PRODUCT-QUERY-SIDE";
+    public static final String CMD_SERVICE_ID = "PRODUCT-COMMAND-SIDE";
 
 
     public static final String API = "";

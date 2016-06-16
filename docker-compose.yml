@@ -1,5 +1,10 @@
 version: '2'
 services:
+  config:
+    image: benwilcock/config-service
+    container_name: config
+    ports:
+     - "8888:8888"
   discovery:
     image: benwilcock/discovery-service
     container_name: discovery
@@ -9,12 +14,12 @@ services:
     image: mongo:2.4
     container_name: mongodb
     ports:
-     - "27017"
+     - "27017:27017"
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
-     - "5672"
+     - "5672:5672"
      - "15672:15672"
     environment:
      - RABBITMQ_DEFAULT_USER=test
@@ -26,6 +31,7 @@ services:
      - mongodb
      - rabbitmq
      - discovery
+     - config
     ports:
       - "9000:9000"
   product-query-side:
@@ -34,5 +40,6 @@ services:
     depends_on:
      - rabbitmq
      - discovery
+     - config
     ports:
       - "9001:9001"
