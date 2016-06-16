@@ -31,13 +31,13 @@ Commands are _actions which change state_. The command-side microservice contain
 
 ## More about the Query-side Microservice
 
-The query-side microservice acts as an event-listener and view. It listens for the `Events` being emitted by the command-side and processes them into whatever view or composite makes most sense. In this particular example, the query-side simply builds and maintains a *materialised view*. This view tracks the state of the individual Products (in terms of what they are and whether they are saleable or un-saleable). The query-side can be replicated many times for scalability and the messages held by the RabbitMQ queues can be made to be durable, so they can temporarily store messages on behalf of the query-side if it goes down.
+The query-side microservice acts as an event-listener and a view. It listens for the `Events` being emitted by the command-side and processes them into whatever view or composite makes most sense. In this particular example, the query-side simply builds and maintains a 'materialised view' or 'projection' which holds the latest state of the individual Products in terms of their id and their description and whether they are saleable or not. The query-side can be replicated many times for scalability and the messages held by the RabbitMQ queues can be made to be durable, so they can temporarily store messages on behalf of the query-side if it goes down.
 
 The command-side and the query-side both have REST API's which can be used to access their capabilities.
 
 > These REST API's are a 'work in progress' and are subject to change.
 
-Read the [Axon documentation](http://www.axonframework.org) for the finer details of how Axon brings CQRS and Event Sourcing to your apps, as well as lots of detail on how it's configured and used (using Spring for the setup and some Java extensions and annotations for the code).
+Read the [Axon documentation](http://www.axonframework.org) for the finer details of how Axon brings CQRS and Event Sourcing to your Java apps, as well as lots of detail on how it's configured and used (using Spring for the setup and annotations for the code).
 
 # Running the Demo
 
