@@ -124,7 +124,7 @@ The response code should be `< HTTP/1.1 201 Created` meaning that the product "E
 Now lets check that regular users can also view the product that we just added. To do this we use the query-side API on port `9001` and issue a simple 'GET' request.
 
 ```bash
-$ curl http://localhost:9090/products/1
+$ curl http://localhost:9001/products/1
 ```
 
 You should see the following output. This shows that the query-side microservice has a record for our newly added MP3 product. The product is listed as non-saleable (saleable = false).
