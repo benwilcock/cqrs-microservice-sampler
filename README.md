@@ -76,29 +76,31 @@ $ docker ps
 
 Once the servers are all up and running (this can take some time at first) you can have a look around using your browser. You should be able to access:-
  
- 1. [The Rabbit Management Console](http://localhost:15672) on port 15672
- 2. [The Eureka Discovery Server Console](http://localhost:8761) on port 8761
- 3. [The Configuration Server](http://localhost:8888/mappings) on port 8888
+ 1. [The Rabbit Management Console](http://localhost:15672) on port `15672`
+ 2. [The Eureka Discovery Server Console](http://localhost:8761) on port `8761`
+ 3. [The Configuration Server](http://localhost:8888/mappings) on port `8888`
  4. [The Product Command Side Swagger API Docs](http://localhost:9000/swagger-ui.html) on port `9000`
  5. [An empty Product repository on the query-side](http://localhost:9001/products) (responses are in JSON format) on port `9001`
 
-## Step 3: Adding and Viewing Products.
+## Step 3: Working with Products.
 
 So far so good. Now we want to test the addition of products. 
 
-In this _hands-on manual test_ we'll issue an `add` command to the command-side REST API which is listening on port 9000. When the command-side has processed the command a 'ProductAdded' event is stored onto MongoDB and forwarded to the query-side via the RabbitMQ messaging server. The query-side then processes this event and adds a record for the product to it's materialised-view (actually a H2 in memory database for this simple demo). Finally we'll use the query-side microservice on port `9090` to lookup information regarding the product we added. As you do these tasks, you should observe some logging output in the terminal window. 
+In this _manual test_ we'll issue an `add` command to the command-side REST API. When the command-side has processed the command a 'ProductAdded' event is raised, stored in MongoDB, and forwarded to the query-side via RabbitMQ. The query-side then processes this event and adds a record for the product to it's materialised-view (actually a H2 in memory database for this simple demo). Finally we'll use the query-side microservice to lookup information regarding the new product we've added. As you do these tasks, you will observe some logging output in the docker terminal window. 
 
 ### Step 3.1: Add A New Product
 
-To perform this manual test this we need to first **open a second terminal window** from where we can issue some CURL commands without having to stop the docker instances we have running in the first window.
+To perform test this we need to first **open a second terminal window** from where we can issue some CURL commands without stopping the docker composed instances we have running in the first window.
 
-For the purposes of this test, we'll add an MP3 product to our product catalogue with the name 'Everything is Awesome'. To do this we can use the command-side REST API on port `9000` and issue it with a POST request as follows.
+For the purposes of this test, we'll add an MP3 product to our product catalogue with the name 'Everything is Awesome'. To do this we can use the command-side REST API and issue it with a POST request as follows.
 
 ```bash
 $ curl -X POST -v --header "Content-Type: application/json" --header "Accept: */*" "http://localhost:9000/products/add/1?name=Everything%20Is%20Awesome"
 ```
 
-You should see the following response. If the response code is `HTTP/1.1 201 Created` then the product "Everything is Awesome" has been added to the command-side event-sourced repository successfully.
+> If you don't have 'CURL' available to you, you can use your browser to add a product by navigating to the simple web-form that comes with the [command-side's Swagger documentation](http://localhost:9000/swagger-ui.html).
+
+You should see the following response.
 
 ```bash
 *   Trying 127.0.0.1...
@@ -114,7 +116,9 @@ You should see the following response. If the response code is `HTTP/1.1 201 Cre
 < Content-Length: 0
 < Server: Jetty(9.2.16.v20160414)
 ```
- 
+
+The response code should be `< HTTP/1.1 201 Created` meaning that the product "Everything is Awesome" has been added to the command-side event-sourced repository successfully.
+
 ### Step 3.2: Query for the Product
 
 Now lets check that regular users can also view the product that we just added. To do this we use the query-side API on port `9001` and issue a simple 'GET' request.
@@ -131,16 +135,16 @@ You should see the following output. This shows that the query-side microservice
     saleable: false,
     _links: {
         self: {
-            href: "http://localhost:9090/products/1"
+            href: "http://localhost:9001/products/1"
         },
         product: {
-            href: "http://localhost:9090/products/1"
+            href: "http://localhost:9001/products/1"
         }
     }
 }
 ```
 
-That's it. Go ahead and add some more products if you like but be careful not to try to re-use the same product ID or you'll see an error.
+That's it. Go ahead and repeat the test to add some more products if you like, but be careful not to try to re-use the same product ID when you POST or you'll see an error.
 
 # Other highlights
 
