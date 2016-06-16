@@ -109,7 +109,7 @@ You should see the following response.
 > Host: localhost:9000
 > User-Agent: curl/7.47.0
 > Content-Type: application/json```bash
-> Accept: */*$ http://localhost:9090/products/1
+> Accept: */*$ http://localhost:9000/products/1
 < HTTP/1.1 201 Created
 < Date: Thu, 02 Jun 2016 13:37:07 GMTThis 
 < X-Application-Context: product-command-side:9000
