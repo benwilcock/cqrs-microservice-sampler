@@ -6,8 +6,7 @@ spring:
     index: ${random.int[1024,4096]}
   cloud:
     config:
-      uri: http://config:8888
-      #uri: http://localhost:8888
+      uri: http://localhost:8888
       failFast: true
       retry:
         initialInterval: 2000
@@ -15,5 +14,4 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://discovery:8761/eureka/
-      #defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/

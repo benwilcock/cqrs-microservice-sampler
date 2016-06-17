@@ -19,4 +19,12 @@ public class Statics {
     public static final String PRODUCTS_QRY_BASE_PATH = API + VERSION + "/products";
     public static final String CMD_PRODUCT_ADD = "/add";
 
+    public static final String PROD_CMD_MESSAGE = "Greetings from the PRODUCT-COMMAND-SIDE microservice [using the PRODUCTION config].";
+    public static final String PROD_QRY_MESSAGE = "Greetings from the PRODUCT-QUERY-SIDE microservice [using the PRODUCTION config].";
+
+    public static final String LOCAL_CMD_MESSAGE = "Greetings from the PRODUCT-COMMAND-SIDE microservice [using the LOCALHOST config].";
+    public static final String LOCAL_QRY_MESSAGE = "Greetings from the PRODUCT-QUERY-SIDE microservice [using the LOCALHOST config].";
+
+    public static final boolean PRODUCTION = Boolean.valueOf(System.getProperty("production", "true"));
+
 }

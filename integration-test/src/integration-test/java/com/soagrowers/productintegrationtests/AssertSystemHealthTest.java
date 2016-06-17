@@ -5,6 +5,7 @@ import com.soagrowers.utils.Statics;
 import org.apache.http.HttpStatus;
 import org.apache.http.protocol.HTTP;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,20 @@ public class AssertSystemHealthTest {
     private static final Logger LOG = LoggerFactory.getLogger(AssertSystemHealthTest.class);
 
     private String productId = UUID.randomUUID().toString();
+    private String cmdConfigMessage;
+    private String qryConfigMessage;
+
+    @Before
+    public void setup(){
+        System.out.println("PRODUCTION MODE: " + Statics.PRODUCTION);
+        if(!Statics.PRODUCTION){
+            cmdConfigMessage = Statics.LOCAL_CMD_MESSAGE;
+            qryConfigMessage = Statics.LOCAL_QRY_MESSAGE;
+        } else {
+            cmdConfigMessage = Statics.PROD_CMD_MESSAGE;
+            qryConfigMessage = Statics.PROD_QRY_MESSAGE;
+        }
+    }
 
     @Test
     public void assertDiscoveryHealth() {
@@ -75,7 +90,7 @@ public class AssertSystemHealthTest {
                 get("/message").
                 then().
                 statusCode(HttpStatus.SC_OK).
-                body(Matchers.is("Hello"));
+                body(Matchers.is(cmdConfigMessage));
 
         given().
                 port(Statics.PORT_FOR_COMMANDS).
@@ -106,7 +121,7 @@ public class AssertSystemHealthTest {
                 get("/message").
                 then().
                 statusCode(HttpStatus.SC_OK).
-                body(Matchers.is("Greetings!"));
+                body(Matchers.is(qryConfigMessage));
 
         given().
                 port(Statics.PORT_FOR_QUERIES).

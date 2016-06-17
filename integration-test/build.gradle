@@ -52,3 +52,6 @@ task wrapper(type: Wrapper) {
 task image(){
     // Dummy task to allow global commands to work as intended
 }
+
+test.systemProperties = System.properties;
+integrationTest.systemProperties = System.properties;
