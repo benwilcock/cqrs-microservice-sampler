@@ -39,7 +39,7 @@ public class AddDuplicateProductTest {
     @Test
     public void testAddOfDuplicatesFailsPartA() {
         given().
-                port(PORT_FOR_COMMANDS).
+                port(PORT_FOR_GATEWAY).
                 when().
                 post(PRODUCTS_CMD_BASE_PATH + CMD_PRODUCT_ADD + "/{id}?name={name}", id, name).
                 then().
@@ -49,7 +49,7 @@ public class AddDuplicateProductTest {
     @Test
     public void testAddOfDuplicatesFailsPartB() {
         given()
-                .port(PORT_FOR_COMMANDS)
+                .port(PORT_FOR_GATEWAY)
                 .when()
                 .post(PRODUCTS_CMD_BASE_PATH + CMD_PRODUCT_ADD + "/{id}?name={name}", id, name)
                 .then()

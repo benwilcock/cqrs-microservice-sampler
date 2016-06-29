@@ -47,7 +47,7 @@ public class EndToEndProductTest {
     public void testA_PostAProduct() {
 
         given().
-                port(PORT_FOR_COMMANDS).
+                port(PORT_FOR_GATEWAY).
         when().
                 post(PRODUCTS_CMD_BASE_PATH + CMD_PRODUCT_ADD + "/{id}?name={name}", id, name).
         then().
@@ -63,7 +63,7 @@ public class EndToEndProductTest {
     public void testB_GetAProduct(){
 
         given().
-                port(Statics.PORT_FOR_QUERIES).
+                port(Statics.PORT_FOR_GATEWAY).
         when().
                 get(PRODUCTS_QRY_BASE_PATH + "/{id}", id).
         then().

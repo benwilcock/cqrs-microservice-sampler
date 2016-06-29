@@ -22,19 +22,30 @@ public class AssertSystemHealthTest {
     private static final Logger LOG = LoggerFactory.getLogger(AssertSystemHealthTest.class);
 
     private String productId = UUID.randomUUID().toString();
-    private String cmdConfigMessage;
-    private String qryConfigMessage;
+
 
     @Before
     public void setup(){
         System.out.println("PRODUCTION MODE: " + Statics.PRODUCTION);
-        if(!Statics.PRODUCTION){
-            cmdConfigMessage = Statics.LOCAL_CMD_MESSAGE;
-            qryConfigMessage = Statics.LOCAL_QRY_MESSAGE;
-        } else {
-            cmdConfigMessage = Statics.PROD_CMD_MESSAGE;
-            qryConfigMessage = Statics.PROD_QRY_MESSAGE;
-        }
+    }
+
+    @Test
+    public void assertGatewayHealth() {
+        given().
+                port(Statics.PORT_FOR_GATEWAY).
+                when().
+                get("/health/").
+                then().
+                statusCode(HttpStatus.SC_OK).
+                body("status", Matchers.is("UP")).
+                body("hystrix.status", Matchers.is("UP"));
+
+        given().
+                port(Statics.PORT_FOR_GATEWAY).
+                when().
+                get("/routes/").
+                then().
+                statusCode(HttpStatus.SC_OK);
     }
 
     @Test
@@ -68,16 +79,23 @@ public class AssertSystemHealthTest {
                 then().
                 statusCode(HttpStatus.SC_OK).
                 body("name", Matchers.is("integration-test"));
-                //body("$.propertySources[0].source.*", Matchers.hasItem("0eb10d28-32ff-11e6-8bd1-5775583ead59"));
-                //body("propertySources.source", Matchers.hasValue("0eb10d28-32ff-11e6-8bd1-5775583ead59"));
     }
 
     @Test
     public void assertCommandSideHealth() {
+
+        String cmdConfigMessage;
+
+        if(!Statics.PRODUCTION){
+            cmdConfigMessage = Statics.LOCAL_CMD_MESSAGE;
+        } else {
+            cmdConfigMessage = Statics.PROD_CMD_MESSAGE;
+        }
+
         given().
-                port(Statics.PORT_FOR_COMMANDS).
+                port(Statics.PORT_FOR_GATEWAY).
                 when().
-                get("/health/").
+                get("/commands/health/").
                 then().
                 statusCode(HttpStatus.SC_OK).
                 body("status", Matchers.is("UP")).
@@ -85,17 +103,17 @@ public class AssertSystemHealthTest {
                 body("mongo.status", Matchers.is("UP"));
 
         given().
-                port(Statics.PORT_FOR_COMMANDS).
+                port(Statics.PORT_FOR_GATEWAY).
                 when().
-                get("/message").
+                get("/commands/message").
                 then().
                 statusCode(HttpStatus.SC_OK).
                 body(Matchers.is(cmdConfigMessage));
 
         given().
-                port(Statics.PORT_FOR_COMMANDS).
+                port(Statics.PORT_FOR_GATEWAY).
                 when().
-                get("/instances").
+                get("/commands/instances").
                 then().
                 statusCode(HttpStatus.SC_OK).
                 body("serviceId", Matchers.hasItems(Statics.CMD_SERVICE_ID)).
@@ -104,10 +122,18 @@ public class AssertSystemHealthTest {
 
     @Test
     public void assertQuerySideHealth() {
+
+        String qryConfigMessage;
+        if(!Statics.PRODUCTION){
+            qryConfigMessage = Statics.LOCAL_QRY_MESSAGE;
+        } else {
+            qryConfigMessage = Statics.PROD_QRY_MESSAGE;
+        }
+
         given().
-                port(Statics.PORT_FOR_QUERIES).
+                port(Statics.PORT_FOR_GATEWAY).
                 when().
-                get("/health/").
+                get("/queries/health/").
                 then().
                 statusCode(HttpStatus.SC_OK).
                 body("status", Matchers.is("UP")).
@@ -116,17 +142,17 @@ public class AssertSystemHealthTest {
                 body("db.database", Matchers.is("H2"));
 
         given().
-                port(Statics.PORT_FOR_QUERIES).
+                port(Statics.PORT_FOR_GATEWAY).
                 when().
-                get("/message").
+                get("/queries/message").
                 then().
                 statusCode(HttpStatus.SC_OK).
                 body(Matchers.is(qryConfigMessage));
 
         given().
-                port(Statics.PORT_FOR_QUERIES).
+                port(Statics.PORT_FOR_GATEWAY).
                 when().
-                get("/instances").
+                get("/queries/instances").
                 then().
                 statusCode(HttpStatus.SC_OK).
                 body("serviceId", Matchers.hasItems(Statics.QRY_SERVICE_ID)).
