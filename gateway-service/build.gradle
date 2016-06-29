@@ -1,0 +1,58 @@
+buildscript {
+	ext {
+		springBootVersion = '1.3.5.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath('se.transmode.gradle:gradle-docker:1.2')
+	}
+}
+
+group = 'benwilcock'
+apply plugin: 'spring-boot'
+apply plugin: 'docker'
+
+jar {
+	baseName = 'gateway-service'
+	archiveName = "gateway-service.jar"
+}
+
+configurations{
+	compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}")
+	compile("org.springframework.retry:spring-retry")
+	compile("org.springframework.boot:spring-boot-starter-aop:${springBootVersion}")
+	compile("org.springframework.cloud:spring-cloud-starter-eureka")
+	compile('org.springframework.cloud:spring-cloud-starter-zuul')
+	compile("org.springframework.cloud:spring-cloud-starter-config")
+	testCompile('org.springframework.boot:spring-boot-starter-test') 
+}
+
+dependencyManagement {
+	imports { 
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR1" 
+	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.3'
+}
+
+task image(type: Docker, dependsOn: build){
+	push = false
+	applicationName = jar.baseName
+	dockerfile = file('src/main/docker/Dockerfile')
+	doFirst{
+		copy {
+			from jar
+			into stageDir
+		}
+	}
+}
