@@ -10,7 +10,3 @@ spring:
       retry:
         initialInterval: 2000
         maxAttempts: 20
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://discovery:8761/eureka/

@@ -9,7 +9,6 @@ import org.axonframework.repository.ConcurrencyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -42,11 +41,10 @@ public class ProductRestController {
             LOG.info("Added Product [{}] '{}'", id, name);
             response.setStatus(HttpServletResponse.SC_CREATED);// Set up the 201 CREATED response
             return;
-        } catch (AssertionError ae){
+        } catch (AssertionError ae) {
             LOG.warn("Add Request failed - empty params?. [{}] '{}'", id, name);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }
-        catch (CommandExecutionException cex) {
+        } catch (CommandExecutionException cex) {
             LOG.warn("Add Command FAILED with Message: {}", cex.getMessage());
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
