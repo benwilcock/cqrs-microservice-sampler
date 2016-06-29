@@ -1,4 +1,4 @@
-#Microservices with Docker, Spring Boot and Axon CQRS/ES
+#Microservices with Docker, Spring Boot, Spring Cloud and Axon
 
 This is a non-trivial demonstration of how to build a CQRS microservice application consisting of several collaborating microservices. It combines together all of the following elements in order to produce one logical application - a simple Product Master Data service.
 
