@@ -1,15 +1,5 @@
 version: '2'
 services:
-  config:
-    image: benwilcock/config-service
-    container_name: config
-    ports:
-     - "8888:8888"
-  discovery:
-    image: benwilcock/discovery-service
-    container_name: discovery
-    ports:
-     - "8761:8761"
   mongodb:
     image: mongo:2.4
     container_name: mongodb
@@ -24,6 +14,28 @@ services:
     environment:
      - RABBITMQ_DEFAULT_USER=test
      - RABBITMQ_DEFAULT_PASS=password
+  config:
+    image: benwilcock/config-service
+    container_name: config
+    ports:
+     - "8888:8888"
+    environment:
+     - SPRING_PROFILES_ACTIVE=production
+  discovery:
+    image: benwilcock/discovery-service
+    container_name: discovery
+    ports:
+     - "8761:8761"
+  gateway:
+    image: benwilcock/gateway-service
+    container_name: gateway
+    ports:
+     - "8080:8080"
+    environment:
+     - SPRING_PROFILES_ACTIVE=production
+    depends_on:
+     - discovery
+     - config
   product-command-side:
     image: benwilcock/product-command-side:latest
     container_name: product-cmd-side
@@ -33,7 +45,7 @@ services:
      - discovery
      - config
     ports:
-      - "9000:9000"
+      - "9000"
     environment:
      - SPRING_PROFILES_ACTIVE=production
   product-query-side:
@@ -44,6 +56,6 @@ services:
      - discovery
      - config
     ports:
-      - "9001:9001"
+     - "9001"
     environment:
-         - SPRING_PROFILES_ACTIVE=production
+     - SPRING_PROFILES_ACTIVE=production
