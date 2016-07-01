@@ -5,6 +5,6 @@ spring:
     config:
       server:
         git:
-          uri: file://home/ben/src/github/microservice-sampler-config
+          uri: https://github.com/benwilcock/microservice-sampler-config
 server:
   port: 8888

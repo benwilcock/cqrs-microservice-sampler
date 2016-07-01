@@ -9,10 +9,8 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.List;
 
@@ -20,7 +18,6 @@ import java.util.List;
  * Created by ben on 19/01/16.
  */
 @EnableEurekaClient
-@EnableSwagger2
 @SpringBootApplication
 public class Application {
 

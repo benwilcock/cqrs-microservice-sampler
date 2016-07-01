@@ -3,11 +3,9 @@ package com.soagrowers.productquery.handlers;
 import com.soagrowers.productevents.events.ProductAddedEvent;
 import com.soagrowers.productevents.events.ProductSaleableEvent;
 import com.soagrowers.productevents.events.ProductUnsaleableEvent;
-import com.soagrowers.productquery.Application;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

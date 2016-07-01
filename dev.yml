@@ -19,8 +19,8 @@ services:
     container_name: config
     ports:
      - "8888:8888"
-    environment:
-     - SPRING_PROFILES_ACTIVE=production
+    volumes:
+     - ..:/home/ben/src/github
     depends_on:
      - mongodb
      - rabbitmq
@@ -34,31 +34,6 @@ services:
     container_name: gateway
     ports:
      - "8080:8080"
-    environment:
-     - SPRING_PROFILES_ACTIVE=production
     depends_on:
-     - discovery
      - config
-  product-command-side:
-    image: benwilcock/product-command-side:latest
-    container_name: product-cmd-side
-    depends_on:
-     - mongodb
-     - rabbitmq
      - discovery
-     - config
-    ports:
-      - "9000"
-    environment:
-     - SPRING_PROFILES_ACTIVE=production
-  product-query-side:
-    image: benwilcock/product-query-side:latest
-    container_name: product-qry-side
-    depends_on:
-     - rabbitmq
-     - discovery
-     - config
-    ports:
-     - "9001"
-    environment:
-     - SPRING_PROFILES_ACTIVE=production

@@ -2,7 +2,6 @@ package com.soagrowers.productcommand;
 
 import com.soagrowers.productcommand.commands.AddProductCommand;
 import com.soagrowers.utils.Asserts;
-import io.swagger.annotations.ApiOperation;
 import org.axonframework.commandhandling.CommandExecutionException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.repository.ConcurrencyException;
@@ -26,7 +25,6 @@ public class ProductRestController {
     @Autowired
     CommandGateway commandGateway;
 
-    @ApiOperation(value = "add", httpMethod = "POST", code = 200, notes = "Used to ADD new products")
     @RequestMapping(value = "/add/{id}", method = RequestMethod.POST)
     public void add(@PathVariable(value = "id") String id,
                     @RequestParam(value = "name", required = true) String name,

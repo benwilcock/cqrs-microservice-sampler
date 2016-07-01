@@ -3,7 +3,6 @@ package com.soagrowers.productintegrationtests;
 
 import com.soagrowers.utils.Statics;
 import org.apache.http.HttpStatus;
-import org.apache.http.protocol.HTTP;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
