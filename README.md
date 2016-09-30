@@ -10,7 +10,7 @@ This is a non-trivial demonstration of how to build a CQRS microservice applicat
 
 #About the Author
 
-[Ben Wilcock](href="https://uk.linkedin.com/in/benwilcock) works for Pivotal as a Cloud Solutions Architect with a passion for microservices, cloud and mobile applications. Ben has helps [Pivotal's Cloud Foundry](http://pivotal.io/platform) customers become more responsive, innovate faster and leverage higher returns from their software investments. Ben is also a respected technology blogger who's articles have featured in Java Code Geeks, InfoQ, Android Weekly and more.
+[Ben Wilcock](https://uk.linkedin.com/in/benwilcock) works for Pivotal as a Cloud Solutions Architect. Ben has a passion for microservices, cloud and mobile applications and helps [Pivotal's Cloud Foundry](http://pivotal.io/platform) customers to become more responsive, innovate faster and gain greater returns from their software investments. Ben is also a respected technology [blogger](http://benwilcock.wordpress.com) who's articles have featured in Java Code Geeks, InfoQ, Android Weekly and more.
 
 ##Running the Demo
 
