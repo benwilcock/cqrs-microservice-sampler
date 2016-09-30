@@ -3,6 +3,7 @@
 .gradle
 .idea
 /unused
+**/.DS_Store
 
 # File Patterns
 *.class

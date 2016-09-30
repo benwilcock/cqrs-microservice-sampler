@@ -8,6 +8,10 @@ This is a non-trivial demonstration of how to build a CQRS microservice applicat
  - Command & Query responsibility Separation with the [Axon CQRS Framework](http://www.axonframework.org/)
  - Event Sourcing & Materialised Views with RabbitMQ, MongoDB and H2
 
+#About the Author
+
+[Ben Wilcock](href="https://uk.linkedin.com/in/benwilcock) works for Pivotal as a Cloud Solutions Architect with a passion for microservices, cloud and mobile applications. Ben has helps [Pivotal's Cloud Foundry](http://pivotal.io/platform) customers become more responsive, innovate faster and leverage higher returns from their software investments. Ben is also a respected technology blogger who's articles have featured in Java Code Geeks, InfoQ, Android Weekly and more.
+
 ##Running the Demo
 
 Running the demo is easy. The whole environment has been packaged to be run as a series of Docker containers. To run the code, you'll need to have the following software installed on your machine. For reference I'm using Ubuntu 16.04 as my OS, but I have also tested the app on the new Docker for Windows Beta successfully.
@@ -18,7 +22,7 @@ Running the demo is easy. The whole environment has been packaged to be run as a
 
 If you have these, you can run the demo by following the process outlined below.
 
->If you have either MongoDB or RabbitMQ already, please shut down those services before continuing in order to avoid port clashes.
+>If you have either MongoDB or RabbitMQ running locally already, please shut down these services before continuing in order to avoid port clashes.
 
 ###Step 1: Build the containers
 
@@ -75,7 +79,7 @@ You should see the following response.
 > User-Agent: curl/7.47.0
 > Content-Type: application/json
 > Accept: */*
-> 
+>
 < HTTP/1.1 201 Created
 < Date: Wed, 29 Jun 2016 14:14:26 GMT
 < X-Application-Context: gateway-service:production:8080
@@ -112,10 +116,7 @@ You should see the following output. This shows that the query-side microservice
 That's it! Go ahead and repeat the test to add some more products if you like, just be careful not to reuse the same product ID when you POST or you'll get a `409 Conflict` error.
 
 If you're familiar with MongoDB you can inspect the database to see all the events that you've created. Similarly if you know your way around the RabbitMQ Management Console you can see the messages as they flow between the command-side and query-side microservices. If you like you can also execute the integration tests using the command..
- 
+
 ```bash
 $ ./gradlew integration-test:integrationTest
 ```
-
-#About the Author
-[Ben Wilcock](href="https://uk.linkedin.com/in/benwilcock) is a freelance Software Architect and Tech Lead with a passion for microservices, cloud and mobile applications. Ben has helped several FTSE 100 companies become more responsive, innovate faster and leverage higher returns from their software investments. Ben is also a respected technology blogger who's articles have featured in Java Code Geeks, InfoQ, Android Weekly and more.
