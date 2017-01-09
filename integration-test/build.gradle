@@ -28,6 +28,7 @@ jar {
 }
 
 dependencies {
+    testCompile 'ch.qos.logback:logback-classic:1.1.5'
     testCompile("com.jayway.restassured:rest-assured:2.8.0")
 }
 
