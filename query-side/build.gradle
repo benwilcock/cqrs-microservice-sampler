@@ -47,10 +47,6 @@ dependencyManagement {
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
-}
-
 task image(type: Docker, dependsOn: assemble){
     push = false
     applicationName = jar.baseName

@@ -45,10 +45,6 @@ tasks.withType(Test) {
 check.dependsOn integrationTest
 integrationTest.mustRunAfter test
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
-}
-
 task image(){
     // Dummy task to allow global commands to work as intended
 }
