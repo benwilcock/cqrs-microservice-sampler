@@ -1,7 +1,4 @@
 buildscript {
-	ext {
-		springBootVersion = '1.3.5.RELEASE'
-	}
 	repositories {
 		jcenter()
 	}
@@ -34,10 +31,3 @@ dependencies {
 	compile("org.springframework.cloud:spring-cloud-starter-config")
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
 }
-
-dependencyManagement {
-	imports { 
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR1" 
-	}
-}
-

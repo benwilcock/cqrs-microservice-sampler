@@ -1,9 +1,19 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
 allprojects {
     group = 'benwilcock'
 }
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: "io.spring.dependency-management"
     apply plugin: 'idea'
 
     sourceCompatibility = 1.8
@@ -17,6 +27,12 @@ subprojects {
     dependencies {
         compile 'ch.qos.logback:logback-classic:1.1.5'
         testCompile 'junit:junit:4.12'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR1"
+        }
     }
 
     tasks.withType(JavaCompile) {
