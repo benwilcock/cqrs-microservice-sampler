@@ -21,8 +21,6 @@ jar {
     archiveName = 'product-command-side.jar'
 }
 
-group = 'benwilcock'
-
 apply plugin: 'spring-boot'
 apply plugin: 'docker'
 

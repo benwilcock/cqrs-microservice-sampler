@@ -20,7 +20,7 @@ jar {
     archiveName = 'product-query-side.jar'
 }
 
-group = 'benwilcock'
+
 apply plugin: 'spring-boot'
 apply plugin: 'docker'
 
