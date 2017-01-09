@@ -13,9 +13,8 @@ import org.springframework.data.rest.core.annotation.RestResource;
 public interface ReadOnlyPagingAndSortingRepository extends PagingAndSortingRepository<Product, String> {
 
     @Override
-    @SuppressWarnings("unchecked")
     @RestResource(exported = false)//true means the capability will be offered
-    Product save(Product entity);
+    <S extends Product> S save(S entity);
 
     @Override
     @RestResource(exported = false)//false restricts the capability
