@@ -32,6 +32,7 @@ dependencies {
     testCompile("com.jayway.restassured:rest-assured:2.8.0")
 }
 
+// run with gradle integrationTest
 task integrationTest(type: Test) {
     testClassesDir = sourceSets.integrationTest.output.classesDir
     classpath = sourceSets.integrationTest.runtimeClasspath
@@ -41,10 +42,6 @@ task integrationTest(type: Test) {
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
 }
-
-// http://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/
-check.dependsOn integrationTest
-integrationTest.mustRunAfter test
 
 
 test.systemProperties = System.properties;
