@@ -176,6 +176,7 @@ public class AxonConfiguration {
      * @return
      */
     @Bean
+    @SuppressWarnings("deprecation")
     AggregateAnnotationCommandHandler<ProductAggregate> productAggregateCommandHandler() {
         AggregateAnnotationCommandHandler<ProductAggregate> handler = new AggregateAnnotationCommandHandler<ProductAggregate>(
                 ProductAggregate.class,
