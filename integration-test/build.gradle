@@ -45,9 +45,6 @@ tasks.withType(Test) {
 check.dependsOn integrationTest
 integrationTest.mustRunAfter test
 
-task image(){
-    // Dummy task to allow global commands to work as intended
-}
 
 test.systemProperties = System.properties;
 integrationTest.systemProperties = System.properties;

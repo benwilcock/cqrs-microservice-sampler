@@ -9,7 +9,3 @@ buildscript {
 jar {
     baseName = 'product-domain-events'
 }
-
-task image(){
-    // Dummy task to allow global commands to work as intended
-}

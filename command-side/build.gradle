@@ -22,7 +22,7 @@ jar {
 }
 
 apply plugin: 'spring-boot'
-apply plugin: 'docker'
+apply from: "$rootDir/gradle/dockertask.gradle"
 
 dependencies {
     compile project(':common-things')
@@ -44,18 +44,6 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR1"
-    }
-}
-
-task image(type: Docker, dependsOn: build){
-    push = false
-    applicationName = jar.baseName
-    dockerfile = file('src/main/docker/Dockerfile')
-    doFirst{
-        copy {
-            from jar
-            into stageDir
-        }
     }
 }
 

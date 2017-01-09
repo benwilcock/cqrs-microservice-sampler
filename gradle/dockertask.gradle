@@ -1,0 +1,16 @@
+// use using
+// apply from: "$rootDir/gradle/dockertask.gradle"
+apply plugin: 'docker'
+
+
+task image(type: Docker, dependsOn: build){
+    push = false
+    applicationName = jar.baseName
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst{
+        copy {
+            from jar
+            into stageDir
+        }
+    }
+}

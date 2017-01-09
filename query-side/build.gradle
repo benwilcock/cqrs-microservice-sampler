@@ -22,7 +22,7 @@ jar {
 
 
 apply plugin: 'spring-boot'
-apply plugin: 'docker'
+apply from: "$rootDir/gradle/dockertask.gradle"
 
 dependencies {
     compile project(':common-things')
@@ -47,15 +47,4 @@ dependencyManagement {
     }
 }
 
-task image(type: Docker, dependsOn: assemble){
-    push = false
-    applicationName = jar.baseName
-    dockerfile = file('src/main/docker/Dockerfile')
-    doFirst{
-        copy {
-            from jar
-            into stageDir
-        }
-    }
-}
 

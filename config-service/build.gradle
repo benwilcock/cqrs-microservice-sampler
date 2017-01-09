@@ -12,7 +12,7 @@ buildscript {
 }
 
 apply plugin: 'spring-boot'
-apply plugin: 'docker'
+apply from: "$rootDir/gradle/dockertask.gradle"
 
 jar {
 	baseName = 'config-service'
@@ -37,14 +37,3 @@ dependencyManagement {
 }
 
 
-task image(type: Docker, dependsOn: build){
-	push = false
-	applicationName = jar.baseName
-	dockerfile = file('src/main/docker/Dockerfile')
-	doFirst{
-		copy {
-			from jar
-			into stageDir
-		}
-	}
-}
