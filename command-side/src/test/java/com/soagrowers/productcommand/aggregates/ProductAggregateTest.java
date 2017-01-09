@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ProductAggregateTest {
 
-    private FixtureConfiguration fixture;
+    private FixtureConfiguration<ProductAggregate> fixture;
 
     @Before
     public void setUp() throws Exception {
