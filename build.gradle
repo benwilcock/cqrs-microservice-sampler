@@ -19,5 +19,10 @@ subprojects {
         testCompile 'junit:junit:4.12'
     }
 
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '-Xlint:unchecked'
+        options.compilerArgs << '-Xlint:deprecation'
+    }
+
 //    version = '0.0.1'
 }
