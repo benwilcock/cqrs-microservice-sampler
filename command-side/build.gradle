@@ -12,6 +12,9 @@ buildscript {
     }
 }
 
+apply plugin: 'spring-boot'
+apply from: "$rootDir/gradle/dockertask.gradle"
+
 configurations{
     compile.exclude module: "spring-boot-starter-tomcat"
 }
@@ -20,9 +23,6 @@ jar {
     baseName = 'product-command-side'
     archiveName = 'product-command-side.jar'
 }
-
-apply plugin: 'spring-boot'
-apply from: "$rootDir/gradle/dockertask.gradle"
 
 dependencies {
     compile project(':common-things')
