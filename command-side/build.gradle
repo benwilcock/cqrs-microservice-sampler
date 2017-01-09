@@ -4,7 +4,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('se.transmode.gradle:gradle-docker:1.2')
+        classpath("se.transmode.gradle:gradle-docker:${dockerGradlePluginVersion}")
     }
 }
 
@@ -22,8 +22,8 @@ jar {
 
 dependencies {
     compile project(':common-things')
-    compile("org.axonframework:axon-amqp:2.4.3")
-    compile("org.axonframework:axon-mongo:2.4.3")
+    compile("org.axonframework:axon-amqp:${axonVersion}")
+    compile("org.axonframework:axon-mongo:${axonVersion}")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}")
@@ -34,7 +34,7 @@ dependencies {
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
     compile("org.springframework.cloud:spring-cloud-starter-config")
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("org.axonframework:axon-test:2.4.3")
+    testCompile("org.axonframework:axon-test:${axonVersion}")
 }
 
 

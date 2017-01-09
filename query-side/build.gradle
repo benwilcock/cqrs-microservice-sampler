@@ -4,7 +4,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('se.transmode.gradle:gradle-docker:1.2')
+        classpath("se.transmode.gradle:gradle-docker:${dockerGradlePluginVersion}")
     }
 }
 
@@ -23,7 +23,7 @@ jar {
 dependencies {
     compile project(':common-things')
     compile("com.h2database:h2")
-    compile("org.axonframework:axon-amqp:2.4.3")
+    compile("org.axonframework:axon-amqp:${axonVersion}")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}")
