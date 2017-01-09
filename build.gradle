@@ -40,5 +40,20 @@ subprojects {
         options.compilerArgs << '-Xlint:deprecation'
     }
 
+    configurations { conf ->
+        conf.all*.exclude module: 'spring-boot-starter-tomcat'
+        compile.transitive = false
+        compileClasspath.transitive = false
+        // allow transitive dependencies in tests (less risk for product)
+        testCompile.transitive = true
+        testCompileClasspath.transitive = true
+    }
+
+    test {
+        testLogging {
+            exceptionFormat "full" // default is "short"
+        }
+    }
+
 //    version = '0.0.1'
 }

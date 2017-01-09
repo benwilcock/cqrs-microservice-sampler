@@ -16,14 +16,13 @@ jar {
 	archiveName = 'config-service.jar'
 }
 
-configurations{
-    compile.exclude module: "spring-boot-starter-tomcat"
-}
-
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}")
 	compile('org.springframework.cloud:spring-cloud-config-server')
+	compile("org.springframework.boot:spring-boot:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}")
+	compile("org.springframework:spring-context")
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
 }
 

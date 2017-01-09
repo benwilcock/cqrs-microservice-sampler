@@ -11,10 +11,6 @@ buildscript {
 apply plugin: 'spring-boot'
 apply from: "$rootDir/gradle/dockertask.gradle"
 
-configurations{
-    compile.exclude module: "spring-boot-starter-tomcat"
-}
-
 jar {
     baseName = 'product-command-side'
     archiveName = 'product-command-side.jar'
@@ -22,17 +18,33 @@ jar {
 
 dependencies {
     compile project(':common-things')
+    compile("com.rabbitmq:amqp-client:${amqpVersion}")
+    compileOnly("javax.servlet:javax.servlet-api")
+    compile("org.axonframework:axon-core:${axonVersion}")
     compile("org.axonframework:axon-amqp:${axonVersion}")
     compile("org.axonframework:axon-mongo:${axonVersion}")
+    compile("org.springframework.boot:spring-boot:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-amqp:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile("org.springframework.amqp:spring-amqp")
+    compile("org.springframework.amqp:spring-rabbit")
+    compile("org.springframework:spring-beans")
+    compile("org.springframework:spring-context")
+    compile("org.springframework:spring-web")
+    compile("org.springframework:spring-tx")
+    compile("org.mongodb:mongo-java-driver")
     compile("org.springframework.retry:spring-retry")
     compile("org.springframework.boot:spring-boot-starter-aop:${springBootVersion}")
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
     compile("org.springframework.cloud:spring-cloud-starter-config")
+    compile("org.springframework.cloud:spring-cloud-context")
+    compile("org.springframework.cloud:spring-cloud-commons")
+    compile("org.springframework.cloud:spring-cloud-netflix-eureka-client")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.axonframework:axon-test:${axonVersion}")
 }

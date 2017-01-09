@@ -17,10 +17,6 @@ jar {
 	archiveName = "gateway-service.jar"
 }
 
-configurations{
-	compile.exclude module: "spring-boot-starter-tomcat"
-}
-
 
 dependencies {
 	compile("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}")
@@ -29,5 +25,12 @@ dependencies {
 	compile("org.springframework.cloud:spring-cloud-starter-eureka")
 	compile('org.springframework.cloud:spring-cloud-starter-zuul')
 	compile("org.springframework.cloud:spring-cloud-starter-config")
+	compile("org.springframework.cloud:spring-cloud-netflix-core")
+	compile("org.springframework.boot:spring-boot:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}")
+	compile("org.springframework:spring-beans")
+	compile("org.springframework:spring-context")
+	compile("com.netflix.zuul:zuul-core")
+	compileOnly("javax.servlet:javax.servlet-api")
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
 }
