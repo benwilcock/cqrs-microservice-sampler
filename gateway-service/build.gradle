@@ -9,7 +9,7 @@ buildscript {
 }
 
 group = 'benwilcock'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 apply from: "$rootDir/gradle/dockertask.gradle"
 
 jar {
