@@ -1,5 +1,19 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+allprojects {
+    group = 'benwilcock'
+}
+
 subprojects {
     apply plugin: 'java'
+    apply plugin: "io.spring.dependency-management"
     apply plugin: 'idea'
 
     sourceCompatibility = 1.8
@@ -7,17 +21,39 @@ subprojects {
 
     repositories {
         mavenLocal()
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
-        compile 'ch.qos.logback:logback-classic:1.1.5'
+        compile 'org.slf4j:slf4j-api:1.7.21'
         testCompile 'junit:junit:4.12'
     }
 
-//    version = '0.0.1'
-}
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudBomVersion}"
+        }
+    }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '-Xlint:unchecked'
+        options.compilerArgs << '-Xlint:deprecation'
+    }
+
+    configurations { conf ->
+        conf.all*.exclude module: 'spring-boot-starter-tomcat'
+        compile.transitive = false
+        compileClasspath.transitive = false
+        // allow transitive dependencies in tests (less risk for product)
+        testCompile.transitive = true
+        testCompileClasspath.transitive = true
+    }
+
+    test {
+        testLogging {
+            exceptionFormat "full" // default is "short"
+        }
+    }
+
+//    version = '0.0.1'
 }

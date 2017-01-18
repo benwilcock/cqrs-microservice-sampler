@@ -1,9 +1,11 @@
 # Folders
-/build
+**/build
 .gradle
 .idea
 /unused
 **/.DS_Store
+**/bin
+*/.gitignore
 
 # File Patterns
 *.class

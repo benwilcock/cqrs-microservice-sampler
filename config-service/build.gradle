@@ -1,54 +1,28 @@
 buildscript {
-	ext {
-		springBootVersion = '1.3.5.RELEASE'
-	}
 	repositories {
-		mavenCentral()
+		jcenter()
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath('se.transmode.gradle:gradle-docker:1.2')
+		classpath("se.transmode.gradle:gradle-docker:${dockerGradlePluginVersion}")
 	}
 }
 
-group = 'benwilcock'
-apply plugin: 'spring-boot'
-apply plugin: 'docker'
+apply plugin: 'org.springframework.boot'
+apply from: "$rootDir/gradle/dockertask.gradle"
 
 jar {
 	baseName = 'config-service'
 	archiveName = 'config-service.jar'
 }
 
-configurations{
-    compile.exclude module: "spring-boot-starter-tomcat"
-}
-
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}")
 	compile('org.springframework.cloud:spring-cloud-config-server')
+	compile("org.springframework.boot:spring-boot:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}")
+	compile("org.springframework:spring-context")
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
 }
 
-dependencyManagement {
-	imports { 
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR1"
-	}
-}
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '2.3'
-}
-
-task image(type: Docker, dependsOn: build){
-	push = false
-	applicationName = jar.baseName
-	dockerfile = file('src/main/docker/Dockerfile')
-	doFirst{
-		copy {
-			from jar
-			into stageDir
-		}
-	}
-}

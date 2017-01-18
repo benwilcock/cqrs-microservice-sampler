@@ -51,6 +51,7 @@ public class ProductRestControllerParamValidityTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testFailedAddWithAssertionError() {
         // Arrange
         controller.commandGateway = gateway; //cheating a bit here, but mocking all the axon framework's beans is a pain.
@@ -65,6 +66,7 @@ public class ProductRestControllerParamValidityTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testFailedAddWithCommandExecutionException() {
         // Arrange
         controller.commandGateway = gateway; //cheating a bit here, but mocking all the axon framework's beans is a pain.

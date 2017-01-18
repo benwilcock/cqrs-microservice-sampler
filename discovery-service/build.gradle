@@ -1,19 +1,15 @@
 buildscript {
-	ext {
-		springBootVersion = '1.3.5.RELEASE'
-	}
 	repositories {
-		mavenCentral()
+		jcenter()
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath('se.transmode.gradle:gradle-docker:1.2')
+		classpath("se.transmode.gradle:gradle-docker:${dockerGradlePluginVersion}")
 	}
 }
 
-group = 'benwilcock'
-apply plugin: 'spring-boot'
-apply plugin: 'docker'
+apply plugin: 'org.springframework.boot'
+apply from: "$rootDir/gradle/dockertask.gradle"
 
 jar {
 	baseName = 'discovery-service'
@@ -22,27 +18,9 @@ jar {
 
 dependencies {
 	compile('org.springframework.cloud:spring-cloud-starter-eureka-server')
+	compile("org.springframework.boot:spring-boot:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}")
+	compile("org.springframework:spring-context")
+	compile("org.springframework.cloud:spring-cloud-netflix-eureka-server")
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
-}
-
-dependencyManagement {
-	imports { 
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.RELEASE" 
-	}
-}
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '2.3'
-}
-
-task image(type: Docker, dependsOn: build){
-	push = false
-	applicationName = jar.baseName
-	dockerfile = file('src/main/docker/Dockerfile')
-	doFirst{
-		copy {
-			from jar
-			into stageDir
-		}
-	}
 }

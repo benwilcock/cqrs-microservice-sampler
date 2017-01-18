@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
@@ -28,9 +28,11 @@ jar {
 }
 
 dependencies {
+    testCompile 'ch.qos.logback:logback-classic:1.1.5'
     testCompile("com.jayway.restassured:rest-assured:2.8.0")
 }
 
+// run with gradle integrationTest
 task integrationTest(type: Test) {
     testClassesDir = sourceSets.integrationTest.output.classesDir
     classpath = sourceSets.integrationTest.runtimeClasspath
@@ -41,17 +43,6 @@ tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
 }
 
-// http://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/
-check.dependsOn integrationTest
-integrationTest.mustRunAfter test
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
-}
-
-task image(){
-    // Dummy task to allow global commands to work as intended
-}
 
 test.systemProperties = System.properties;
 integrationTest.systemProperties = System.properties;
