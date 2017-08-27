@@ -1,4 +1,4 @@
-#Microservices with Docker, Spring Boot, Spring Cloud and Axon
+# Microservices with Docker, Spring Boot, Spring Cloud and Axon
 
 This is a non-trivial demonstration of how to build a CQRS microservice application consisting of several collaborating microservices. It combines together all of the following elements in order to produce one logical application - a simple Product Master Data service.
 
@@ -8,11 +8,11 @@ This is a non-trivial demonstration of how to build a CQRS microservice applicat
  - Command & Query responsibility Separation with the [Axon CQRS Framework](http://www.axonframework.org/)
  - Event Sourcing & Materialised Views with RabbitMQ, MongoDB and H2
 
-#About the Author
+# About the Author
 
 [Ben Wilcock](https://uk.linkedin.com/in/benwilcock) works for Pivotal as a Cloud Solutions Architect. Ben has a passion for microservices, cloud and mobile applications and helps [Pivotal's Cloud Foundry](http://pivotal.io/platform) customers to become more responsive, innovate faster and gain greater returns from their software investments. Ben is also a respected technology [blogger](http://benwilcock.wordpress.com) who's articles have featured in [DZone](https://dzone.com/users/296242/benwilcock.html), [Java Code Geeks](https://www.javacodegeeks.com/author/ben-wilcock/), [InfoQ](https://www.infoq.com/author/Ben-Wilcock) and more.
 
-##Running the Demo
+## Running the Demo
 
 Running the demo is easy. The whole environment has been packaged to be run as a series of Docker containers. To run the code, you'll need to have the following software installed on your machine. For reference I'm using Ubuntu 16.04 as my OS, but I have also tested the app on the new Docker for Windows Beta successfully.
 
@@ -24,7 +24,7 @@ If you have these, you can run the demo by following the process outlined below.
 
 >If you have either MongoDB or RabbitMQ running locally already, please shut down these services before continuing in order to avoid port clashes.
 
-###Step 1: Build the containers
+### Step 1: Build the containers
 
 In a new empty folder, at the terminal execute the following command to download the latest code for this demo.
 
@@ -41,7 +41,7 @@ $ ./gradlew clean image
 
 This will create a series of Docker container images, one for each of the spring-boot microservices used in this demo.
 
-###Step 2: Start the Microservices
+### Step 2: Start the Microservices
 
 There are seven Docker container images in this microservice group, they are 'mongodb', 'rabbitmq', 'config', 'discovery', `gateway-service', 'product-cmd-side', and 'product-qry-side'. The logical architecture looks like this:-
 
@@ -59,7 +59,7 @@ If you want to see which docker instances are running on your machine at any tim
 $ docker ps
 ```
 
-###Step 3: Integration Test (Manual)
+### Step 3: Integration Test (Manual)
 
 So far so good. Now we want to test the addition of products. In a new terminal window (ctrl-alt-t in Ubuntu), execute the following curl request...
 

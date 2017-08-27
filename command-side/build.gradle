@@ -64,5 +64,3 @@ task image(type: Docker, dependsOn: build){
         }
     }
 }
-
-

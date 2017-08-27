@@ -51,12 +51,12 @@ public class AssertsTest {
     @Test
     public void testAreNotEmpty(){
 
-        Asserts.INSTANCE.areNotEmpty(Arrays.asList("test", "test"));
+        Asserts.INSTANCE.areNotEmpty(Arrays.asList((Object)"test", (Object)"test"));
 
         try {
             String id = UUID.randomUUID().toString();
             String name = Asserts.EMPTY_STRING;
-            Asserts.INSTANCE.areNotEmpty(Arrays.asList(id, name));
+            Asserts.INSTANCE.areNotEmpty(Arrays.asList((Object)id, (Object)name));
             assertTrue(false);
         } catch (AssertionError ae){
             assertEquals(ae.getMessage(), Asserts.UNEXPECTED_EMPTY_STRING);
@@ -65,7 +65,7 @@ public class AssertsTest {
         try {
             String id = null;
             String name = Asserts.EMPTY_STRING;
-            Asserts.INSTANCE.areNotEmpty(Arrays.asList(id, name));
+            Asserts.INSTANCE.areNotEmpty(Arrays.asList((Object)id, (Object)name));
             assertTrue(false);
         } catch (AssertionError ae){
             assertEquals(ae.getMessage(), Asserts.UNEXPECTED_NULL);

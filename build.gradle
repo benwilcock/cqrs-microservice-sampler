@@ -1,5 +1,7 @@
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'maven'   // @Trifon
+    apply plugin: 'eclipse' // @Trifon
     apply plugin: 'idea'
 
     sourceCompatibility = 1.8

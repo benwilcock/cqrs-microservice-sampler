@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ProductAggregate is essentially a DDD AggregateRoot (from the DDD concept). In event-sourced
- * systems, Aggregates are often stored and retreived using a 'Repository'. In the
+ * systems, Aggregates are often stored and retrieved using a 'Repository'. In the
  * simplest terms, Aggregates are the sum of their applied 'Events'.
  * <p/>
  * The Repository stores the aggregate's Events in an 'Event Store'. When an Aggregate
