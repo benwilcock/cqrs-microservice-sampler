@@ -24,12 +24,12 @@ public class SimpleLoggingPreFilter extends ZuulFilter {
         return 1;
     }
 
-    @Override
+ //   @Override
     public boolean shouldFilter() {
         return true;
     }
 
-    @Override
+//    @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();

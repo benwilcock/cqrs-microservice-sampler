@@ -33,7 +33,7 @@ public class ProductRestController {
         LOG.debug("Adding Product [{}] '{}'", id, name);
 
         try {
-            Asserts.INSTANCE.areNotEmpty(Arrays.asList(id, name));
+            Asserts.INSTANCE.areNotEmpty(Arrays.asList((Object)id, (Object)name));
             AddProductCommand command = new AddProductCommand(id, name);
             commandGateway.sendAndWait(command);
             LOG.info("Added Product [{}] '{}'", id, name);
