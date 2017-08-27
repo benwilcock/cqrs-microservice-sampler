@@ -1,6 +1,8 @@
 #!/bin/bash
-docker push benwilcock/config-service:latest
-docker push benwilcock/discovery-service:latest
-docker push benwilcock/gateway-service:latest
-docker push benwilcock/product-query-side:latest
-docker push benwilcock/product-command-side:latest
+DOCKER_USER=trifonnt
+
+docker push ${DOCKER_USER}/config-service:latest
+docker push ${DOCKER_USER}/discovery-service:latest
+docker push ${DOCKER_USER}/gateway-service:latest
+docker push ${DOCKER_USER}/product-query-side:latest
+docker push ${DOCKER_USER}/product-command-side:latest
