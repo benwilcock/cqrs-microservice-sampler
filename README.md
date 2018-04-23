@@ -45,7 +45,7 @@ This will create a series of Docker container images, one for each of the spring
 
 There are seven Docker container images in this microservice group, they are 'mongodb', 'rabbitmq', 'config', 'discovery', `gateway-service', 'product-cmd-side', and 'product-qry-side'. The logical architecture looks like this:-
 
-![Architecture](https://github.com/infinityworks/microservice-sampler/blob/master/slides/CQRS-Architecture-02.png "Architecture")
+![Architecture](https://github.com/infinityworks/cqrs-microservice-sampler/blob/master/slides/CQRS-Architecture-02.png "Architecture")
 
 Because we're using docker-compose, starting the microservices is now simply a case of executing the following command.
 
