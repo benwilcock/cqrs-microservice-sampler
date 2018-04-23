@@ -15,19 +15,19 @@ services:
      - RABBITMQ_DEFAULT_USER=test
      - RABBITMQ_DEFAULT_PASS=password
   config:
-    image: benwilcock/config-service
+    image: ${candidate}/config-service
     container_name: config
     ports:
      - "8888:8888"
     environment:
      - SPRING_PROFILES_ACTIVE=production
   discovery:
-    image: benwilcock/discovery-service
+    image: ${candidate}/discovery-service
     container_name: discovery
     ports:
      - "8761:8761"
   gateway:
-    image: benwilcock/gateway-service
+    image: ${candidate}/gateway-service
     container_name: gateway
     ports:
      - "8080:8080"
@@ -37,7 +37,7 @@ services:
      - discovery
      - config
   product-command-side:
-    image: benwilcock/product-command-side:latest
+    image: ${candidate}/product-command-side:latest
     container_name: product-cmd-side
     depends_on:
      - mongodb
@@ -49,7 +49,7 @@ services:
     environment:
      - SPRING_PROFILES_ACTIVE=production
   product-query-side:
-    image: benwilcock/product-query-side:latest
+    image: ${candidate}/product-query-side:latest
     container_name: product-qry-side
     depends_on:
      - rabbitmq
