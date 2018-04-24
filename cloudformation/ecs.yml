@@ -1,0 +1,97 @@
+Description: 
+  This template deploys a VPC, with a pair of public and private subnets spread 
+  across two Availability Zones. It deploys an Internet Gateway, with a default 
+  route on the public subnets. It deploys a pair of NAT Gateways (one in each AZ), 
+  and default routes for them in the private subnets.
+
+Parameters:
+  VPCID:
+    Description: The id of the VPC where the ECS cluster is being created
+    Type: String
+
+  NamePrefix:
+    Description: The string to be used as prefix on named resources
+    Type: String
+
+  PrivateSubnets:
+    Description: The list of subnets where the ECS nodes should be living
+    Type: List<String>
+
+
+Resources:
+  AppECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub ${NamePrefix}-system
+
+  AppECSClusterLC:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: "ami-2d386654"
+      InstanceType: "m5.2xlarge"
+      IamInstanceProfile: !Ref AppEC2InstProf
+      SecurityGroups:
+        - !Ref AppECInstSG
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            echo ECS_CLUSTER=${NamePrefix}-system >> /etc/ecs/ecs.config
+
+  AppECSClusterASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: !Sub ${NamePrefix}-system-asg
+      LaunchConfigurationName: !Ref AppECSClusterLC
+      VPCZoneIdentifier: !Ref PrivateSubnets
+      MinSize: 1
+      MaxSize: 3
+      DesiredCapacity: 1
+
+  AppEC2InstProf:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      InstanceProfileName: !Sub ${NamePrefix}-system-ecs-instance-profile
+      Roles:
+        - !Ref AppEC2InstRole
+
+  AppEC2InstRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${NamePrefix}-system-ecs-instance-role
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+
+  AppECInstSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "system-ecs-cluster-sg"
+      GroupDescription: "Allow all to group"
+      VpcId: !Ref VPCID
+      SecurityGroupIngress:
+        - FromPort: 0
+          ToPort: 65535
+          IpProtocol: "TCP"
+          CidrIp: "0.0.0.0/0"
+      SecurityGroupEgress:
+        - FromPort: 0
+          ToPort: 65535
+          IpProtocol: "-1"
+          CidrIp: "0.0.0.0/0"
+      Tags:
+        - Key: Name
+          Value: !Sub ${NamePrefix}-system-ecs-cluster-sg
+
+  AppCWLogGroup:
+    Type: "AWS::Logs::LogGroup"
+    Properties: 
+      LogGroupName: !Sub ${NamePrefix}-ecs-logs
