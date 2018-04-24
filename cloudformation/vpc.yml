@@ -43,20 +43,20 @@ Parameters:
     Default: "192.168.96.0/20"
 
   ####
-  # No Multi-AZ
+  # No Multi-AZ at this point
   ####
-  PublicSubnet2CIDR:
-    Description: IP range for the public subnet in the second Availability Zone
-    Type: String
-    Default: "192.168.16.0/20"
-  PrivateSubnet2CIDR:
-    Description: IP range for the private subnet in the second Availability Zone
-    Type: String
-    Default: "192.168.64.0/19"
-  DatabaseSubnet2CIDR:
-    Description: IP range for the private subnet in the second Availability Zone
-    Type: String
-    Default: "192.168.112.0/20"
+  # PublicSubnet2CIDR:
+  #   Description: IP range for the public subnet in the second Availability Zone
+  #   Type: String
+  #   Default: "192.168.16.0/20"
+  # PrivateSubnet2CIDR:
+  #   Description: IP range for the private subnet in the second Availability Zone
+  #   Type: String
+  #   Default: "192.168.64.0/19"
+  # DatabaseSubnet2CIDR:
+  #   Description: IP range for the private subnet in the second Availability Zone
+  #   Type: String
+  #   Default: "192.168.112.0/20"
 
 Resources:
   VPC: 
