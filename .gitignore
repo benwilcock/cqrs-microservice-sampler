@@ -24,5 +24,6 @@ hs_err_pid*
 **/*.tfvars
 
 # Compiled files
-*.tfstate
-*.tfstate.backup
+**/.terraform
+**/*.tfstate
+**/*.tfstate.backup
