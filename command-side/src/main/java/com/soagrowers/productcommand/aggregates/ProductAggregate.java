@@ -1,17 +1,19 @@
 package com.soagrowers.productcommand.aggregates;
 
+import org.axonframework.commandhandling.CommandHandler;
+import org.axonframework.commandhandling.model.AggregateIdentifier;
+import org.axonframework.commandhandling.model.AggregateLifecycle;
+import org.axonframework.commandhandling.model.AggregateRoot;
+import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.soagrowers.productcommand.commands.AddProductCommand;
 import com.soagrowers.productcommand.commands.MarkProductAsSaleableCommand;
 import com.soagrowers.productcommand.commands.MarkProductAsUnsaleableCommand;
 import com.soagrowers.productevents.events.ProductAddedEvent;
 import com.soagrowers.productevents.events.ProductSaleableEvent;
 import com.soagrowers.productevents.events.ProductUnsaleableEvent;
-import org.axonframework.commandhandling.annotation.CommandHandler;
-import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
-import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
-import org.axonframework.eventsourcing.annotation.EventSourcingHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * ProductAggregate is essentially a DDD AggregateRoot (from the DDD concept). In event-sourced
@@ -32,7 +34,8 @@ import org.slf4j.LoggerFactory;
  * Events to the Aggregate, and the handling of those events by the aggregate or any other
  * configured EventHandlers.
  */
-public class ProductAggregate extends AbstractAnnotatedAggregateRoot {
+@AggregateRoot
+public class ProductAggregate {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductAggregate.class);
 
@@ -69,14 +72,14 @@ public class ProductAggregate extends AbstractAnnotatedAggregateRoot {
     public ProductAggregate(AddProductCommand command) {
         LOG.debug("Command: 'AddProductCommand' received.");
         LOG.debug("Queuing up a new ProductAddedEvent for product '{}'", command.getId());
-        apply(new ProductAddedEvent(command.getId(), command.getName()));
+        AggregateLifecycle.apply(new ProductAddedEvent(command.getId(), command.getName()));
     }
 
     @CommandHandler
     public void markSaleable(MarkProductAsSaleableCommand command) {
         LOG.debug("Command: 'MarkProductAsSaleableCommand' received.");
         if (!this.isSaleable()) {
-            apply(new ProductSaleableEvent(id));
+            AggregateLifecycle.apply(new ProductSaleableEvent(id));
         } else {
             throw new IllegalStateException("This ProductAggregate (" + this.getId() + ") is already Saleable.");
         }
@@ -86,7 +89,7 @@ public class ProductAggregate extends AbstractAnnotatedAggregateRoot {
     public void markUnsaleable(MarkProductAsUnsaleableCommand command) {
         LOG.debug("Command: 'MarkProductAsUnsaleableCommand' received.");
         if (this.isSaleable()) {
-            apply(new ProductUnsaleableEvent(id));
+            AggregateLifecycle.apply(new ProductUnsaleableEvent(id));
         } else {
             throw new IllegalStateException("This ProductAggregate (" + this.getId() + ") is already off-sale.");
         }

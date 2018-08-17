@@ -1,17 +1,23 @@
 package com.soagrowers.productcommand;
 
-import com.soagrowers.productcommand.commands.AddProductCommand;
-import com.soagrowers.utils.Asserts;
+import java.util.Arrays;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.axonframework.commandhandling.CommandExecutionException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.axonframework.repository.ConcurrencyException;
+import org.axonframework.commandhandling.model.ConcurrencyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
+import com.soagrowers.productcommand.commands.AddProductCommand;
+import com.soagrowers.utils.Asserts;
 
 /**
  * Created by ben on 19/01/16.

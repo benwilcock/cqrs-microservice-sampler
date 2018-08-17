@@ -1,8 +1,15 @@
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
-
-    sourceCompatibility = 1.8
+    apply plugin: 'eclipse'
+    
+    eclipse {
+        classpath {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+        sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
     repositories {
