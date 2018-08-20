@@ -66,7 +66,7 @@ public class AxonConfiguration {
 
     @Qualifier("eventSerializer")
     @Bean
-    JacksonSerializer axonJsonSerializer() {
+    Serializer axonJsonSerializer() {
         return new JacksonSerializer();
     }
     

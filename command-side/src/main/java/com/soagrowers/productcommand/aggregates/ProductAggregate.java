@@ -2,9 +2,9 @@ package com.soagrowers.productcommand.aggregates;
 
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
-import org.axonframework.commandhandling.model.AggregateLifecycle;
-import org.axonframework.commandhandling.model.AggregateRoot;
+import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.spring.stereotype.Aggregate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +34,7 @@ import com.soagrowers.productevents.events.ProductUnsaleableEvent;
  * Events to the Aggregate, and the handling of those events by the aggregate or any other
  * configured EventHandlers.
  */
-@AggregateRoot
+@Aggregate
 public class ProductAggregate {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductAggregate.class);
@@ -72,14 +72,14 @@ public class ProductAggregate {
     public ProductAggregate(AddProductCommand command) {
         LOG.debug("Command: 'AddProductCommand' received.");
         LOG.debug("Queuing up a new ProductAddedEvent for product '{}'", command.getId());
-        AggregateLifecycle.apply(new ProductAddedEvent(command.getId(), command.getName()));
+        apply(new ProductAddedEvent(command.getId(), command.getName()));
     }
 
     @CommandHandler
     public void markSaleable(MarkProductAsSaleableCommand command) {
         LOG.debug("Command: 'MarkProductAsSaleableCommand' received.");
         if (!this.isSaleable()) {
-            AggregateLifecycle.apply(new ProductSaleableEvent(id));
+            apply(new ProductSaleableEvent(id));
         } else {
             throw new IllegalStateException("This ProductAggregate (" + this.getId() + ") is already Saleable.");
         }
@@ -89,7 +89,7 @@ public class ProductAggregate {
     public void markUnsaleable(MarkProductAsUnsaleableCommand command) {
         LOG.debug("Command: 'MarkProductAsUnsaleableCommand' received.");
         if (this.isSaleable()) {
-            AggregateLifecycle.apply(new ProductUnsaleableEvent(id));
+            apply(new ProductUnsaleableEvent(id));
         } else {
             throw new IllegalStateException("This ProductAggregate (" + this.getId() + ") is already off-sale.");
         }
