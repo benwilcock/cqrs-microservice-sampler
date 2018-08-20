@@ -1,22 +1,24 @@
 package com.soagrowers.productquery.handlers;
 
-import com.soagrowers.productevents.events.ProductAddedEvent;
-import com.soagrowers.productevents.events.ProductSaleableEvent;
-import com.soagrowers.productevents.events.ProductUnsaleableEvent;
-import com.soagrowers.productquery.domain.Product;
-import com.soagrowers.productquery.repository.ProductRepository;
-import org.axonframework.eventhandling.annotation.EventHandler;
-import org.axonframework.eventhandling.replay.ReplayAware;
+import org.axonframework.eventhandling.AllowReplay;
+import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.soagrowers.productevents.events.ProductAddedEvent;
+import com.soagrowers.productevents.events.ProductSaleableEvent;
+import com.soagrowers.productevents.events.ProductUnsaleableEvent;
+import com.soagrowers.productquery.domain.Product;
+import com.soagrowers.productquery.repository.ProductRepository;
+
 /**
  * Created by Ben on 10/08/2015.
  */
 @Component
-public class ProductViewEventHandler implements ReplayAware {
+@AllowReplay
+public class ProductViewEventHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductViewEventHandler.class);
 
@@ -52,17 +54,5 @@ public class ProductViewEventHandler implements ReplayAware {
                 productRepository.save(product);
             }
         }
-    }
-
-    public void beforeReplay() {
-        LOG.info("Event Replay is about to START. Clearing the View...");
-    }
-
-    public void afterReplay() {
-        LOG.info("Event Replay has FINISHED.");
-    }
-
-    public void onReplayFailed(Throwable cause) {
-        LOG.error("Event Replay has FAILED.");
     }
 }

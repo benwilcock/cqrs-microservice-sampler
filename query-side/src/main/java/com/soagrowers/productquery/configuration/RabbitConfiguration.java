@@ -1,6 +1,5 @@
 package com.soagrowers.productquery.configuration;
 
-import org.axonframework.contextsupport.spring.AnnotationDriven;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
@@ -16,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
  * Created by ben on 19/02/16.
  */
 @Configuration
-@AnnotationDriven
 public class RabbitConfiguration {
 
     @Value("${spring.rabbitmq.hostname}")

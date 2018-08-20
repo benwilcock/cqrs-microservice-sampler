@@ -43,7 +43,7 @@ dependencies {
     compile("org.springframework.cloud:spring-cloud-starter-config")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.10")
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("org.axonframework:axon-test:3.3.3")
+    testCompile("org.axonframework:axon-test:${axonVersion}")
 }
 
 dependencyManagement {
