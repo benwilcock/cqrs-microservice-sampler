@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.soagrowers.productcommand.commands.AddProductCommand;
+import com.soagrowers.productcommand.commands.MarkProductAsSaleableCommand;
+import com.soagrowers.productcommand.commands.MarkProductAsUnsaleableCommand;
 import com.soagrowers.utils.Asserts;
 
 /**
@@ -32,9 +34,8 @@ public class ProductRestController {
     CommandGateway commandGateway;
 
     @RequestMapping(value = "/add/{id}", method = RequestMethod.POST)
-    public void add(@PathVariable(value = "id") String id,
-                    @RequestParam(value = "name", required = true) String name,
-                    HttpServletResponse response) {
+    public void add(@PathVariable(value = "id") String id, @RequestParam(value = "name", required = true) String name,
+            HttpServletResponse response) {
 
         LOG.debug("Adding Product [{}] '{}'", id, name);
 
@@ -43,22 +44,20 @@ public class ProductRestController {
             AddProductCommand command = new AddProductCommand(id, name);
             commandGateway.sendAndWait(command);
             LOG.info("Added Product [{}] '{}'", id, name);
-            response.setStatus(HttpServletResponse.SC_CREATED);// Set up the 201 CREATED response
-            return;
+            response.setStatus(HttpServletResponse.SC_CREATED);// Set up the 201
+                                                               // CREATED
+                                                               // response
         } catch (AssertionError ae) {
             LOG.warn("Add Request failed - empty params?. [{}] '{}'", id, name);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (ConcurrencyException concEx) {
+            LOG.warn("A duplicate product with the same ID [{}] already exists.", id);
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
         } catch (CommandExecutionException cex) {
             LOG.warn("Add Command FAILED with Message: {}", cex.getMessage());
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
-            if (null != cex.getCause()) {
-                LOG.warn("Caused by: {} {}", cex.getCause().getClass().getName(), cex.getCause().getMessage());
-                if (cex.getCause() instanceof ConcurrencyException) {
-                    LOG.warn("A duplicate product with the same ID [{}] already exists.", id);
-                    response.setStatus(HttpServletResponse.SC_CONFLICT);
-                }
-            }
         }
     }
+
 }

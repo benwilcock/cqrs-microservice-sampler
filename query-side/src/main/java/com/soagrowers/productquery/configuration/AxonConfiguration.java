@@ -3,9 +3,7 @@ package com.soagrowers.productquery.configuration;
 import org.axonframework.amqp.eventhandling.AMQPMessageConverter;
 import org.axonframework.amqp.eventhandling.spring.SpringAMQPMessageSource;
 import org.axonframework.common.jpa.EntityManagerProvider;
-import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
-import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.axonframework.mongo.DefaultMongoTemplate;
 import org.axonframework.mongo.MongoTemplate;
 import org.axonframework.mongo.eventhandling.saga.repository.MongoSagaStore;
@@ -13,8 +11,6 @@ import org.axonframework.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
 import org.axonframework.mongo.eventsourcing.eventstore.documentperevent.DocumentPerEventStorageStrategy;
 import org.axonframework.serialization.Serializer;
 import org.axonframework.serialization.json.JacksonSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -27,7 +23,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.mongodb.MongoClient;
 import com.rabbitmq.client.Channel;
-import com.soagrowers.productquery.handlers.EventLoggingHandler;
 
 /**
  * Created by ben on 18/02/16.
@@ -57,16 +52,19 @@ class AxonConfiguration {
     }
 
     @Bean
-    public SpringAMQPMessageSource myQueueMessageSource(AMQPMessageConverter messageConverter) {
-        return new SpringAMQPMessageSource(messageConverter) {
+    public SpringAMQPMessageSource queryMessageQueue(AMQPMessageConverter messageConverter) {
+        SpringAMQPMessageSource springAMQPMessageSource = new SpringAMQPMessageSource(messageConverter) {
 
             @RabbitListener(queues = "#{uniqueQueueName}")
             @Override
             public void onMessage(Message message, Channel channel) {
-                System.out.println("******************* Query Side" + message.toString());
                 super.onMessage(message, channel);
             }
         };
+        
+        return springAMQPMessageSource;
+        
+        
     }
 
     @Bean(name = "axonMongoTemplate")
@@ -76,17 +74,11 @@ class AxonConfiguration {
         return template;
     }
 
-//    @Bean
-//    EventStore eventStore() {
-//        EmbeddedEventStore eventStore = new EmbeddedEventStore(eventStoreEngine());
-//        return eventStore;
-//    }
-//
-//    @Bean
-//    EventStorageEngine eventStoreEngine() {
-//        return new MongoEventStorageEngine(axonJsonSerializer(), null, axonMongoTemplate(),
-//                new DocumentPerEventStorageStrategy());
-//    }
+    @Bean
+    EventStorageEngine eventStoreEngine() {
+        return new MongoEventStorageEngine(axonJsonSerializer(), null, axonMongoTemplate(),
+                new DocumentPerEventStorageStrategy());
+    }
 
     @Bean
     public MongoSagaStore sagaStore(Serializer eventSerializer, EntityManagerProvider entityManagerProvider) {

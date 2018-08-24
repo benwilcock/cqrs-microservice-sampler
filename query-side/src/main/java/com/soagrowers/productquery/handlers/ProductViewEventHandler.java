@@ -1,5 +1,6 @@
 package com.soagrowers.productquery.handlers;
 
+import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import com.soagrowers.productquery.repository.ProductRepository;
  * Created by Ben on 10/08/2015.
  */
 @Component
+@ProcessingGroup("productQuery")
 public class ProductViewEventHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductViewEventHandler.class);

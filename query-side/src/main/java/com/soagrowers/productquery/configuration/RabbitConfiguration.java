@@ -38,7 +38,6 @@ public class RabbitConfiguration {
     @Bean
     public String uniqueQueueName() {
         return queueName + "." + index;
-//        return queueName;
     }
 
     @Bean
