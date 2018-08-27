@@ -1,4 +1,4 @@
-package com.soagrowers.productcommand.configuration;
+package com.pankesh.productcommand.configuration;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.FanoutExchange;

@@ -1,4 +1,4 @@
-package com.soagrowers.productcommand.commands;
+package com.pankesh.productcommand.commands;
 
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
 

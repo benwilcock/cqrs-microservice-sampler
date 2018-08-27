@@ -1,4 +1,4 @@
-package com.soagrowers.productquery;
+package com.pankesh.productquery;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @EnableEurekaClient
 @SpringBootApplication
-@EntityScan("com.soagrowers.productquery.domain")
+@EntityScan("com.pankesh.productquery.domain")
 public class Application {
 
     public static void main(String... args) {

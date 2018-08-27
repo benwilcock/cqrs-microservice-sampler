@@ -1,4 +1,4 @@
-package com.soagrowers.productevents.events;
+package com.pankesh.productevents.events;
 
 import java.io.Serializable;
 

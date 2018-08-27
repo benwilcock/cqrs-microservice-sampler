@@ -1,6 +1,6 @@
-package com.soagrowers.productcommand;
+package com.pankesh.productcommand;
 
-import com.soagrowers.utils.Asserts;
+import com.pankesh.utils.Asserts;
 import org.axonframework.commandhandling.CommandExecutionException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.junit.Before;

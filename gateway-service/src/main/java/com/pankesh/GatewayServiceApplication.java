@@ -1,6 +1,6 @@
-package com.soagrowers;
+package com.pankesh;
 
-import com.soagrowers.prefilters.SimpleLoggingPreFilter;
+import com.pankesh.prefilters.SimpleLoggingPreFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;

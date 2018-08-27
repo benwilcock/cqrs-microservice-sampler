@@ -1,4 +1,4 @@
-package com.soagrowers.productquery.handlers;
+package com.pankesh.productquery.handlers;
 
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.soagrowers.productevents.events.ProductAddedEvent;
-import com.soagrowers.productevents.events.ProductSaleableEvent;
-import com.soagrowers.productevents.events.ProductUnsaleableEvent;
-import com.soagrowers.productquery.domain.Product;
-import com.soagrowers.productquery.repository.ProductRepository;
+import com.pankesh.productevents.events.ProductAddedEvent;
+import com.pankesh.productevents.events.ProductSaleableEvent;
+import com.pankesh.productevents.events.ProductUnsaleableEvent;
+import com.pankesh.productquery.domain.Product;
+import com.pankesh.productquery.repository.ProductRepository;
 
 /**
  * Created by Ben on 10/08/2015.

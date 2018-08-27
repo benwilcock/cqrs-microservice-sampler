@@ -1,4 +1,4 @@
-package com.soagrowers.productcommand;
+package com.pankesh.productcommand;
 
 import java.util.Arrays;
 
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.soagrowers.productcommand.commands.AddProductCommand;
-import com.soagrowers.productcommand.commands.MarkProductAsSaleableCommand;
-import com.soagrowers.productcommand.commands.MarkProductAsUnsaleableCommand;
-import com.soagrowers.utils.Asserts;
+import com.pankesh.productcommand.commands.AddProductCommand;
+import com.pankesh.productcommand.commands.MarkProductAsSaleableCommand;
+import com.pankesh.productcommand.commands.MarkProductAsUnsaleableCommand;
+import com.pankesh.utils.Asserts;
 
 /**
  * Created by ben on 19/01/16.

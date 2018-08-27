@@ -1,4 +1,4 @@
-package com.soagrowers.productquery.domain;
+package com.pankesh.productquery.domain;
 
 
 //import org.springframework.data.annotation.Id;

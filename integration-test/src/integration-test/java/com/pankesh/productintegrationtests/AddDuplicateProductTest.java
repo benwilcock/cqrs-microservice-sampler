@@ -1,4 +1,4 @@
-package com.soagrowers.productintegrationtests;
+package com.pankesh.productintegrationtests;
 
 import org.apache.http.HttpStatus;
 import org.junit.After;
@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.jayway.restassured.RestAssured.given;
-import static com.soagrowers.utils.Statics.*;
+import static com.pankesh.utils.Statics.*;
 
 /**
  * Created by ben on 09/03/16.

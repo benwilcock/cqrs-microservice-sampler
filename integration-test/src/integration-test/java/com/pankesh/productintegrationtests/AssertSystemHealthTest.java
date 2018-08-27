@@ -1,7 +1,7 @@
-package com.soagrowers.productintegrationtests;
+package com.pankesh.productintegrationtests;
 
 
-import com.soagrowers.utils.Statics;
+import com.pankesh.utils.Statics;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.Before;

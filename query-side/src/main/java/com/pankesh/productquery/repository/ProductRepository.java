@@ -1,7 +1,7 @@
-package com.soagrowers.productquery.repository;
+package com.pankesh.productquery.repository;
 
 
-import com.soagrowers.productquery.domain.Product;
+import com.pankesh.productquery.domain.Product;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

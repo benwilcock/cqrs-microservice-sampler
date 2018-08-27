@@ -1,4 +1,4 @@
-package com.soagrowers.productcommand.configuration;
+package com.pankesh.productcommand.configuration;
 
 import org.axonframework.amqp.eventhandling.AMQPMessageConverter;
 import org.axonframework.amqp.eventhandling.spring.SpringAMQPMessageSource;
@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.rabbitmq.client.Channel;
-import com.soagrowers.productcommand.aggregates.ProductAggregate;
+import com.pankesh.productcommand.aggregates.ProductAggregate;
 
 /**
  * Created by ben on 23/02/16.

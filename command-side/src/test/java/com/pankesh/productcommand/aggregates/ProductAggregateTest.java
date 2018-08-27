@@ -1,4 +1,4 @@
-package com.soagrowers.productcommand.aggregates;
+package com.pankesh.productcommand.aggregates;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +8,13 @@ import org.axonframework.test.aggregate.FixtureConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.soagrowers.productcommand.commands.AddProductCommand;
-import com.soagrowers.productcommand.commands.MarkProductAsSaleableCommand;
-import com.soagrowers.productcommand.commands.MarkProductAsUnsaleableCommand;
-import com.soagrowers.productevents.events.AbstractEvent;
-import com.soagrowers.productevents.events.ProductAddedEvent;
-import com.soagrowers.productevents.events.ProductSaleableEvent;
-import com.soagrowers.productevents.events.ProductUnsaleableEvent;
+import com.pankesh.productcommand.commands.AddProductCommand;
+import com.pankesh.productcommand.commands.MarkProductAsSaleableCommand;
+import com.pankesh.productcommand.commands.MarkProductAsUnsaleableCommand;
+import com.pankesh.productevents.events.AbstractEvent;
+import com.pankesh.productevents.events.ProductAddedEvent;
+import com.pankesh.productevents.events.ProductSaleableEvent;
+import com.pankesh.productevents.events.ProductUnsaleableEvent;
 
 /**
  * Created by Ben on 07/08/2015.

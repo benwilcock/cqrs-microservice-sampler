@@ -1,4 +1,4 @@
-package com.soagrowers.productcommand.aggregates;
+package com.pankesh.productcommand.aggregates;
 
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
@@ -8,12 +8,12 @@ import org.axonframework.spring.stereotype.Aggregate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.soagrowers.productcommand.commands.AddProductCommand;
-import com.soagrowers.productcommand.commands.MarkProductAsSaleableCommand;
-import com.soagrowers.productcommand.commands.MarkProductAsUnsaleableCommand;
-import com.soagrowers.productevents.events.ProductAddedEvent;
-import com.soagrowers.productevents.events.ProductSaleableEvent;
-import com.soagrowers.productevents.events.ProductUnsaleableEvent;
+import com.pankesh.productcommand.commands.AddProductCommand;
+import com.pankesh.productcommand.commands.MarkProductAsSaleableCommand;
+import com.pankesh.productcommand.commands.MarkProductAsUnsaleableCommand;
+import com.pankesh.productevents.events.ProductAddedEvent;
+import com.pankesh.productevents.events.ProductSaleableEvent;
+import com.pankesh.productevents.events.ProductUnsaleableEvent;
 
 /**
  * ProductAggregate is essentially a DDD AggregateRoot (from the DDD concept). In event-sourced
@@ -25,12 +25,12 @@ import com.soagrowers.productevents.events.ProductUnsaleableEvent;
  * to the aggregate thereby re-creating the logical state of the Aggregate.
  * <p/>
  * The ProductAggregate Aggregate can handle and react to 'Commands', and when it reacts
- * to these com.soagrowers.product.commands it creates and 'applies' Events that represent the logical changes
+ * to these com.pankesh.product.commands it creates and 'applies' Events that represent the logical changes
  * to be made. These Events are also handled by the ProductAggregate.
  * <p/>
  * Axon takes care of much of this via the CommandBus, EventBus and Repository.
  * <p/>
- * Axon delivers com.soagrowers.product.commands placed on the bus to the Aggregate. Axon supports the 'applying' of
+ * Axon delivers com.pankesh.product.commands placed on the bus to the Aggregate. Axon supports the 'applying' of
  * Events to the Aggregate, and the handling of those events by the aggregate or any other
  * configured EventHandlers.
  */

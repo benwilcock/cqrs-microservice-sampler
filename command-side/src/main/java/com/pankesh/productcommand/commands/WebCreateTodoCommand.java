@@ -1,4 +1,4 @@
-package com.soagrowers.productcommand.commands;
+package com.pankesh.productcommand.commands;
 
 /**
  * Created by ben on 19/01/16.

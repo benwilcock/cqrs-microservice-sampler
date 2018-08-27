@@ -1,4 +1,4 @@
-package com.soagrowers.productquery.configuration;
+package com.pankesh.productquery.configuration;
 
 import org.axonframework.amqp.eventhandling.AMQPMessageConverter;
 import org.axonframework.amqp.eventhandling.spring.SpringAMQPMessageSource;

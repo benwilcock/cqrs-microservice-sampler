@@ -1,13 +1,13 @@
-package com.soagrowers.productcommand.handlers;
+package com.pankesh.productcommand.handlers;
 
 import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.soagrowers.productevents.events.ProductAddedEvent;
-import com.soagrowers.productevents.events.ProductSaleableEvent;
-import com.soagrowers.productevents.events.ProductUnsaleableEvent;
+import com.pankesh.productevents.events.ProductAddedEvent;
+import com.pankesh.productevents.events.ProductSaleableEvent;
+import com.pankesh.productevents.events.ProductUnsaleableEvent;
 
 /**
  * EventHandler's (a.k.a. EventListeners) are used to react to events and perform associated
