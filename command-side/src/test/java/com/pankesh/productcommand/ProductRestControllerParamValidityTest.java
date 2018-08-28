@@ -50,6 +50,7 @@ public class ProductRestControllerParamValidityTest {
         assertTrue(mockHttpServletResponse.getStatus() == HttpServletResponse.SC_CREATED);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testFailedAddWithAssertionError() {
         // Arrange
@@ -64,6 +65,7 @@ public class ProductRestControllerParamValidityTest {
         assertTrue(mockHttpServletResponse.getStatus() == HttpServletResponse.SC_BAD_REQUEST);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testFailedAddWithCommandExecutionException() {
         // Arrange

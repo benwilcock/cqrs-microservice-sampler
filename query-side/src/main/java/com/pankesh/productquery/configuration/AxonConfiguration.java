@@ -3,12 +3,14 @@ package com.pankesh.productquery.configuration;
 import org.axonframework.amqp.eventhandling.AMQPMessageConverter;
 import org.axonframework.amqp.eventhandling.spring.SpringAMQPMessageSource;
 import org.axonframework.common.jpa.EntityManagerProvider;
+import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.mongo.DefaultMongoTemplate;
 import org.axonframework.mongo.MongoTemplate;
 import org.axonframework.mongo.eventhandling.saga.repository.MongoSagaStore;
 import org.axonframework.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
 import org.axonframework.mongo.eventsourcing.eventstore.documentperevent.DocumentPerEventStorageStrategy;
+import org.axonframework.mongo.eventsourcing.tokenstore.MongoTokenStore;
 import org.axonframework.serialization.Serializer;
 import org.axonframework.serialization.json.JacksonSerializer;
 import org.springframework.amqp.core.Message;
@@ -78,6 +80,11 @@ class AxonConfiguration {
     EventStorageEngine eventStoreEngine() {
         return new MongoEventStorageEngine(axonJsonSerializer(), null, axonMongoTemplate(),
                 new DocumentPerEventStorageStrategy());
+    }
+    
+    @Bean
+    public TokenStore tokenStore() {
+        return new MongoTokenStore(axonMongoTemplate(), axonJsonSerializer());
     }
 
     @Bean

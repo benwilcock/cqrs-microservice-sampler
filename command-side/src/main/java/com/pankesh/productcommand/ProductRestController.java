@@ -60,4 +60,29 @@ public class ProductRestController {
         }
     }
 
+    @RequestMapping(value = "{id}/saleable/{saleableFlag}", method = RequestMethod.PUT)
+    public void makeSaleable(@PathVariable(value = "id") String id, @PathVariable(value = "saleableFlag", required = true) boolean saleableFlag,
+            HttpServletResponse response) {
+
+        LOG.debug("Changing Product [{}] '{}'", id, saleableFlag);
+
+        try {
+            if (saleableFlag) {
+                MarkProductAsSaleableCommand productSaleableCommand = new MarkProductAsSaleableCommand(id);
+                commandGateway.sendAndWait(productSaleableCommand);
+            } else {
+                MarkProductAsUnsaleableCommand productUnsaleableCommand = new MarkProductAsUnsaleableCommand(id);                
+                commandGateway.sendAndWait(productUnsaleableCommand);
+            }
+            LOG.info("Changed Product [{}] '{}'", id, saleableFlag);
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);// Set up the 202 ACCEPTED response
+        } catch (AssertionError ae) {
+            LOG.warn("Change Request failed - empty params?. [{}] '{}'", id, saleableFlag, ae);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (CommandExecutionException cex) {
+            LOG.warn("Change Command FAILED with Message: {}", cex.getMessage(), cex);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
 }
