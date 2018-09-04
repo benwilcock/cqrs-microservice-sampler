@@ -1,7 +1,6 @@
 package com.pankesh.productcommand.configuration;
 
-import org.axonframework.amqp.eventhandling.AMQPMessageConverter;
-import org.axonframework.amqp.eventhandling.spring.SpringAMQPMessageSource;
+import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventsourcing.EventSourcingRepository;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
@@ -10,10 +9,9 @@ import org.axonframework.mongo.DefaultMongoTemplate;
 import org.axonframework.mongo.MongoTemplate;
 import org.axonframework.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
 import org.axonframework.mongo.eventsourcing.eventstore.documentperevent.DocumentPerEventStorageStrategy;
+import org.axonframework.mongo.eventsourcing.tokenstore.MongoTokenStore;
 import org.axonframework.serialization.Serializer;
 import org.axonframework.serialization.json.JacksonSerializer;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.transaction.RabbitTransactionManager;
@@ -25,7 +23,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
-import com.rabbitmq.client.Channel;
 import com.pankesh.productcommand.aggregates.ProductAggregate;
 
 /**
@@ -72,19 +69,6 @@ public class AxonConfiguration {
         return new CachingConnectionFactory();
     }
     
-    @Bean
-    public SpringAMQPMessageSource myQueueMessageSource(AMQPMessageConverter messageConverter) {
-        return new SpringAMQPMessageSource(messageConverter) {
-            
-            @RabbitListener(queues = "${spring.application.queue}")
-            @Override
-            public void onMessage(Message message, Channel channel) {
-                System.out.println("******************* Command Side");
-                super.onMessage(message, channel);
-            }
-        };
-    }    
-    
     @Bean(name = "axonMongoTemplate")
     MongoTemplate axonMongoTemplate() {
         MongoTemplate template = new DefaultMongoTemplate(mongoClient,databaseName).withSnapshotCollection(snapshotCollectionName)
@@ -102,6 +86,11 @@ public class AxonConfiguration {
     @Bean
     EventStorageEngine eventStoreEngine() {
         return new MongoEventStorageEngine(axonJsonSerializer(), null,axonMongoTemplate(),new DocumentPerEventStorageStrategy());
+    }
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new MongoTokenStore(axonMongoTemplate(), axonJsonSerializer());
     }
 
     @Bean

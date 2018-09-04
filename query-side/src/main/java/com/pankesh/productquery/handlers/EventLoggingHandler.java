@@ -1,5 +1,6 @@
 package com.pankesh.productquery.handlers;
 
+import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,12 +11,9 @@ import com.pankesh.productevents.events.ProductAddedEvent;
 import com.pankesh.productevents.events.ProductSaleableEvent;
 import com.pankesh.productevents.events.ProductUnsaleableEvent;
 
-/**
- * Handler's (a.k.a. Listeners) can be used to react to events and perform associated
- * actions, such as updating a 'materialised-view' for example.
- * Created by ben on 24/09/15.
- */
+
 @Component
+@ProcessingGroup("productQuery")
 public class EventLoggingHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventLoggingHandler.class);

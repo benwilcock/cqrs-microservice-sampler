@@ -13,9 +13,6 @@ import com.pankesh.productevents.events.ProductUnsaleableEvent;
 import com.pankesh.productquery.domain.Product;
 import com.pankesh.productquery.repository.ProductRepository;
 
-/**
- * Created by Ben on 10/08/2015.
- */
 @Component
 @ProcessingGroup("productQuery")
 public class ProductViewEventHandler {

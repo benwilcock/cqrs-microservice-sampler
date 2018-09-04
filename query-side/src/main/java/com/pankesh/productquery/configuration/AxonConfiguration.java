@@ -3,6 +3,8 @@ package com.pankesh.productquery.configuration;
 import org.axonframework.amqp.eventhandling.AMQPMessageConverter;
 import org.axonframework.amqp.eventhandling.spring.SpringAMQPMessageSource;
 import org.axonframework.common.jpa.EntityManagerProvider;
+import org.axonframework.config.EventProcessingConfiguration;
+import org.axonframework.eventhandling.EventProcessor;
 import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.mongo.DefaultMongoTemplate;
@@ -53,6 +55,14 @@ class AxonConfiguration {
         return new JacksonSerializer();
     }
 
+
+    /**
+     * This creates the subscription on the AMQP channel which can then be used as a source
+     * for the event processor.
+     * {@code eventhandling.processors.productQuery.source=queryMessageQueue} 
+     * @param messageConverter
+     * @return
+     */
     @Bean
     public SpringAMQPMessageSource queryMessageQueue(AMQPMessageConverter messageConverter) {
         SpringAMQPMessageSource springAMQPMessageSource = new SpringAMQPMessageSource(messageConverter) {
@@ -68,7 +78,7 @@ class AxonConfiguration {
         
         
     }
-
+    
     @Bean(name = "axonMongoTemplate")
     MongoTemplate axonMongoTemplate() {
         MongoTemplate template = new DefaultMongoTemplate(mongoClient, databaseName);
@@ -82,11 +92,6 @@ class AxonConfiguration {
                 new DocumentPerEventStorageStrategy());
     }
     
-    @Bean
-    public TokenStore tokenStore() {
-        return new MongoTokenStore(axonMongoTemplate(), axonJsonSerializer());
-    }
-
     @Bean
     public MongoSagaStore sagaStore(Serializer eventSerializer, EntityManagerProvider entityManagerProvider) {
         return new MongoSagaStore(axonMongoTemplate(), axonJsonSerializer());
