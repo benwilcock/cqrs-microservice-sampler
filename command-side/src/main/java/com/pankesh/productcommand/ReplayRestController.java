@@ -1,10 +1,9 @@
 package com.pankesh.productcommand;
 
-import java.util.function.Supplier;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.axonframework.config.EventProcessingConfiguration;
+import org.axonframework.eventhandling.TrackingEventProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +24,13 @@ public class ReplayRestController {
     @RequestMapping(value = "/replay/{group}", method = RequestMethod.POST)
     public void replay(@PathVariable(value = "group") String group, HttpServletResponse response) {
 
-        LOG.debug("Start replaying...");
-        final Supplier<? extends RuntimeException> notFoundSupplier = () -> new IllegalArgumentException(
-                "Processor " + group + " not registered.");
-        this.eventProcessingConfiguration.eventProcessor(group).orElseThrow(notFoundSupplier).shutDown();
-        try {
-            Thread.sleep(20000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        this.eventProcessingConfiguration.eventProcessor(group).orElseThrow(notFoundSupplier).start();
-
+        LOG.debug("Start replaying for Processing Group [{}]...", group);
+        
+        this.eventProcessingConfiguration.eventProcessorByProcessingGroup(group, TrackingEventProcessor.class)
+        .ifPresent(trackingEventProcessor -> {
+            trackingEventProcessor.shutDown();
+            trackingEventProcessor.resetTokens();
+            trackingEventProcessor.start();
+        });
     }
 }
