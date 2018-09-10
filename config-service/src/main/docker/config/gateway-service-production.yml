@@ -2,9 +2,6 @@ ribbon:
   eureka:
     enabled: true
 
-management:
-    security:
-        enabled: false
 eureka:
   client:
     serviceUrl:
