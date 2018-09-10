@@ -30,7 +30,7 @@ public class ProductViewTrackingEventHandler {
         LOG.info("Tracking ProductAddedEvent: [{}] '{}'. Replay status: {}.", event.getId(), event.getName(), replayStatus.isReplay());
         
         if (replayStatus.isReplay()) {
-            EventMessage<ProductAddedEvent> asEventMessage = GenericEventMessage.asEventMessage(event);
+            EventMessage<ProductAddedEvent> asEventMessage = GenericEventMessage.<ProductAddedEvent>asEventMessage(event);
             eventBus.publish(asEventMessage);
         }
         
@@ -41,7 +41,7 @@ public class ProductViewTrackingEventHandler {
         LOG.info("Tracking ProductSaleableEvent: [{}] Replay status: {}", event.getId(), replayStatus.isReplay());
 
         if (replayStatus.isReplay()) {
-            EventMessage<ProductSaleableEvent> asEventMessage = GenericEventMessage.asEventMessage(event);
+            EventMessage<ProductSaleableEvent> asEventMessage = GenericEventMessage.<ProductSaleableEvent>asEventMessage(event);
             eventBus.publish(asEventMessage);
         }
         
@@ -52,7 +52,7 @@ public class ProductViewTrackingEventHandler {
         LOG.info("Tracking ProductUnsaleableEvent: [{}] Replay status: {}", event.getId(), replayStatus.isReplay());
 
         if (replayStatus.isReplay()) {
-            EventMessage<ProductUnsaleableEvent> asEventMessage = GenericEventMessage.asEventMessage(event);
+            EventMessage<ProductUnsaleableEvent> asEventMessage = GenericEventMessage.<ProductUnsaleableEvent>asEventMessage(event);
             eventBus.publish(asEventMessage);
         }
         

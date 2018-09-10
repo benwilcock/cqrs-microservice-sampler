@@ -1,10 +1,20 @@
 package com.pankesh.productcommand.configuration;
 
+import java.util.Map;
+
+import org.axonframework.boot.autoconfig.KafkaProperties;
+import org.axonframework.eventhandling.EventBus;
 import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventsourcing.EventSourcingRepository;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
+import org.axonframework.kafka.eventhandling.KafkaMessageConverter;
+import org.axonframework.kafka.eventhandling.producer.ConfirmationMode;
+import org.axonframework.kafka.eventhandling.producer.DefaultProducerFactory;
+import org.axonframework.kafka.eventhandling.producer.KafkaPublisher;
+import org.axonframework.kafka.eventhandling.producer.KafkaPublisherConfiguration;
+import org.axonframework.kafka.eventhandling.producer.ProducerFactory;
 import org.axonframework.mongo.DefaultMongoTemplate;
 import org.axonframework.mongo.MongoTemplate;
 import org.axonframework.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
@@ -18,6 +28,9 @@ import org.springframework.amqp.rabbit.transaction.RabbitTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,10 +43,13 @@ import com.pankesh.productcommand.aggregates.ProductAggregate;
  */
 @Configuration
 public class AxonConfiguration {
+    
+    @Autowired
+    private KafkaProperties properties;
 
     @Autowired
     public Mongo mongo;
-    
+
     @Autowired
     public MongoClient mongoClient;
 
@@ -63,17 +79,17 @@ public class AxonConfiguration {
     Serializer axonJsonSerializer() {
         return new JacksonSerializer();
     }
-    
+
     @Bean
     ConnectionFactory amqpConnectionFactory() {
         return new CachingConnectionFactory();
     }
-    
+
     @Bean(name = "axonMongoTemplate")
     MongoTemplate axonMongoTemplate() {
-        MongoTemplate template = new DefaultMongoTemplate(mongoClient,databaseName).withSnapshotCollection(snapshotCollectionName)
-                .withDomainEventsCollection(eventsCollectionName);
-        
+        MongoTemplate template = new DefaultMongoTemplate(mongoClient, databaseName)
+                .withSnapshotCollection(snapshotCollectionName).withDomainEventsCollection(eventsCollectionName);
+
         return template;
     }
 
@@ -85,7 +101,8 @@ public class AxonConfiguration {
 
     @Bean
     EventStorageEngine eventStoreEngine() {
-        return new MongoEventStorageEngine(axonJsonSerializer(), null,axonMongoTemplate(),new DocumentPerEventStorageStrategy());
+        return new MongoEventStorageEngine(axonJsonSerializer(), null, axonMongoTemplate(),
+                new DocumentPerEventStorageStrategy());
     }
 
     @Bean
@@ -100,4 +117,36 @@ public class AxonConfiguration {
         return repo;
     }
 
+//    @ConditionalOnMissingBean
+//    @ConditionalOnProperty("axon.kafka.producer.transaction-id-prefix")
+//    @Bean
+//    public ProducerFactory<String, byte[]> producerFactory() {
+//        Map<String, Object> producer = properties.buildProducerProperties();
+//        String transactionIdPrefix = properties.getProducer().getTransactionIdPrefix();
+//        if (transactionIdPrefix == null) {
+//            throw new IllegalStateException("transactionalIdPrefix cannot be empty");
+//        }
+//        return DefaultProducerFactory.<String, byte[]>builder(producer)
+//                .withConfirmationMode(ConfirmationMode.TRANSACTIONAL)
+//                .withTransactionalIdPrefix(transactionIdPrefix)
+//                .build();
+//    }
+//
+//    
+//    @ConditionalOnMissingBean
+//    @Bean(initMethod = "start", destroyMethod = "shutDown")
+//    @ConditionalOnBean(ProducerFactory.class)
+//    public KafkaPublisher<String, byte[]> kafkaPublisher(ProducerFactory<String, byte[]> producerFactory,
+//                                                         EventBus eventBus,
+//                                                         KafkaMessageConverter<String, byte[]> messageConverter,
+//                                                         org.axonframework.spring.config.AxonConfiguration configuration) {
+//        return new KafkaPublisher<>(KafkaPublisherConfiguration.<String, byte[]>builder()
+//                                            .withTopic("test-topic")
+//                                            .withMessageConverter(messageConverter)
+//                                            .withProducerFactory(producerFactory)
+//                                            .withMessageSource(eventBus)
+//                                            .withMessageMonitor(configuration
+//                                                                        .messageMonitor(KafkaPublisher.class, "kafkaPublisher"))
+//                                            .build());
+//    }
 }
