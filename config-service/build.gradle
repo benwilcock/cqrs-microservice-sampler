@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '1.3.5.RELEASE'
+        springBootVersion = '1.5.7.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -49,6 +49,10 @@ task image(type: Docker, dependsOn: build){
 		copy {
 			from jar
 			into stageDir
+		}
+		copy {
+			from 'src/main/docker/config'
+    		into stageDir
 		}
 	}
 }

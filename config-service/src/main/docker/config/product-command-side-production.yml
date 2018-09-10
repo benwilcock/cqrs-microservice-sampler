@@ -1,0 +1,61 @@
+message: Greetings from the PRODUCT-COMMAND-SIDE microservice [using the PRODUCTION config].
+
+management:
+    security:
+        enabled: false
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
+  instance:
+    preferIpAddress: true
+
+axon:
+    amqp:
+        exchange: product.events.fanout.exchange
+        transaction-mode: transactional
+    kafka:
+        client-id: testClient
+        default-topic: test-topic
+        producer:
+            transaction-id-prefix: testTransactionId
+            bootstrapServers: kafka:9092
+            retries: 10
+            request:
+                timeout:
+                    ms: 2000
+
+    serializer:
+        general: jackson
+    eventhandling:
+        processors:
+            productQueryTracking:
+                mode: tracking
+                source: eventStore
+spring:
+    application:
+        queue: product.default.queue
+        databaseName: products
+        eventsCollectionName: events
+        snapshotCollectionName: snapshots
+    rabbitmq:
+        hostname: rabbitmq
+        username: test
+        password: password
+    data:
+        mongodb:
+            uri: mongodb://mongodb:27017/products
+logging:
+    level:
+        root: INFO
+        org.springframework: INFO
+            #aop: DEBUG
+            #dao: DEBUG
+            #orm: DEBUG
+            #amqp: DEBUG
+            #data: DEBUG
+            #transaction: DEBUG
+        org.axonframework: DEBUG
+        com.pankesh: DEBUG
+    file: ./logs/command-side-server.log

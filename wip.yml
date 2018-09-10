@@ -5,6 +5,23 @@ services:
     container_name: mongodb
     ports:
      - "27017:27017"
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181/local
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_CREATE_TOPICS: "test-topic:2:1"
+    depends_on:
+     - zookeeper
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
@@ -20,7 +37,7 @@ services:
     ports:
      - "8888:8888"
     environment:
-     - SPRING_PROFILES_ACTIVE=production
+     - SPRING_PROFILES_ACTIVE=native
     depends_on:
      - mongodb
      - rabbitmq
@@ -45,6 +62,7 @@ services:
     depends_on:
      - mongodb
      - rabbitmq
+     - kafka
      - discovery
      - config
     ports:
@@ -56,6 +74,7 @@ services:
     container_name: product-qry-side
     depends_on:
      - rabbitmq
+     - kafka
      - discovery
      - config
     ports:

@@ -1,0 +1,51 @@
+message: Greetings from the PRODUCT-QUERY-SIDE microservice [using the PRODUCTION config].
+
+management:
+    security:
+        enabled: false
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
+  instance:
+    preferIpAddress: true
+    
+axon:
+    amqp:
+        exchange: product.events.fanout.exchange
+        transaction-mode: transactional
+        queue: event.stream
+    serializer:
+        general: jackson
+    eventhandling:
+        processors:
+            productQuery:
+                source: queryMessageQueue
+
+spring:
+    application:
+        databaseName: query
+        queue: event.stream
+    rabbitmq:
+        hostname: rabbitmq
+        username: test
+        password: password
+    data:
+       mongodb:
+          uri: mongodb://mongodb:27017/query
+       rest:
+            #base-path: api/v1
+logging:
+    level:
+        root: INFO
+        org.springframework: INFO
+            #aop: DEBUG
+            #dao: DEBUG
+            #orm: DEBUG
+            #amqp: DEBUG
+            #data: DEBUG
+            #transaction: DEBUG
+        org.axonframework: DEBUG
+        com.pankesh: DEBUG
+    file: ./logs/query-side-server.log
