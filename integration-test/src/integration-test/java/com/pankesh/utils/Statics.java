@@ -1,8 +1,6 @@
 package com.pankesh.utils;
 
-/**
- * Created by ben on 24/02/16.
- */
+
 public class Statics {
 
     public static final int PORT_FOR_GATEWAY = 8080;

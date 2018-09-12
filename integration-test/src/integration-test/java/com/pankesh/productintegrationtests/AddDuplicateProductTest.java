@@ -15,9 +15,7 @@ import java.util.concurrent.TimeUnit;
 import static com.jayway.restassured.RestAssured.given;
 import static com.pankesh.utils.Statics.*;
 
-/**
- * Created by ben on 09/03/16.
- */
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AddDuplicateProductTest {
 

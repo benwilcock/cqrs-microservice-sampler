@@ -2,9 +2,7 @@ package com.pankesh.productcommand.commands;
 
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
 
-/**
- * Created by Ben on 07/08/2015.
- */
+
 public class MarkProductAsSaleableCommand {
 
     /**

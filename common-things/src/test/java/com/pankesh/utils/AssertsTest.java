@@ -8,9 +8,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by ben on 02/03/16.
- */
+
 public class AssertsTest {
 
     @Before

@@ -22,7 +22,7 @@ jar {
     archiveName = 'product-command-side.jar'
 }
 
-group = 'benwilcock'
+group = 'pankesh'
 
 apply plugin: 'spring-boot'
 apply plugin: 'docker'

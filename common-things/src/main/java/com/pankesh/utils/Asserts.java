@@ -5,9 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-/**
- * Created by ben on 02/03/16.
- */
+
 public enum Asserts {
 
     INSTANCE;

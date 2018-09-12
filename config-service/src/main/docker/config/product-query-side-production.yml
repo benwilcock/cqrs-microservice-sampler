@@ -16,12 +16,21 @@ axon:
         exchange: product.events.fanout.exchange
         transaction-mode: transactional
         queue: event.stream
+    kafka:
+        client-id: productQueryClient
+        default-topic: test-topic
+        consumer:
+            group-id: productQueryGroup
+            bootstrapServers: kafka:9092
     serializer:
         general: jackson
     eventhandling:
         processors:
             productQuery:
                 source: queryMessageQueue
+            productQueryKafka:
+                source: kafkaMessageSource
+                mode: TRACKING
 
 spring:
     application:

@@ -16,9 +16,7 @@ import com.pankesh.productevents.events.ProductAddedEvent;
 import com.pankesh.productevents.events.ProductSaleableEvent;
 import com.pankesh.productevents.events.ProductUnsaleableEvent;
 
-/**
- * Created by Ben on 07/08/2015.
- */
+
 public class ProductAggregateTest {
 
     private FixtureConfiguration<ProductAggregate> fixture;

@@ -8,10 +8,6 @@ This is a non-trivial demonstration of how to build a CQRS microservice applicat
  - Command & Query responsibility Separation with the [Axon CQRS Framework](http://www.axonframework.org/)
  - Event Sourcing & Materialised Views with RabbitMQ, MongoDB and H2
 
-#About the Author
-
-[Ben Wilcock](https://uk.linkedin.com/in/benwilcock) works for Pivotal as a Cloud Solutions Architect. Ben has a passion for microservices, cloud and mobile applications and helps [Pivotal's Cloud Foundry](http://pivotal.io/platform) customers to become more responsive, innovate faster and gain greater returns from their software investments. Ben is also a respected technology [blogger](http://benwilcock.wordpress.com) who's articles have featured in [DZone](https://dzone.com/users/296242/benwilcock.html), [Java Code Geeks](https://www.javacodegeeks.com/author/ben-wilcock/), [InfoQ](https://www.infoq.com/author/Ben-Wilcock) and more.
-
 ##Running the Demo
 
 Running the demo is easy. The whole environment has been packaged to be run as a series of Docker containers. To run the code, you'll need to have the following software installed on your machine. For reference I'm using Ubuntu 16.04 as my OS, but I have also tested the app on the new Docker for Windows Beta successfully.
@@ -29,7 +25,7 @@ If you have these, you can run the demo by following the process outlined below.
 In a new empty folder, at the terminal execute the following command to download the latest code for this demo.
 
 ```bash
-$ git clone https://github.com/benwilcock/microservice-sampler.git
+$ git clone https://github.com/pankesh/microservice-sampler.git
 ```
 
 Then build the docker container images.
@@ -45,7 +41,7 @@ This will create a series of Docker container images, one for each of the spring
 
 There are seven Docker container images in this microservice group, they are 'mongodb', 'rabbitmq', 'config', 'discovery', `gateway-service', 'product-cmd-side', and 'product-qry-side'. The logical architecture looks like this:-
 
-![Architecture](https://github.com/benwilcock/microservice-sampler/blob/master/slides/CQRS-Architecture-02.png "Architecture")
+![Architecture](https://github.com/pankesh/microservice-sampler/blob/master/slides/CQRS-Architecture-02.png "Architecture")
 
 Because we're using docker-compose, starting the microservices is now simply a case of executing the following command.
 

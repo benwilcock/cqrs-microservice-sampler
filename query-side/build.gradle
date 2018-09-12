@@ -21,7 +21,7 @@ jar {
     archiveName = 'product-query-side.jar'
 }
 
-group = 'benwilcock'
+group = 'pankesh'
 
 apply plugin: 'spring-boot'
 apply plugin: 'docker'
@@ -31,6 +31,7 @@ dependencies {
     compile("com.h2database:h2")
     compile("org.axonframework:axon-amqp:${axonVersion}")
     compile("org.axonframework:axon-mongo:${axonVersion}")
+    compile("org.axonframework:axon-kafka:${axonVersion}")
     compile("org.axonframework:axon-spring-boot-starter:${axonVersion}")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
@@ -43,6 +44,9 @@ dependencies {
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
     compile("org.springframework.cloud:spring-cloud-starter-config")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.10")
+    compile("org.apache.kafka:kafka-clients:1.0.1")
+    //needed internally by the kafka fetcher - even when not used.
+    compile("com.thoughtworks.xstream:xstream:1.4.10")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.axonframework:axon-test:${axonVersion}")
 }

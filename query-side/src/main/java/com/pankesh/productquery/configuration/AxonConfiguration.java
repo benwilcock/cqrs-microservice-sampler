@@ -3,8 +3,6 @@ package com.pankesh.productquery.configuration;
 import org.axonframework.amqp.eventhandling.AMQPMessageConverter;
 import org.axonframework.amqp.eventhandling.spring.SpringAMQPMessageSource;
 import org.axonframework.common.jpa.EntityManagerProvider;
-import org.axonframework.config.EventProcessingConfiguration;
-import org.axonframework.eventhandling.EventProcessor;
 import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.mongo.DefaultMongoTemplate;
@@ -23,14 +21,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.mongodb.MongoClient;
 import com.rabbitmq.client.Channel;
 
-/**
- * Created by ben on 18/02/16.
- */
 @Configuration
 class AxonConfiguration {
 
@@ -51,6 +48,7 @@ class AxonConfiguration {
 
     @Bean
     @Qualifier("eventSerializer")
+    @Order(Ordered.HIGHEST_PRECEDENCE)
     Serializer axonJsonSerializer() {
         return new JacksonSerializer();
     }
@@ -95,6 +93,12 @@ class AxonConfiguration {
     @Bean
     public MongoSagaStore sagaStore(Serializer eventSerializer, EntityManagerProvider entityManagerProvider) {
         return new MongoSagaStore(axonMongoTemplate(), axonJsonSerializer());
+    }
+
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new MongoTokenStore(axonMongoTemplate(), axonJsonSerializer());
     }
 
 }

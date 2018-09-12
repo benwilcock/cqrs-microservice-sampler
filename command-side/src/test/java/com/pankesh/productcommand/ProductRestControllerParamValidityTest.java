@@ -17,9 +17,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by ben on 02/03/16.
- */
+
 public class ProductRestControllerParamValidityTest {
 
     ProductRestController controller;

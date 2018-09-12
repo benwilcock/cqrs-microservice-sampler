@@ -1,8 +1,6 @@
 package com.pankesh.productcommand.commands;
 
-/**
- * Created by ben on 19/01/16.
- */
+
 public class WebCreateTodoCommand {
 
     private final String id;

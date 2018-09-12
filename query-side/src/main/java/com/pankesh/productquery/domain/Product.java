@@ -6,9 +6,6 @@ package com.pankesh.productquery.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-/**
- * Created by ben on 07/10/15.
- */
 @Entity
 public class Product {
 

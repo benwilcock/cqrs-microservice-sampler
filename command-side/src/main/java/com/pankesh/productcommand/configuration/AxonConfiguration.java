@@ -1,20 +1,11 @@
 package com.pankesh.productcommand.configuration;
 
-import java.util.Map;
-
 import org.axonframework.boot.autoconfig.KafkaProperties;
-import org.axonframework.eventhandling.EventBus;
 import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventsourcing.EventSourcingRepository;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
-import org.axonframework.kafka.eventhandling.KafkaMessageConverter;
-import org.axonframework.kafka.eventhandling.producer.ConfirmationMode;
-import org.axonframework.kafka.eventhandling.producer.DefaultProducerFactory;
-import org.axonframework.kafka.eventhandling.producer.KafkaPublisher;
-import org.axonframework.kafka.eventhandling.producer.KafkaPublisherConfiguration;
-import org.axonframework.kafka.eventhandling.producer.ProducerFactory;
 import org.axonframework.mongo.DefaultMongoTemplate;
 import org.axonframework.mongo.MongoTemplate;
 import org.axonframework.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
@@ -28,9 +19,6 @@ import org.springframework.amqp.rabbit.transaction.RabbitTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,9 +26,7 @@ import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.pankesh.productcommand.aggregates.ProductAggregate;
 
-/**
- * Created by ben on 23/02/16.
- */
+
 @Configuration
 public class AxonConfiguration {
     

@@ -13,9 +13,7 @@ import java.util.UUID;
 
 import static com.jayway.restassured.RestAssured.given;
 
-/**
- * Created by ben on 24/02/16.
- */
+
 public class AssertSystemHealthTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(AssertSystemHealthTest.class);

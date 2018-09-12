@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by ben on 29/06/16.
- */
+
 public class SimpleLoggingPreFilter extends ZuulFilter {
 
     private static Logger log = LoggerFactory.getLogger(SimpleLoggingPreFilter.class);
