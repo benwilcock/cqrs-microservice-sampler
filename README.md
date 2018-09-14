@@ -54,8 +54,20 @@ If you want to see which docker instances are running on your machine at any tim
 ```bash
 $ docker ps
 ```
+###Step 3: Stopping \[& rebuilding code\] (Manual)
+You can stop the entire cluster by doing the following
 
-###Step 3: Integration Test (Manual)
+```bash
+docker-compose -f wip.yml down
+```
+
+You can also rebuild particular services (e.g. command-side) and add it into the cluster using the following
+
+```bash
+./gradlew :command-side:clean :command-side:image && docker-compose -f wip.yml up product-query-side &
+```
+
+###Step 4: Integration Test (Manual)
 
 So far so good. Now we want to test the addition of products. In a new terminal window (ctrl-alt-t in Ubuntu), execute the following curl request...
 
