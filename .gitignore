@@ -1,6 +1,7 @@
 # Folders
 /build
 **/bin
+**/out
 .gradle
 .idea
 /unused

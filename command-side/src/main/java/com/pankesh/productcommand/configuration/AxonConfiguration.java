@@ -39,11 +39,7 @@ public class AxonConfiguration {
     @Autowired
     public MongoClient mongoClient;
 
-    @Autowired
-    public ConnectionFactory connectionFactory;
 
-    @Autowired
-    public RabbitTransactionManager transactionManager;
 
     @Value("${spring.application.queue}")
     private String queueName;
@@ -66,10 +62,6 @@ public class AxonConfiguration {
         return new JacksonSerializer();
     }
 
-    @Bean
-    ConnectionFactory amqpConnectionFactory() {
-        return new CachingConnectionFactory();
-    }
 
     @Bean(name = "axonMongoTemplate")
     MongoTemplate axonMongoTemplate() {

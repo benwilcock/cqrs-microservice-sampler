@@ -12,10 +12,6 @@ eureka:
     preferIpAddress: true
     
 axon:
-    amqp:
-        exchange: product.events.fanout.exchange
-        transaction-mode: transactional
-        queue: event.stream
     kafka:
         client-id: productQueryClient
         default-topic: test-topic
@@ -24,22 +20,19 @@ axon:
             bootstrapServers: kafka:9092
     serializer:
         general: jackson
+        events: jackson
+        messages: jackson
     eventhandling:
         processors:
-            productQuery:
-                source: queryMessageQueue
             productQueryKafka:
                 source: kafkaMessageSource
+                #mode: SUBSCRIBING
                 mode: TRACKING
 
 spring:
     application:
         databaseName: query
         queue: event.stream
-    rabbitmq:
-        hostname: rabbitmq
-        username: test
-        password: password
     data:
        mongodb:
           uri: mongodb://mongodb:27017/query

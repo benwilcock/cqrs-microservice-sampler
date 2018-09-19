@@ -12,9 +12,6 @@ eureka:
     preferIpAddress: true
 
 axon:
-    amqp:
-        exchange: product.events.fanout.exchange
-        transaction-mode: transactional
     kafka:
         client-id: testClient
         default-topic: test-topic
@@ -28,21 +25,17 @@ axon:
 
     serializer:
         general: jackson
-    eventhandling:
-        processors:
-            productQueryTracking:
-                mode: tracking
-                source: eventStore
+#    eventhandling:
+#        processors:
+#            productQueryTracking:
+#                mode: tracking
+#                source: eventStore
 spring:
     application:
         queue: product.default.queue
         databaseName: products
         eventsCollectionName: events
         snapshotCollectionName: snapshots
-    rabbitmq:
-        hostname: rabbitmq
-        username: test
-        password: password
     data:
         mongodb:
             uri: mongodb://mongodb:27017/products

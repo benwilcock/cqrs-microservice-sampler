@@ -1,7 +1,9 @@
 package com.pankesh.productquery.handlers;
 
+
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.eventhandling.ReplayStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,12 @@ public class ProductViewKafkaEventHandler {
     @Autowired
     private ProductRepository productRepository;
 
+
     @EventHandler
-    public void handle(ProductAddedEvent event) {
-        LOG.info("ProductAddedEvent via Kafka: [{}] '{}'", event.getId(), event.getName());
-//        productRepository.save(new Product(event.getId(), event.getName(), false));
+    public void handle(ProductAddedEvent event, ReplayStatus replayStatus) {
+        LOG.info("ProductAddedEvent In Query via Kafka: [{}] '{}'", event.getId(), event.getName());
+        productRepository.save(new Product(event.getId(), event.getName(), false));
+        LOG.info("After save in Query side");
     }
 
     @EventHandler
