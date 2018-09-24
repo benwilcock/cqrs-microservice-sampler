@@ -3,6 +3,8 @@ package com.pankesh.productcommand.aggregates;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
 import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
+
+import org.axonframework.eventhandling.ReplayStatus;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.slf4j.Logger;
@@ -69,10 +71,12 @@ public class ProductAggregate {
      * @param command
      */
     @CommandHandler
-    public ProductAggregate(AddProductCommand command) {
+    public ProductAggregate(AddProductCommand command, ReplayStatus status) {
         LOG.debug("Command: 'AddProductCommand' received.");
         LOG.debug("Queuing up a new ProductAddedEvent for product '{}'", command.getId());
-        apply(new ProductAddedEvent(command.getId(), command.getName()));
+        if(!(status.isReplay())) {
+            apply(new ProductAddedEvent(command.getId(), command.getName()));
+        }
     }
 
     @CommandHandler

@@ -4,19 +4,16 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.axonframework.common.Registration;
 import org.axonframework.common.jpa.EntityManagerProvider;
 import org.axonframework.eventhandling.saga.repository.inmemory.InMemorySagaStore;
 import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventhandling.tokenstore.inmemory.InMemoryTokenStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine;
-import org.axonframework.messaging.SubscribableMessageSource;
 import org.axonframework.mongo.DefaultMongoTemplate;
 import org.axonframework.mongo.MongoTemplate;
 import org.axonframework.serialization.Serializer;
 import org.axonframework.serialization.json.JacksonSerializer;
-import org.axonframework.spring.messaging.InboundEventMessageChannelAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +23,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.transaction.PlatformTransactionManager;
+
+
+
 
 
 
@@ -72,12 +72,6 @@ class AxonConfiguration {
                         .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
         .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
-    /* @Qualifier("kafkaMessageSource")
-    @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    org.axonframework.messaging.SubscribableMessageSource kafkaMessageSource() {
-        return new InboundEventMessageChannelAdapter();
-    }*/
 
 
 
@@ -106,6 +100,6 @@ class AxonConfiguration {
     @Bean
     public TokenStore tokenStore() {
         return new InMemoryTokenStore();
-        }
+    }
 
 }
