@@ -25,11 +25,11 @@ axon:
 
     serializer:
         general: jackson
-#    eventhandling:
-#        processors:
-#            productQueryTracking:
-#                mode: tracking
-#                source: eventStore
+    eventhandling:
+        processors:
+            productQueryTracking:
+                mode: tracking
+                source: eventStore
 spring:
     application:
         queue: product.default.queue

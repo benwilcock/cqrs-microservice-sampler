@@ -36,7 +36,7 @@ import com.pankesh.productevents.events.ProductUnsaleableEvent;
  * Events to the Aggregate, and the handling of those events by the aggregate or any other
  * configured EventHandlers.
  */
-@Aggregate
+@Aggregate(snapshotTriggerDefinition = "snapshotTriggerDefinition",repository = "productAggregateRepository")
 public class ProductAggregate {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductAggregate.class);
@@ -59,6 +59,8 @@ public class ProductAggregate {
      */
     public ProductAggregate() {
     }
+
+
 
     /**
      * This constructor is marked as a 'CommandHandler' for the
