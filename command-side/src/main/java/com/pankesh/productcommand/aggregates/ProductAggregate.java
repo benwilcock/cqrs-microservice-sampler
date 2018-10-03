@@ -1,5 +1,7 @@
 package com.pankesh.productcommand.aggregates;
 
+import com.pankesh.productcommand.commands.MarkProductAsDeliverableCommand;
+import com.pankesh.productevents.events.ProductDeliverableEvent;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
 import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
@@ -50,6 +52,7 @@ public class ProductAggregate {
     private String id;
     private String name;
     private boolean isSaleable = false;
+    private boolean isDeliverable = false;
 
     /**
      * This default constructor is used by the Repository to construct
@@ -100,6 +103,17 @@ public class ProductAggregate {
             throw new IllegalStateException("This ProductAggregate (" + this.getId() + ") is already off-sale.");
         }
     }
+    @CommandHandler
+    public void markDeliverable(MarkProductAsDeliverableCommand command) {
+        LOG.debug("Command: 'MarkProductAsDeliverableCommand' received.");
+        if (!this.isDeliverable()) {
+            apply(new ProductDeliverableEvent(id));
+        } else {
+            throw new IllegalStateException("This ProductAggregate (" + this.getId() + ") is already Deliverable.");
+        }
+    }
+
+
 
     /**
      * This method is marked as an EventSourcingHandler and is therefore used by the Axon framework to
@@ -138,5 +152,8 @@ public class ProductAggregate {
 
     public boolean isSaleable() {
         return isSaleable;
+    }
+    public boolean isDeliverable() {
+        return isDeliverable;
     }
 }

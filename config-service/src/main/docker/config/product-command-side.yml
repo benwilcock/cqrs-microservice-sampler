@@ -15,10 +15,8 @@ spring:
         databaseName: products
         eventsCollectionName: events
         snapshotCollectionName: snapshots
-    rabbitmq:
-        hostname: localhost
-        username: test
-        password: password
+        sagaCollectionName: sagas
+
     data:
         mongodb:
             uri: mongodb://localhost:27017/products
