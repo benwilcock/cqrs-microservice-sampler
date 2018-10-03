@@ -35,25 +35,25 @@ public class ProductViewKafkaEventHandler {
     @EventHandler
     public void handle(ProductSaleableEvent event) {
         LOG.info("ProductSaleableEvent via Kafka: [{}]", event.getId());
-//        if (productRepository.exists(event.getId())) {
-//            Product product = productRepository.findOne(event.getId());
-//            if (!product.isSaleable()) {
-//                product.setSaleable(true);
-//                productRepository.save(product);
-//            }
-//        }
+        if (productRepository.exists(event.getId())) {
+            Product product = productRepository.findOne(event.getId());
+            if (!product.isSaleable()) {
+                product.setSaleable(true);
+                productRepository.save(product);
+            }
+        }
     }
 
     @EventHandler
     public void handle(ProductUnsaleableEvent event) {
         LOG.info("ProductUnsaleableEvent via Kafka: [{}]", event.getId());
 
-//        if (productRepository.exists(event.getId())) {
-//            Product product = productRepository.findOne(event.getId());
-//            if (product.isSaleable()) {
-//                product.setSaleable(false);
-//                productRepository.save(product);
-//            }
-//        }
+        if (productRepository.exists(event.getId())) {
+            Product product = productRepository.findOne(event.getId());
+            if (product.isSaleable()) {
+                product.setSaleable(false);
+                productRepository.save(product);
+            }
+        }
     }
 }

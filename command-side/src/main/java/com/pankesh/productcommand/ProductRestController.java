@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.pankesh.productcommand.commands.MarkProductAsDeliverableCommand;
 import org.axonframework.commandhandling.CommandExecutionException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.commandhandling.model.ConcurrencyException;
@@ -76,6 +77,28 @@ public class ProductRestController {
             response.setStatus(HttpServletResponse.SC_ACCEPTED);// Set up the 202 ACCEPTED response
         } catch (AssertionError ae) {
             LOG.warn("Change Request failed - empty params?. [{}] '{}'", id, saleableFlag, ae);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (CommandExecutionException cex) {
+            LOG.warn("Change Command FAILED with Message: {}", cex.getMessage(), cex);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "{id}/deliverable/{deliverableFlag}", method = RequestMethod.PUT)
+    public void makeDeliverable(@PathVariable(value = "id") String id, @PathVariable(value = "deliverableFlag", required = true) boolean deliverableFlag,
+                                HttpServletResponse response) {
+
+        LOG.debug("Changing Product [{}] '{}'", id, deliverableFlag);
+
+        try {
+            if (deliverableFlag) {
+                MarkProductAsDeliverableCommand productAsDeliverableCommand = new MarkProductAsDeliverableCommand(id);
+                commandGateway.sendAndWait(productAsDeliverableCommand);
+            }
+            LOG.info("Changed Product [{}] '{}'", id, deliverableFlag);
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);// Set up the 202 ACCEPTED response
+        } catch (AssertionError ae) {
+            LOG.warn("Change Request failed - empty params?. [{}] '{}'", id, deliverableFlag, ae);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (CommandExecutionException cex) {
             LOG.warn("Change Command FAILED with Message: {}", cex.getMessage(), cex);

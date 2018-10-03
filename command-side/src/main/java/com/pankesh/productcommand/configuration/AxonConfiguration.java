@@ -1,10 +1,9 @@
 package com.pankesh.productcommand.configuration;
 
-import com.pankesh.productcommand.handlers.ProductViewTrackingEventHandler;
-import org.axonframework.boot.autoconfig.KafkaProperties;
-import org.axonframework.boot.autoconfig.TransactionAutoConfiguration;
+
 import org.axonframework.commandhandling.model.Repository;
 import org.axonframework.common.transaction.TransactionManager;
+import org.axonframework.eventhandling.saga.repository.SagaStore;
 import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventsourcing.*;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
@@ -13,6 +12,7 @@ import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.axonframework.messaging.annotation.ParameterResolverFactory;
 import org.axonframework.mongo.DefaultMongoTemplate;
 import org.axonframework.mongo.MongoTemplate;
+import org.axonframework.mongo.eventhandling.saga.repository.MongoSagaStore;
 import org.axonframework.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
 import org.axonframework.mongo.eventsourcing.eventstore.documentperevent.DocumentPerEventStorageStrategy;
 import org.axonframework.mongo.eventsourcing.tokenstore.MongoTokenStore;
@@ -21,7 +21,6 @@ import org.axonframework.serialization.json.JacksonSerializer;
 import org.axonframework.serialization.xml.XStreamSerializer;
 import org.axonframework.spring.eventsourcing.SpringAggregateSnapshotter;
 import org.axonframework.spring.eventsourcing.SpringAggregateSnapshotterFactoryBean;
-import org.axonframework.spring.eventsourcing.SpringPrototypeAggregateFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +64,10 @@ public class AxonConfiguration {
     @Value("${spring.application.snapshotCollectionName}")
     private String snapshotCollectionName;
 
+    @Value("${spring.application.sagaCollectionName}")
+    private String sagaCollectionName;
+
+
     @Qualifier("eventSerializer")
     @Bean
     Serializer axonJsonSerializer() {
@@ -74,7 +77,7 @@ public class AxonConfiguration {
     @Bean(name = "axonMongoTemplate")
     MongoTemplate axonMongoTemplate() {
         MongoTemplate template = new DefaultMongoTemplate(mongoClient, databaseName)
-                .withSnapshotCollection(snapshotCollectionName).withDomainEventsCollection(eventsCollectionName);
+                .withSnapshotCollection(snapshotCollectionName).withDomainEventsCollection(eventsCollectionName).withSagasCollection(sagaCollectionName);
 
         return template;
     }
@@ -86,6 +89,12 @@ public class AxonConfiguration {
     }
 
     @Bean
+    SagaStore sagaStore(){
+        return new MongoSagaStore(axonMongoTemplate(), new XStreamSerializer());
+    }
+
+
+    @Bean
     EventStorageEngine eventStoreEngine() {
         return new MongoEventStorageEngine(new XStreamSerializer(), null, axonJsonSerializer(), axonMongoTemplate(), new DocumentPerEventStorageStrategy());
 
@@ -94,11 +103,6 @@ public class AxonConfiguration {
     @Bean
     public TokenStore tokenStore() {
         return new MongoTokenStore(axonMongoTemplate(), axonJsonSerializer());
-    }
-
-    @Bean
-    public SpringAggregateSnapshotterFactoryBean springAggregateSnapshotterFactoryBean(){
-        return new SpringAggregateSnapshotterFactoryBean();
     }
 
 
