@@ -1,7 +1,7 @@
 package com.pankesh.productcommand.aggregates;
 
-import com.pankesh.productcommand.commands.MarkProductAsDeliverableCommand;
-import com.pankesh.productevents.events.ProductDeliverableEvent;
+import com.pankesh.productcommand.commands.MarkProductAsDeliveredCommand;
+import com.pankesh.productevents.events.ProductDeliveredEvent;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
 import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
@@ -20,58 +20,60 @@ import com.pankesh.productevents.events.ProductSaleableEvent;
 import com.pankesh.productevents.events.ProductUnsaleableEvent;
 
 /**
- * ProductAggregate is essentially a DDD AggregateRoot (from the DDD concept). In event-sourced
- * systems, Aggregates are often stored and retreived using a 'Repository'. In the
- * simplest terms, Aggregates are the sum of their applied 'Events'.
+ * ProductAggregate is essentially a DDD AggregateRoot (from the DDD concept).
+ * In event-sourced systems, Aggregates are often stored and retreived using a
+ * 'Repository'. In the simplest terms, Aggregates are the sum of their applied
+ * 'Events'.
  * <p/>
- * The Repository stores the aggregate's Events in an 'Event Store'. When an Aggregate
- * is re-loaded by the repository, the Repository re-applies all the stored events
- * to the aggregate thereby re-creating the logical state of the Aggregate.
+ * The Repository stores the aggregate's Events in an 'Event Store'. When an
+ * Aggregate is re-loaded by the repository, the Repository re-applies all the
+ * stored events to the aggregate thereby re-creating the logical state of the
+ * Aggregate.
  * <p/>
- * The ProductAggregate Aggregate can handle and react to 'Commands', and when it reacts
- * to these com.pankesh.product.commands it creates and 'applies' Events that represent the logical changes
- * to be made. These Events are also handled by the ProductAggregate.
+ * The ProductAggregate Aggregate can handle and react to 'Commands', and when
+ * it reacts to these com.pankesh.product.commands it creates and 'applies'
+ * Events that represent the logical changes to be made. These Events are also
+ * handled by the ProductAggregate.
  * <p/>
  * Axon takes care of much of this via the CommandBus, EventBus and Repository.
  * <p/>
- * Axon delivers com.pankesh.product.commands placed on the bus to the Aggregate. Axon supports the 'applying' of
- * Events to the Aggregate, and the handling of those events by the aggregate or any other
- * configured EventHandlers.
+ * Axon delivers com.pankesh.product.commands placed on the bus to the
+ * Aggregate. Axon supports the 'applying' of Events to the Aggregate, and the
+ * handling of those events by the aggregate or any other configured
+ * EventHandlers.
  */
-@Aggregate(snapshotTriggerDefinition = "snapshotTriggerDefinition",repository = "productAggregateRepository")
+@Aggregate(snapshotTriggerDefinition = "snapshotTriggerDefinition", repository = "productAggregateRepository")
 public class ProductAggregate {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductAggregate.class);
 
     /**
      * Aggregates that are managed by Axon must have a unique identifier.
-     * Strategies similar to GUID are often used. The annotation 'AggregateIdentifier'
-     * identifies the id field as such.
+     * Strategies similar to GUID are often used. The annotation
+     * 'AggregateIdentifier' identifies the id field as such.
      */
     @AggregateIdentifier
     private String id;
     private String name;
     private boolean isSaleable = false;
-    private boolean isDeliverable = false;
+    private boolean isDelivered = false;
 
     /**
-     * This default constructor is used by the Repository to construct
-     * a prototype ProductAggregate. Events are then used to set properties
-     * such as the ProductAggregate's Id in order to make the Aggregate reflect
-     * it's true logical state.
+     * This default constructor is used by the Repository to construct a
+     * prototype ProductAggregate. Events are then used to set properties such
+     * as the ProductAggregate's Id in order to make the Aggregate reflect it's
+     * true logical state.
      */
     public ProductAggregate() {
     }
 
-
-
     /**
      * This constructor is marked as a 'CommandHandler' for the
-     * AddProductCommand. This command can be used to construct
-     * new instances of the Aggregate. If successful a new ProductAddedEvent
-     * is 'applied' to the aggregate using the Axon 'apply' method. The apply
-     * method appears to also propagate the Event to any other registered
-     * 'Event Listeners', who may take further action.
+     * AddProductCommand. This command can be used to construct new instances of
+     * the Aggregate. If successful a new ProductAddedEvent is 'applied' to the
+     * aggregate using the Axon 'apply' method. The apply method appears to also
+     * propagate the Event to any other registered 'Event Listeners', who may
+     * take further action.
      *
      * @param command
      */
@@ -79,15 +81,15 @@ public class ProductAggregate {
     public ProductAggregate(AddProductCommand command, ReplayStatus status) {
         LOG.debug("Command: 'AddProductCommand' received.");
         LOG.debug("Queuing up a new ProductAddedEvent for product '{}'", command.getId());
-        if(!(status.isReplay())) {
+        if (!status.isReplay()) {
             apply(new ProductAddedEvent(command.getId(), command.getName()));
         }
     }
 
     @CommandHandler
-    public void markSaleable(MarkProductAsSaleableCommand command) {
+    public void markSaleable(MarkProductAsSaleableCommand command, ReplayStatus status) {
         LOG.debug("Command: 'MarkProductAsSaleableCommand' received.");
-        if (!this.isSaleable()) {
+        if (!this.isSaleable() && !status.isReplay()) {
             apply(new ProductSaleableEvent(id));
         } else {
             throw new IllegalStateException("This ProductAggregate (" + this.getId() + ") is already Saleable.");
@@ -95,30 +97,30 @@ public class ProductAggregate {
     }
 
     @CommandHandler
-    public void markUnsaleable(MarkProductAsUnsaleableCommand command) {
+    public void markUnsaleable(MarkProductAsUnsaleableCommand command, ReplayStatus status) {
         LOG.debug("Command: 'MarkProductAsUnsaleableCommand' received.");
-        if (this.isSaleable()) {
+        if (this.isSaleable() && !status.isReplay()) {
             apply(new ProductUnsaleableEvent(id));
         } else {
             throw new IllegalStateException("This ProductAggregate (" + this.getId() + ") is already off-sale.");
         }
     }
+
     @CommandHandler
-    public void markDeliverable(MarkProductAsDeliverableCommand command) {
-        LOG.debug("Command: 'MarkProductAsDeliverableCommand' received.");
-        if (!this.isDeliverable()) {
-            apply(new ProductDeliverableEvent(id));
+    public void markDelivered(MarkProductAsDeliveredCommand command, ReplayStatus status) {
+        LOG.debug("Command: 'MarkProductAsDeliveredCommand' received.");
+        if (!this.isDelivered() && !status.isReplay()) {
+            apply(new ProductDeliveredEvent(id));
         } else {
-            throw new IllegalStateException("This ProductAggregate (" + this.getId() + ") is already Deliverable.");
+            throw new IllegalStateException("This ProductAggregate (" + this.getId() + ") is already Deliverered.");
         }
     }
 
-
-
     /**
-     * This method is marked as an EventSourcingHandler and is therefore used by the Axon framework to
-     * handle events of the specified type (ProductAddedEvent). The ProductAddedEvent can be
-     * raised either by the constructor during ProductAggregate(AddProductCommand) or by the
+     * This method is marked as an EventSourcingHandler and is therefore used by
+     * the Axon framework to handle events of the specified type
+     * (ProductAddedEvent). The ProductAddedEvent can be raised either by the
+     * constructor during ProductAggregate(AddProductCommand) or by the
      * Repository when 're-loading' the aggregate.
      *
      * @param event
@@ -142,6 +144,12 @@ public class ProductAggregate {
         LOG.debug("Applied: 'ProductUnsaleableEvent' [{}]", event.getId());
     }
 
+    @EventSourcingHandler
+    public void on(ProductDeliveredEvent event) {
+        this.isDelivered = true;
+        LOG.debug("Applied: 'ProductDeliveredEvent' [{}]", event.getId());
+    }
+    
     public String getId() {
         return id;
     }
@@ -153,7 +161,8 @@ public class ProductAggregate {
     public boolean isSaleable() {
         return isSaleable;
     }
-    public boolean isDeliverable() {
-        return isDeliverable;
+
+    public boolean isDelivered() {
+        return isDelivered;
     }
 }

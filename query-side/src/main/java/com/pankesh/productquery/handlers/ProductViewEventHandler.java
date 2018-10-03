@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.pankesh.productevents.events.ProductAddedEvent;
+import com.pankesh.productevents.events.ProductDeliveredEvent;
 import com.pankesh.productevents.events.ProductSaleableEvent;
 import com.pankesh.productevents.events.ProductUnsaleableEvent;
 import com.pankesh.productquery.domain.Product;
@@ -48,6 +49,19 @@ public class ProductViewEventHandler {
             Product product = productRepository.findOne(event.getId());
             if (product.isSaleable()) {
                 product.setSaleable(false);
+                productRepository.save(product);
+            }
+        }
+    }
+
+    @EventHandler
+    public void handle(ProductDeliveredEvent event) {
+        LOG.info("ProductDeliveredEvent: [{}]", event.getId());
+
+        if (productRepository.exists(event.getId())) {
+            Product product = productRepository.findOne(event.getId());
+            if (!product.isDelivered()) {
+                product.setDelivered(true);
                 productRepository.save(product);
             }
         }

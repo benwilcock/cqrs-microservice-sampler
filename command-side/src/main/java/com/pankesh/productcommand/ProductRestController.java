@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.pankesh.productcommand.commands.MarkProductAsDeliverableCommand;
+import com.pankesh.productcommand.commands.MarkProductAsDeliveredCommand;
 import org.axonframework.commandhandling.CommandExecutionException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.commandhandling.model.ConcurrencyException;
@@ -63,7 +63,7 @@ public class ProductRestController {
     public void makeSaleable(@PathVariable(value = "id") String id, @PathVariable(value = "saleableFlag", required = true) boolean saleableFlag,
             HttpServletResponse response) {
 
-        LOG.debug("Changing Product [{}] '{}'", id, saleableFlag);
+        LOG.debug("Changing Product [{}] Saleability '{}'", id, saleableFlag);
 
         try {
             if (saleableFlag) {
@@ -84,21 +84,21 @@ public class ProductRestController {
         }
     }
 
-    @RequestMapping(value = "{id}/deliverable/{deliverableFlag}", method = RequestMethod.PUT)
-    public void makeDeliverable(@PathVariable(value = "id") String id, @PathVariable(value = "deliverableFlag", required = true) boolean deliverableFlag,
+    @RequestMapping(value = "{id}/delivered/{deliveredFlag}", method = RequestMethod.PUT)
+    public void makeDeliverable(@PathVariable(value = "id") String id, @PathVariable(value = "deliveredFlag", required = true) boolean deliveredFlag,
                                 HttpServletResponse response) {
 
-        LOG.debug("Changing Product [{}] '{}'", id, deliverableFlag);
+        LOG.debug("Changing Product [{}] Delivered status '{}'", id, deliveredFlag);
 
         try {
-            if (deliverableFlag) {
-                MarkProductAsDeliverableCommand productAsDeliverableCommand = new MarkProductAsDeliverableCommand(id);
+            if (deliveredFlag) {
+                MarkProductAsDeliveredCommand productAsDeliverableCommand = new MarkProductAsDeliveredCommand(id);
                 commandGateway.sendAndWait(productAsDeliverableCommand);
             }
-            LOG.info("Changed Product [{}] '{}'", id, deliverableFlag);
+            LOG.info("Changed Product [{}] '{}'", id, deliveredFlag);
             response.setStatus(HttpServletResponse.SC_ACCEPTED);// Set up the 202 ACCEPTED response
         } catch (AssertionError ae) {
-            LOG.warn("Change Request failed - empty params?. [{}] '{}'", id, deliverableFlag, ae);
+            LOG.warn("Change Request failed - empty params?. [{}] '{}'", id, deliveredFlag, ae);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (CommandExecutionException cex) {
             LOG.warn("Change Command FAILED with Message: {}", cex.getMessage(), cex);

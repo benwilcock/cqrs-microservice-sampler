@@ -26,7 +26,6 @@ axon:
         processors:
             productQueryKafka:
                 source: kafkaMessageSource
-                #mode: SUBSCRIBING
                 mode: TRACKING
 
 spring:

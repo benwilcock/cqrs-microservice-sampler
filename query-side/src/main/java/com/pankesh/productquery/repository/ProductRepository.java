@@ -11,4 +11,5 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "products", path = "products")
 public interface ProductRepository extends ReadOnlyPagingAndSortingRepository {
     public List<Product> findBySaleable(@Param("saleable") boolean saleable);
+    public List<Product> findByDelivered(@Param("delivered") boolean delivered);
 }

@@ -14,6 +14,7 @@ public class Product {
 
     private String name;
     private boolean saleable;
+    private boolean delivered;
 
     public Product() {
     }
@@ -46,5 +47,13 @@ public class Product {
 
     public void setSaleable(boolean saleable) {
         this.saleable = saleable;
+    }
+
+    public boolean isDelivered() {
+        return delivered;
+    }
+
+    public void setDelivered(boolean delivered) {
+        this.delivered = delivered;
     }
 }

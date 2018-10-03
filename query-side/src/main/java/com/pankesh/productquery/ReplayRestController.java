@@ -26,10 +26,6 @@ public class ReplayRestController {
     public void replay(@PathVariable(value = "group") String group, HttpServletResponse response) {
 
         LOG.debug("Start replaying...");
-//        final Supplier<? extends RuntimeException> notFoundSupplier = () -> new IllegalArgumentException(
-//                "Processor " + group + " not registered.");
-//        this.eventProcessingConfiguration.eventProcessor(group).orElseThrow(notFoundSupplier).shutDown();
-//        this.eventProcessingConfiguration.eventProcessor(group).orElseThrow(notFoundSupplier).start();
         this.eventProcessingConfiguration.eventProcessorByProcessingGroup(group, TrackingEventProcessor.class)
         .ifPresent(trackingEventProcessor -> {
             trackingEventProcessor.shutDown();

@@ -3,7 +3,7 @@ package com.pankesh.productcommand.commands;
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
 
 
-public class MarkProductAsDeliverableCommand {
+public class MarkProductAsDeliveredCommand {
 
     /**
      * How does Axon know which Aggregate to Mark as completed? It uses
@@ -19,7 +19,7 @@ public class MarkProductAsDeliverableCommand {
      *
      * @param id
      */
-    public MarkProductAsDeliverableCommand(String id) {
+    public MarkProductAsDeliveredCommand(String id) {
         this.id = id;
     }
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.pankesh.productevents.events.ProductAddedEvent;
+import com.pankesh.productevents.events.ProductDeliveredEvent;
 import com.pankesh.productevents.events.ProductSaleableEvent;
 import com.pankesh.productevents.events.ProductUnsaleableEvent;
 
@@ -33,6 +34,11 @@ public class EventLoggingHandler {
 
     @EventHandler
     public void handle(ProductUnsaleableEvent event) {
+        LOG.debug("Instance:[{}] Event:{} Id:{}", indexId, event.getClass().getSimpleName(), event.getId());
+    }
+    
+    @EventHandler
+    public void handle(ProductDeliveredEvent event) {
         LOG.debug("Instance:[{}] Event:{} Id:{}", indexId, event.getClass().getSimpleName(), event.getId());
     }
 }
