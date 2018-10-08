@@ -32,10 +32,7 @@ spring:
     application:
         databaseName: query
         queue: event.stream
-    data:
-       mongodb:
-          uri: mongodb://mongodb:27017/query
-       rest:
+        rest:
             #base-path: api/v1
 logging:
     level:

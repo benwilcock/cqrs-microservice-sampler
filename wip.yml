@@ -1,15 +1,21 @@
 version: '2'
 services:
-  mongodb:
-    image: mongo:2.6
-    container_name: mongodb
-    ports:
-     - "27017:27017"
+  #mongodb:
+  #  image: mongo:2.6
+  #  container_name: mongodb
+  #  ports:
+  #   - "27017:27017"
   zookeeper:
     image: wurstmeister/zookeeper
     container_name: zookeeper
     ports:
       - "2181:2181"
+  oracle:
+    image: sath89/oracle-xe-11g
+    container_name: oracle
+    ports:
+      - "8090:8080"
+      - "1521:1521"
   kafka:
     image: wurstmeister/kafka
     container_name: kafka
@@ -29,8 +35,9 @@ services:
      - "8888:8888"
     environment:
      - SPRING_PROFILES_ACTIVE=native
-    depends_on:
-     - mongodb
+   # depends_on:
+   #  - mongodb
+     - oracle
   discovery:
     image: pankesh/discovery-service
     container_name: discovery
@@ -50,10 +57,11 @@ services:
     image: pankesh/product-command-side:latest
     container_name: product-cmd-side
     depends_on:
-     - mongodb
+    # - mongodb
      - kafka
      - discovery
      - config
+     - oracle
     ports:
       - "9000"
     environment:
@@ -65,6 +73,7 @@ services:
      - kafka
      - discovery
      - config
+     - oracle
     ports:
      - "9001"
     environment:

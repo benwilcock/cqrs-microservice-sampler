@@ -8,14 +8,7 @@ eureka:
     preferIpAddress: true
     
 spring:
-    application:
-        exchange: product.events.fanout.exchange
-        queue: event.stream
-        terminal: product.axon.terminal
-    rabbitmq:
-        hostname: localhost
-        username: test
-        password: password
+
     data:
         rest:
             #base-path: api/v1
