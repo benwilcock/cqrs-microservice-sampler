@@ -36,9 +36,7 @@ spring:
         databaseName: products
         eventsCollectionName: events
         snapshotCollectionName: snapshots
-    data:
-        mongodb:
-            uri: mongodb://mongodb:27017/products
+
 logging:
     level:
         root: INFO

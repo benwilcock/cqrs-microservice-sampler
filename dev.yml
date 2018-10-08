@@ -1,19 +1,5 @@
 version: '2'
 services:
-  mongodb:
-    image: mongo:2.4
-    container_name: mongodb
-    ports:
-     - "27017:27017"
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-     - "5672:5672"
-     - "15672:15672"
-    environment:
-     - RABBITMQ_DEFAULT_USER=test
-     - RABBITMQ_DEFAULT_PASS=password
   config:
     image: pankesh/config-service
     container_name: config
