@@ -2,7 +2,7 @@ package com.pankesh.productcommand;
 
 import java.util.List;
 
-import com.pankesh.productcommand.configuration.properties.DatasourceProperties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;

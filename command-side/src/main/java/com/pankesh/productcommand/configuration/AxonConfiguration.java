@@ -86,7 +86,6 @@ public class AxonConfiguration {
     @Bean
     SagaStore sagaStore() {
         return new JpaSagaStore(new XStreamSerializer(), entityManagerProvider());
-        //return new MongoSagaStore(axonMongoTemplate(), new XStreamSerializer());
     }
 
     @Bean
@@ -113,7 +112,7 @@ public class AxonConfiguration {
     @Bean
     public TokenStore tokenStore(EntityManagerProvider entityManagerProvider) {
         return new JpaTokenStore(entityManagerProvider, axonJsonSerializer());
-        //return new MongoTokenStore(axonMongoTemplate(), axonJsonSerializer());
+
     }
 
 
