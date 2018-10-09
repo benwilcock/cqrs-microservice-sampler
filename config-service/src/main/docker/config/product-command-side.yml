@@ -15,34 +15,13 @@ spring:
         eventsCollectionName: events
         snapshotCollectionName: snapshots
         sagaCollectionName: sagas
-#    datasource:
-#        url: jdbc:oracle:thin:system/oracle@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SID=xe)))
-#    jpa:
-#      #generate-ddl: true
-#      hibernate:
-#        ddl-auto: create
-#        show_sql: true
-datasource:
-  url: jdbc:oracle:thin:system/oracle@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SID=xe)))
-  username: system
-  password: oracle
-  driver-class-name: oracle.jdbc.OracleDriver
-  transactionTimeout: 5 #Seconds
-  connectionPool:
-     initialPoolSize: 20
-     maxPoolSize: 20
-     minPoolSize: 20
-     maxStatements: 50
-     checkoutTimeout: 30000 # Milliseconds
-  properties:
-     hibernate.dialect: 'org.hibernate.dialect.Oracle10gDialect'
-     hibernate.naming_strategy: 'org.hibernate.cfg.DefaultComponentSafeNamingStrategy'
-     hibernate.hbm2ddl.auto: create-drop
-     #hibernate.show_sql: true
-     #hibernate.format_sql: true
-     hibernate.cache.use_second_level_cache: false
-     hibernate.cache.use_query_cache: false
-     hibernate.generate_statistics: false
+    datasource:
+        url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SID=xe)))
+        username: system
+        password: oracle
+    jpa:
+      generate-ddl: true
+
 
 logging:
     level:
