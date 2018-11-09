@@ -1,13 +1,23 @@
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
-
-    sourceCompatibility = 1.8
+    apply plugin: 'eclipse'
+    
+    eclipse {
+        classpath {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+        sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
     repositories {
         mavenLocal()
         mavenCentral()
+        maven {
+            url "http://repo.maven.apache.org/maven2"
+        }
     }
 
     dependencies {

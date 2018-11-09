@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '1.3.5.RELEASE'
+        springBootVersion = '1.5.7.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -11,7 +11,7 @@ buildscript {
 	}
 }
 
-group = 'benwilcock'
+group = 'pankesh'
 apply plugin: 'spring-boot'
 apply plugin: 'docker'
 
@@ -33,7 +33,7 @@ dependencies {
 
 dependencyManagement {
 	imports { 
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR1"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.SR2"
 	}
 }
 
@@ -49,6 +49,10 @@ task image(type: Docker, dependsOn: build){
 		copy {
 			from jar
 			into stageDir
+		}
+		copy {
+			from 'src/main/docker/config'
+    		into stageDir
 		}
 	}
 }

@@ -1,0 +1,27 @@
+message: Greetings from the PRODUCT-QUERY-SIDE microservice [using the LOCALHOST config].
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+    
+spring:
+
+    data:
+        rest:
+            #base-path: api/v1
+logging:
+    level:
+        root: INFO
+        org.springframework: INFO
+            #aop: DEBUG
+            #dao: DEBUG
+            #orm: DEBUG
+            #amqp: DEBUG
+            #data: DEBUG
+            #transaction: DEBUG
+        org.axonframework: INFO
+        com.pankesh: DEBUG
+    file: ./build/logs/query-side-server.log

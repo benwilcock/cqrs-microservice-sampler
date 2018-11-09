@@ -4,7 +4,7 @@ spring:
   cloud:
     config:
       server:
-        git:
-          uri: https://github.com/benwilcock/microservice-sampler-config
+        native:
+         search-locations: file:/config
 server:
   port: 8888

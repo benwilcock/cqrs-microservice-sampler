@@ -1,0 +1,38 @@
+message: Greetings from the PRODUCT-COMMAND-SIDE microservice [using the LOCALHOST config].
+
+#debug: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+    
+spring:
+    application:
+        queue: product.default.queue
+        databaseName: products
+        eventsCollectionName: events
+        snapshotCollectionName: snapshots
+        sagaCollectionName: sagas
+    datasource:
+        url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SID=xe)))
+        username: system
+        password: oracle
+    jpa:
+      generate-ddl: true
+
+
+logging:
+    level:
+        root: INFO
+        org.springframework: INFO
+            #aop: DEBUG
+            #dao: DEBUG
+            #orm: DEBUG
+            #amqp: DEBUG
+            #data: DEBUG
+            #transaction: DEBUG
+        org.axonframework: INFO
+        com.pankesh: INFO
+    file: ./build/logs/command-side-server.log

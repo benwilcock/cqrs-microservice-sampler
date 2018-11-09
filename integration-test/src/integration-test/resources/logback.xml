@@ -14,7 +14,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.soagrowers">
+    <logger name="com.pankesh">
         <level value="DEBUG"/>
     </logger>
 

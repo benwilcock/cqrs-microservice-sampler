@@ -1,21 +1,7 @@
 version: '2'
 services:
-  mongodb:
-    image: mongo:2.4
-    container_name: mongodb
-    ports:
-     - "27017:27017"
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-     - "5672:5672"
-     - "15672:15672"
-    environment:
-     - RABBITMQ_DEFAULT_USER=test
-     - RABBITMQ_DEFAULT_PASS=password
   config:
-    image: benwilcock/config-service
+    image: pankesh/config-service
     container_name: config
     ports:
      - "8888:8888"
@@ -25,12 +11,12 @@ services:
      - mongodb
      - rabbitmq
   discovery:
-    image: benwilcock/discovery-service
+    image: pankesh/discovery-service
     container_name: discovery
     ports:
      - "8761:8761"
   gateway:
-    image: benwilcock/gateway-service
+    image: pankesh/gateway-service
     container_name: gateway
     ports:
      - "8080:8080"

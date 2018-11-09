@@ -1,0 +1,49 @@
+message: Greetings from the PRODUCT-QUERY-SIDE microservice [using the PRODUCTION config].
+
+management:
+    security:
+        enabled: false
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
+  instance:
+    preferIpAddress: true
+    
+axon:
+    kafka:
+        client-id: productQueryClient
+        default-topic: test-topic
+        consumer:
+            group-id: productQueryGroup
+            bootstrapServers: kafka:9092
+    serializer:
+        general: jackson
+        events: jackson
+        messages: jackson
+    eventhandling:
+        processors:
+            productQueryKafka:
+                source: kafkaMessageSource
+                mode: TRACKING
+
+spring:
+    application:
+        databaseName: query
+        queue: event.stream
+        rest:
+            #base-path: api/v1
+logging:
+    level:
+        root: INFO
+        org.springframework: INFO
+            #aop: DEBUG
+            #dao: DEBUG
+            #orm: DEBUG
+            #amqp: DEBUG
+            #data: DEBUG
+            #transaction: DEBUG
+        org.axonframework: DEBUG
+        com.pankesh: DEBUG
+    file: ./logs/query-side-server.log

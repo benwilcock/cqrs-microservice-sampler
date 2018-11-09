@@ -1,36 +1,50 @@
 version: '2'
 services:
-  mongodb:
-    image: mongo:2.4
-    container_name: mongodb
+  #mongodb:
+  #  image: mongo:2.6
+  #  container_name: mongodb
+  #  ports:
+  #   - "27017:27017"
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
     ports:
-     - "27017:27017"
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
+      - "2181:2181"
+  oracle:
+    image: sath89/oracle-xe-11g
+    container_name: oracle
     ports:
-     - "5672:5672"
-     - "15672:15672"
+      - "8090:8080"
+      - "1521:1521"
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
     environment:
-     - RABBITMQ_DEFAULT_USER=test
-     - RABBITMQ_DEFAULT_PASS=password
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181/local
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_CREATE_TOPICS: "test-topic:2:1"
+    depends_on:
+     - zookeeper
   config:
-    image: benwilcock/config-service
+    image: pankesh/config-service
     container_name: config
     ports:
      - "8888:8888"
     environment:
-     - SPRING_PROFILES_ACTIVE=production
-    depends_on:
-     - mongodb
-     - rabbitmq
+     - SPRING_PROFILES_ACTIVE=native
+   # depends_on:
+   #  - mongodb
+     - oracle
   discovery:
-    image: benwilcock/discovery-service
+    image: pankesh/discovery-service
     container_name: discovery
     ports:
      - "8761:8761"
   gateway:
-    image: benwilcock/gateway-service
+    image: pankesh/gateway-service
     container_name: gateway
     ports:
      - "8080:8080"
@@ -40,24 +54,26 @@ services:
      - discovery
      - config
   product-command-side:
-    image: benwilcock/product-command-side:latest
+    image: pankesh/product-command-side:latest
     container_name: product-cmd-side
     depends_on:
-     - mongodb
-     - rabbitmq
+    # - mongodb
+     - kafka
      - discovery
      - config
+     - oracle
     ports:
       - "9000"
     environment:
      - SPRING_PROFILES_ACTIVE=production
   product-query-side:
-    image: benwilcock/product-query-side:latest
+    image: pankesh/product-query-side:latest
     container_name: product-qry-side
     depends_on:
-     - rabbitmq
+     - kafka
      - discovery
      - config
+     - oracle
     ports:
      - "9001"
     environment:
